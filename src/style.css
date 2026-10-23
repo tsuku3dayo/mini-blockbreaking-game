@@ -306,7 +306,7 @@ input[aria-invalid='true'] {
 }
 
 /* ── プレイ画面（GUI-0003） ── */
-/* 表示サイズは、この段階では最大 448 px 幅（TASK-0007 で仕様書 §2.1 の計算にする） */
+/* 表示の大きさは play.ts が仕様書 §2.1 の計算で決める（ここは計算の前の仮の値） */
 .stage {
   position: relative;
   width: min(448px, 100%);
@@ -327,6 +327,37 @@ input[aria-invalid='true'] {
 
 #field[data-hide-cursor] {
   cursor: none;
+}
+
+/* 操作欄：ゲーム領域のすぐ下に、ゲーム領域と同じ幅で、左右に分けて置く（間隔 8 + ボタン 48 = 56） */
+.play-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: var(--stage-width, min(448px, 100%));
+  margin: 8px auto 0;
+}
+
+button.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 縦向きのおすすめ（GUI-0006 §5） */
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.notice .icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* 数字は桁をそろえる（スコア・タイム） */
