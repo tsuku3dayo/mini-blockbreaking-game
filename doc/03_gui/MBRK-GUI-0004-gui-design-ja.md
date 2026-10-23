@@ -2,7 +2,7 @@
 id: MBRK-GUI-0004
 type: GUI Design
 title: 結果パネル（スコア登録を含む）
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -12,7 +12,7 @@ sources:
   - MBRK-US-0011
   - MBRK-US-0012
   - doc/specification.md (v1.1) §4.1-8、§4.1-9、§6、§8.3、§9.3、§9.5
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:58:18+09:00" }
 ---
 
 # GUI-0004 結果パネル

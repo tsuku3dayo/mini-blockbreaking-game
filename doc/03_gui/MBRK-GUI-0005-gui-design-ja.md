@@ -2,7 +2,7 @@
 id: MBRK-GUI-0005
 type: GUI Design
 title: ランキング画面（バックアップを含む）
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -10,7 +10,7 @@ sources:
   - MBRK-US-0013
   - MBRK-US-0014
   - doc/specification.md (v1.1) §8.4、§9.6
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:58:18+09:00" }
 ---
 
 # GUI-0005 ランキング画面

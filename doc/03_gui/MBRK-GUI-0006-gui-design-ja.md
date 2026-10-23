@@ -2,7 +2,7 @@
 id: MBRK-GUI-0006
 type: GUI Design
 title: ダイアログと通知
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -14,7 +14,7 @@ sources:
   - MBRK-US-0020
   - doc/specification.md (v1.1) §8.1、§8.6、§9.6
   - simple_shogi index.html（#install-dialog）、public/boot.js
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:58:18+09:00" }
 ---
 
 # GUI-0006 ダイアログと通知
