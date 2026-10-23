@@ -2,13 +2,13 @@
 id: MBRK-AC-0007
 type: Attested Computation
 title: 表示サイズと高密度画面の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-TASK-0007
   - MBRK-TC-0010
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T21:03:34+09:00" }
 ---
 
 # AC-0007 表示サイズと高密度画面の実施記録

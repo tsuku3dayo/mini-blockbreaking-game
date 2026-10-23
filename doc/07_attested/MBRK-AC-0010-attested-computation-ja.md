@@ -2,14 +2,14 @@
 id: MBRK-AC-0010
 type: Attested Computation
 title: 結果パネル（表示とボタン）の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-TASK-0010
   - MBRK-TC-0006
   - MBRK-TC-0010
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T21:03:34+09:00" }
 ---
 
 # AC-0010 結果パネル（表示とボタン）の実施記録

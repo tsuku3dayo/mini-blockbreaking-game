@@ -2,13 +2,13 @@
 id: MBRK-AC-0008
 type: Attested Computation
 title: 指の操作の仕上げの実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-TASK-0008
   - MBRK-TC-0007
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T21:03:34+09:00" }
 ---
 
 # AC-0008 指の操作の仕上げの実施記録
