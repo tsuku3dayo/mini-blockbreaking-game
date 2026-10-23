@@ -2,13 +2,13 @@
 id: MBRK-EP-0002
 type: Epic
 title: スマートフォンで快適に操作し、誰でも使える
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-PB-0001
   - doc/specification.md (v1.1) §2.1、§4、§7.2、§8.1、§8.3、§8.5
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # EP-0002 スマートフォンで快適に操作し、誰でも使える

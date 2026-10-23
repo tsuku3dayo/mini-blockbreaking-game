@@ -2,13 +2,13 @@
 id: MBRK-US-0013
 type: User Story
 title: ランキングで自分の記録を見る
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0003
   - doc/specification.md (v1.1) §8.4、§9.4、§12.4
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0013 ランキングで自分の記録を見る

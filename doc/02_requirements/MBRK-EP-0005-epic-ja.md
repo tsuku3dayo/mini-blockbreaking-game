@@ -2,7 +2,7 @@
 id: MBRK-EP-0005
 type: Epic
 title: アプリとしてインストールし、オフラインでも使う
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -10,7 +10,7 @@ sources:
   - MBRK-SA-0001
   - MBRK-ADR-0002
   - doc/specification.md (v1.1) §8.6
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # EP-0005 アプリとしてインストールし、オフラインでも使う

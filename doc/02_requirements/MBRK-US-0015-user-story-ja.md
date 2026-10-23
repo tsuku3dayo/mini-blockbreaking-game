@@ -2,14 +2,14 @@
 id: MBRK-US-0015
 type: User Story
 title: 効果音で出来事が分かる
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0004
   - MBRK-ADR-0005
   - doc/specification.md (v1.1) §8.7、§10、§12.6
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0015 効果音で出来事が分かる

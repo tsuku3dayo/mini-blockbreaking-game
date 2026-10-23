@@ -2,13 +2,13 @@
 id: MBRK-EP-0001
 type: Epic
 title: ブロック崩しを遊ぶ
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-PB-0001
   - doc/specification.md (v1.1) §2、§3、§5、§6、§7、§8.2、§8.3
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # EP-0001 ブロック崩しを遊ぶ

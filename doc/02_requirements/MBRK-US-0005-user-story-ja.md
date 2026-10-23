@@ -2,13 +2,13 @@
 id: MBRK-US-0005
 type: User Story
 title: クリア・ゲームオーバーで終わる
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0001
   - doc/specification.md (v1.1) §1.2、§5.1、§5.2、§7、§12.1
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0005 クリア・ゲームオーバーで終わる

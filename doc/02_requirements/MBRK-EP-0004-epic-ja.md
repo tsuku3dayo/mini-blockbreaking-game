@@ -2,14 +2,14 @@
 id: MBRK-EP-0004
 type: Epic
 title: 効果音で手ごたえを感じる
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-PB-0001
   - MBRK-ADR-0005
   - doc/specification.md (v1.1) §8.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # EP-0004 効果音で手ごたえを感じる

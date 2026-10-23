@@ -2,13 +2,13 @@
 id: MBRK-US-0003
 type: User Story
 title: ボールを打ち返し、壁で跳ね返らせる
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0001
   - doc/specification.md (v1.1) §3.1、§5.4、§5.5、§5.7、§5.9、§12.1
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0003 ボールを打ち返し、壁で跳ね返らせる
