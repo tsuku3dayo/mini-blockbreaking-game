@@ -30,13 +30,13 @@ verified: null
 
 ## ユーザーストーリー
 
-| ID | ストーリー | 優先度 |
+| ID | ストーリー | 優先順位 |
 | --- | --- | --- |
-| [MBRK-US-0012](MBRK-US-0012-user-story-ja.md) | スコアを名前つきで登録する | P2 |
-| [MBRK-US-0013](MBRK-US-0013-user-story-ja.md) | ランキングで自分の記録を見る | P2 |
-| [MBRK-US-0014](MBRK-US-0014-user-story-ja.md) | 記録をファイルに書き出して戻す | P3 |
+| [MBRK-US-0012](MBRK-US-0012-user-story-ja.md) | スコアを名前つきで登録する | 12（段階 4） |
+| [MBRK-US-0013](MBRK-US-0013-user-story-ja.md) | ランキングで自分の記録を見る | 13（段階 4） |
+| [MBRK-US-0014](MBRK-US-0014-user-story-ja.md) | 記録をファイルに書き出して戻す | 20（段階 7） |
 
-優先度の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) と同じ。
+優先順位と段階の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) の「優先順位」を参照。
 
 ## 仕様書 §12 との対応
 

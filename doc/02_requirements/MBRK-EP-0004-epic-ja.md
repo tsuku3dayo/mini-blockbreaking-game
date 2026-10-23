@@ -28,12 +28,12 @@ verified: null
 
 ## ユーザーストーリー
 
-| ID | ストーリー | 優先度 |
+| ID | ストーリー | 優先順位 |
 | --- | --- | --- |
-| [MBRK-US-0015](MBRK-US-0015-user-story-ja.md) | 効果音で出来事が分かる | P2 |
-| [MBRK-US-0016](MBRK-US-0016-user-story-ja.md) | 効果音をオン / オフする | P2 |
+| [MBRK-US-0015](MBRK-US-0015-user-story-ja.md) | 効果音で出来事が分かる | 14（段階 5） |
+| [MBRK-US-0016](MBRK-US-0016-user-story-ja.md) | 効果音をオン / オフする | 15（段階 5） |
 
-優先度の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) と同じ。
+優先順位と段階の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) の「優先順位」を参照。
 
 ## 仕様書 §12 との対応
 

@@ -28,14 +28,14 @@ verified: null
 
 ## ユーザーストーリー
 
-| ID | ストーリー | 優先度 |
+| ID | ストーリー | 優先順位 |
 | --- | --- | --- |
-| [MBRK-US-0017](MBRK-US-0017-user-story-ja.md) | ホーム画面に追加して開く | P3 |
-| [MBRK-US-0018](MBRK-US-0018-user-story-ja.md) | 電波がなくても遊ぶ | P3 |
-| [MBRK-US-0019](MBRK-US-0019-user-story-ja.md) | 新しい版に自分のタイミングで更新する | P3 |
-| [MBRK-US-0020](MBRK-US-0020-user-story-ja.md) | 起動できなくなっても自動で直る | P3 |
+| [MBRK-US-0017](MBRK-US-0017-user-story-ja.md) | ホーム画面に追加して開く | 16（段階 6） |
+| [MBRK-US-0018](MBRK-US-0018-user-story-ja.md) | 電波がなくても遊ぶ | 17（段階 6） |
+| [MBRK-US-0019](MBRK-US-0019-user-story-ja.md) | 新しい版に自分のタイミングで更新する | 18（段階 6） |
+| [MBRK-US-0020](MBRK-US-0020-user-story-ja.md) | 起動できなくなっても自動で直る | 19（段階 6） |
 
-優先度の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) と同じ。
+優先順位と段階の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) の「優先順位」を参照。
 
 ## 仕様書 §12 との対応
 
