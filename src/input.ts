@@ -1,7 +1,8 @@
 import { FIELD_WIDTH, TAP_MAX_MOVE } from './config';
 import type { StepInput } from './game';
 
-// 入力（TD-0003 §3）。キーボードは、この段階では Space（発射）と P・Esc（一時停止）だけ（左右キーは TASK-0013）
+// 入力（TD-0003 §3）。パドルは「最後に使われた入力」（キーボードかポインタ）に従う。
+// キーは文字ではなく物理キーの位置（event.code）で判定する（キー配列・IME の状態に左右されない）
 
 export interface InputOptions {
   /** P・Esc で一時停止 / 再開を切り替える */
@@ -32,6 +33,9 @@ export interface Input {
 
 export function createInput(canvas: HTMLCanvasElement, options: InputOptions): Input {
   let source: StepInput['source'] = 'pointer';
+  /** 押下中の左右キー */
+  let left = false;
+  let right = false;
   let pointerX: number | null = null;
   let pointerType = 'mouse';
   let activePointerId: number | null = null;
@@ -50,6 +54,8 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
 
   function reset(): void {
     source = 'pointer';
+    left = false;
+    right = false;
     pointerX = null;
     activePointerId = null;
     downX = null;
@@ -73,14 +79,21 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
     source = 'pointer';
   }
 
-  /** 追従をやめる（発射はしない）。中断・フォーカスを失ったとき（仕様書 §4.1-6） */
-  function release(): void {
+  /** 指の追従をやめる（発射はしない） */
+  function releasePointer(): void {
     activePointerId = null;
     downX = null;
   }
 
+  /** 押下中の左右キーと指の追従を、すべて離した扱いにする。一時停止・フォーカスを失ったとき（仕様書 §4.1-6） */
+  function release(): void {
+    left = false;
+    right = false;
+    releasePointer();
+  }
+
   function onPointerCancel(e: PointerEvent): void {
-    if (e.pointerId === activePointerId) release();
+    if (e.pointerId === activePointerId) releasePointer();
   }
 
   function onPointerMove(e: PointerEvent): void {
@@ -98,6 +111,19 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
   function onKeyDown(e: KeyboardEvent): void {
     if (isFormControl(document.activeElement) || e.isComposing) return;
     switch (e.code) {
+      case 'ArrowLeft':
+      case 'KeyA':
+        // ← → はページのスクロールを止める
+        if (e.code === 'ArrowLeft' && options.isActive()) e.preventDefault();
+        left = true;
+        source = 'keyboard';
+        break;
+      case 'ArrowRight':
+      case 'KeyD':
+        if (e.code === 'ArrowRight' && options.isActive()) e.preventDefault();
+        right = true;
+        source = 'keyboard';
+        break;
       case 'Space':
         if (options.isActive()) e.preventDefault();
         // キーリピート（押しっぱなし）は無視する（仕様書 §4.1-4）
@@ -113,17 +139,24 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
     }
   }
 
+  /** 離したキーは、フォーカスの場所によらず離した扱いにする（押したままにならないように） */
+  function onKeyUp(e: KeyboardEvent): void {
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') left = false;
+    else if (e.code === 'ArrowRight' || e.code === 'KeyD') right = false;
+  }
+
   function onPointerUp(e: PointerEvent): void {
     if (e.pointerId !== activePointerId || downX === null) return;
     // 押してから離すまでの横の移動が 10 以内ならタップ（パドルを動かしただけなら発射しない）
     if (Math.abs(toLogicalX(e.clientX) - downX) <= TAP_MAX_MOVE) launchRequested = true;
-    release();
+    releasePointer();
   }
 
   return {
     take() {
       stepInput.source = source;
-      stepInput.dir = 0;
+      // 右が押されていれば +1、左が押されていれば −1。両方押しは止まる（仕様書 §4.1-1）
+      stepInput.dir = ((right ? 1 : 0) - (left ? 1 : 0)) as StepInput['dir'];
       stepInput.pointerX = pointerX;
       stepInput.launch = launchRequested;
       launchRequested = false;
@@ -149,6 +182,7 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
       canvas.addEventListener('lostpointercapture', onPointerCancel, { signal });
       window.addEventListener('blur', release, { signal });
       window.addEventListener('keydown', onKeyDown, { signal });
+      window.addEventListener('keyup', onKeyUp, { signal });
       // 長押しメニューを出さない
       canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { signal });
     },
