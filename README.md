@@ -31,3 +31,14 @@ npm run dev
 | `npm run verify` | lint → 単体テスト → build → check:dist をまとめて行う |
 
 初めて E2E を動かすときは、`npx playwright install chromium` でブラウザを入れてください。
+
+## デバッグモード
+
+URL の末尾に `?debug=1` を付けて開くと（例：http://localhost:5173/?debug=1）、ブラウザの開発者ツールから `window.__breakout` を使えます。E2E でも使っています。
+
+| 名前 | 内容 |
+| --- | --- |
+| `__breakout.snapshot()` | ゲームの状態の写しを返す |
+| `__breakout.setup({ ... })` | 状態の一部を書き換える（例：`setup({ status: 'playing', ball: { x: 100, y: 630, vx: 0, vy: 300 } })`、`setup({ aliveIds: [32] })` でブロックを 1 個だけ残す） |
+
+`body` の `data-game-state` 属性と、`window` の `app:state` イベントで、ゲームの状態（`ready`・`playing`・`paused`・`cleared`・`gameOver`）が分かります。
