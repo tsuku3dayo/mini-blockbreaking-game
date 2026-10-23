@@ -38,7 +38,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # ブラウザと OS の部品の取得が止まることがあるので、4 分で打ち切って 3 回まで試す
+      - name: Install Playwright browser
+        run: |
+          for i in 1 2 3; do
+            timeout 240 npx playwright install --with-deps chromium && exit 0
+            echo "Playwright install attempt $i failed or timed out; retrying"
+          done
+          exit 1
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v7
         if: failure()
