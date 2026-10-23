@@ -1,11 +1,9 @@
-import { BLOCK_COUNT } from './config';
+import { BLOCK_COUNT, RESULT_INPUT_GUARD } from './config';
 import { formatNumber, formatSeconds } from './format';
 import type { ResultSummary } from './game';
 import { el, icon } from './ui';
 
-// 結果パネル（TD-0004 §5、GUI-0004）。
-// この段階は表示・ボタン・初期フォーカス・Enter で RETRY まで。
-// 名前の登録は TASK-0015、入力ガード（500 ms）と Enter の細かい扱いは TASK-0012 で足す
+// 結果パネル（TD-0004 §5、GUI-0004）。名前の登録は TASK-0015 で足す
 
 export interface ResultActions {
   retry(): void;
@@ -66,9 +64,33 @@ export function showResultPanel(summary: ResultSummary, actions: ResultActions):
   root.hidden = false;
   root.scrollTop = 0;
 
-  // どこにもフォーカスがないときの Enter は RETRY
   controller?.abort();
   controller = new AbortController();
+  const { signal } = controller;
+
+  // 入力ガード：パネルが出てから 500 ms は、Enter・Space とパネル上のタップ・クリックを無視する（仕様書 §4.1-8）。
+  // プレイ中に押していたキーや指で、RETRY などが意図せず動かないようにするため。
+  // キャプチャ段階で止めるので、ボタン・入力欄・下の Enter の処理まで届かない。見た目は変えない（GUI-0004 §5）
+  const shownAt = performance.now();
+  const guarded = () => performance.now() - shownAt < RESULT_INPUT_GUARD;
+  const block = (e: Event) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  };
+  for (const type of ['keydown', 'keyup'] as const) {
+    window.addEventListener(
+      type,
+      (e) => {
+        if (guarded() && (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space')) block(e);
+      },
+      { capture: true, signal },
+    );
+  }
+  for (const type of ['pointerdown', 'pointerup', 'click'] as const) {
+    root.addEventListener(type, (e) => guarded() && block(e), { capture: true, signal });
+  }
+
+  // どこにもフォーカスがないときの Enter は RETRY
   document.addEventListener(
     'keydown',
     (e) => {
@@ -78,7 +100,7 @@ export function showResultPanel(summary: ResultSummary, actions: ResultActions):
         actions.retry();
       }
     },
-    { signal: controller.signal },
+    { signal },
   );
 
   // 初期フォーカス：名前の入力欄ができるまで（TASK-0015）は、PC・スマホとも見出し
