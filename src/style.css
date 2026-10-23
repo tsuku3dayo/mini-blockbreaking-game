@@ -213,7 +213,90 @@ input[aria-invalid='true'] {
 }
 
 .menu .start {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   min-height: 56px;
+}
+
+/* PC で出すキーのヒント（GUI-0001 §5.1）。タッチだけの端末では出さない */
+.key-hint {
+  position: absolute;
+  right: 16px;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: normal;
+  opacity: 0.8;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .key-hint {
+    display: none;
+  }
+}
+
+/* 操作方法（GUI-0002）。項目名は --muted、説明は --text */
+.howto {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.howto h2 {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.howto dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.howto dt {
+  color: var(--muted);
+}
+
+.howto dd {
+  margin: 0;
+}
+
+/* ── 画面上部のバー（GUI-0001 §5.4）：左に BACK、中央に見出し、右は釣り合いのための空き ── */
+.bar {
+  display: grid;
+  /* 左は BACK の幅以上。幅に余裕があれば左右を同じ幅にして見出しを中央に置く */
+  grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.bar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  /* 見出しが長くても「BACK」を折り返さない */
+  white-space: nowrap;
+}
+
+.bar-title {
+  text-align: center;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 0;
 }
 
 .install-open {

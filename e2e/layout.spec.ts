@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openApp } from './helpers';
+import { openGame } from './helpers';
 
-// この段階（WS-0003 の途中）では、開いたらすぐプレイ画面になる。タイトルの START からの流れは TASK-0009
+// 前提：/ を開いて START（TC-0010-03）
 
 /** Canvas の CSS の大きさと実ピクセル */
 function canvasSize(page: Page) {
@@ -13,7 +13,7 @@ function canvasSize(page: Page) {
 }
 
 test('TC-0010-03 1 画面に収まる', async ({ page }) => {
-  await openApp(page, './');
+  await openGame(page, './');
   const viewport = page.viewportSize();
   if (!viewport) throw new Error('viewport がありません');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -30,7 +30,7 @@ test('TC-0010-03 1 画面に収まる', async ({ page }) => {
 });
 
 test('TC-0010-05 プレイ画面のボタンは 44 px 以上', async ({ page }) => {
-  await openApp(page, './');
+  await openGame(page, './');
   const buttons = page.locator('#screen-play button:visible, #screen-play input:visible');
   expect(await buttons.count()).toBeGreaterThan(0);
   for (const box of await buttons.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON() as DOMRect))) {
@@ -40,7 +40,7 @@ test('TC-0010-05 プレイ画面のボタンは 44 px 以上', async ({ page }) 
 });
 
 test('TC-0010-06 実ピクセルは CSS の大きさ × 画素密度', async ({ page }) => {
-  await openApp(page, './');
+  await openGame(page, './');
   const size = await canvasSize(page);
   expect(size.width).toBe(Math.round(size.cssWidth * size.dpr));
   expect(size.height).toBe(Math.round(size.cssHeight * size.dpr));
@@ -53,7 +53,7 @@ test('TC-0010-06 実ピクセルは CSS の大きさ × 画素密度', async ({ 
 
 test('TC-0010-07 向きを変えたら大きさを合わせ直す', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
-  await openApp(page, './');
+  await openGame(page, './');
   const portrait = await canvasSize(page);
   expect(portrait.cssWidth).toBe(343);
   expect(portrait.cssHeight).toBe(457);
@@ -67,7 +67,7 @@ test('TC-0010-07 向きを変えたら大きさを合わせ直す', async ({ pag
 
 test('TC-0010-08 横向きで最小のときだけ、縦向きをすすめる', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
-  await openApp(page, './');
+  await openGame(page, './');
   const notice = page.getByText('縦向きでのプレイをおすすめします');
   await expect(notice).toBeHidden();
 

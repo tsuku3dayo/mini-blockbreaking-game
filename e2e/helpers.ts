@@ -22,6 +22,18 @@ export async function openApp(page: Page, path = './?debug=1'): Promise<void> {
   await expect.poll(() => page.evaluate(() => window.__appStarted === true)).toBe(true);
 }
 
+/** タイトル画面の START でゲームを始め、発射前になるまで待つ */
+export async function startGame(page: Page): Promise<void> {
+  await page.locator('#title-start').click();
+  await expect(page.locator('body')).toHaveAttribute('data-game-state', 'ready');
+}
+
+/** 開いて START まで（多くのテストの前提：「/?debug=1 で START」） */
+export async function openGame(page: Page, path = './?debug=1'): Promise<void> {
+  await openApp(page, path);
+  await startGame(page);
+}
+
 /** ゲームの状態の写し（?debug=1 のときだけ使える） */
 export function snapshot(page: Page) {
   return page.evaluate(() => {

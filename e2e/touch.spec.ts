@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { nextFrames, openApp, snapshot, touch, touchAt } from './helpers';
+import { nextFrames, openGame, snapshot, touch, touchAt } from './helpers';
 
-// この段階（WS-0003 の途中）では、開いたらすぐプレイ画面になる。タイトルの START からの流れは TASK-0009
+// 前提：/?debug=1 を開いて START（TC-0007）
 
 const Y = 500;
 
@@ -11,7 +11,7 @@ async function paddleX(page: Parameters<typeof snapshot>[0]): Promise<number> {
 }
 
 test.beforeEach(async ({ page }) => {
-  await openApp(page);
+  await openGame(page);
 });
 
 test('TC-0007-01 なぞると追従し、離すと止まる', async ({ page }) => {
