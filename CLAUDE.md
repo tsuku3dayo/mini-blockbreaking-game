@@ -15,6 +15,17 @@ This file provides guidance to Claude Code when working in this repository.
 
 00 project-brief → 01 システム構成（承認）→ 02 要件・ユーザーストーリー（承認）→ 03 画面設計（承認）→ 04 詳細設計 → 05 テスト / 06 作業計画（並行）→ 07 実装・自動テスト → 手動テスト（承認）→ attested-computation（承認）
 
+## Git の運用
+
+- リポジトリ：https://github.com/tsuku3dayo/mini-blockbreaking-game （公開）。デフォルトブランチは `main`。**`main` に直接コミットしない。**
+- コミットメッセージは英語（命令形、1 コミット 1 目的）。
+- **成果物は、承認を受けるたびに PR にする。**
+  1. 段階ごとに作業ブランチを切る（例：`docs/03-gui-design`。07 の実装は `feat/<内容>`）。
+  2. 成果物を `status: review` で作ってコミットし、オーナーに承認を求める。
+  3. 承認されたら `status: stable`・`verified` を記入してコミットし、push して PR を作る（本文に成果物の ID・承認日時を書く）。
+  4. CI があるときは通ったことを確かめてから、`main` にマージする。
+- 公開リポジトリなので、ほかのプロジェクトの社内情報・個人の ID・機密を含むファイルをコミットしない。
+
 ## 成果物の書式
 
 ### ID とファイル名
