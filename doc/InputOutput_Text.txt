@@ -1,0 +1,52 @@
+project-brief
+      │
+      ▼
+01.システム構成
+      │
+      ├─ system-architecture
+      ├─ technology-stack
+      └─ architecture-decision
+      │
+    承認
+      │
+      ▼
+02.要件・ユーザーストーリー
+      │
+      ├─ epic
+      └─ user-story
+      │
+    承認
+      │
+      ▼
+03.画面設計
+      │
+      └─ gui-design
+      │
+    承認
+      │
+      ▼
+04.詳細設計
+      │
+      └─ technical-design
+      │
+ ┌────┴────┐
+ ▼         ▼
+05.テスト  06.作業計画
+ │          │
+ ▼          ▼
+test-      workstream
+strategy      │
+ │            ▼
+ ▼         implementation-task
+test-case     │
+ └────┬──────┘
+      ▼
+07.実装・自動テスト
+      │
+      ▼
+手動テスト
+      │
+    承認
+      │
+      ▼
+attested-computation
