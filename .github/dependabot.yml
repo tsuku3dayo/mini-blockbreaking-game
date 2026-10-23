@@ -1,0 +1,15 @@
+# 依存の更新を、週に 1 回 PR で知らせる
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # 開発用の道具はまとめて 1 つの PR にする
+      dev-dependencies:
+        dependency-type: development
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
