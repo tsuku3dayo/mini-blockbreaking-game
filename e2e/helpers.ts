@@ -34,6 +34,15 @@ export async function openGame(page: Page, path = './?debug=1'): Promise<void> {
   await startGame(page);
 }
 
+/**
+ * page.clock の時計を止める（page.clock.install() のあとで呼ぶ）。
+ * install() だけでは時計は実時間でも進み続けるので、時間に厳しいテストでは止めて runFor で進める
+ */
+export async function freezeClock(page: Page): Promise<void> {
+  const now = await page.evaluate(() => Date.now());
+  await page.clock.pauseAt(now + 100);
+}
+
 /** ゲームの状態の写し（?debug=1 のときだけ使える） */
 export function snapshot(page: Page) {
   return page.evaluate(() => {
