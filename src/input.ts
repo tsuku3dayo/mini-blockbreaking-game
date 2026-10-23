@@ -1,7 +1,19 @@
 import { FIELD_WIDTH, TAP_MAX_MOVE } from './config';
 import type { StepInput } from './game';
 
-// 入力（TD-0003 §3）。この段階はポインタだけ（キーボードは TASK-0013）
+// 入力（TD-0003 §3）。キーボードは、この段階では Space（発射）と P・Esc（一時停止）だけ（左右キーは TASK-0013）
+
+export interface InputOptions {
+  /** P・Esc で一時停止 / 再開を切り替える */
+  onTogglePause(): void;
+  /** ← → Space の既定の動き（スクロール）を止めてよい状態か（発射前・プレイ中・一時停止中） */
+  isActive(): boolean;
+}
+
+/** フォーカスがこれらの部品にあるときのキーは、ゲームに渡さない（TD-0003 §3.2） */
+function isFormControl(element: Element | null): boolean {
+  return !!element && element.matches('button, input, select, textarea, a[href], summary, [contenteditable="true"]');
+}
 
 export interface Input {
   /** そのステップの入力を作る。発射要求は取り出したら消える */
@@ -10,13 +22,15 @@ export interface Input {
   discardLaunch(): void;
   /** マウスで操作しているか（プレイ中にカーソルを隠すため） */
   usingMouse(): boolean;
+  /** 押下中の指・キーをすべて離した扱いにする（一時停止のとき） */
+  release(): void;
   /** 入力の受付を始める */
   attach(): void;
   /** 入力の受付をやめて、状態を初期に戻す */
   detach(): void;
 }
 
-export function createInput(canvas: HTMLCanvasElement): Input {
+export function createInput(canvas: HTMLCanvasElement, options: InputOptions): Input {
   let source: StepInput['source'] = 'pointer';
   let pointerX: number | null = null;
   let pointerType = 'mouse';
@@ -81,6 +95,24 @@ export function createInput(canvas: HTMLCanvasElement): Input {
     }
   }
 
+  function onKeyDown(e: KeyboardEvent): void {
+    if (isFormControl(document.activeElement) || e.isComposing) return;
+    switch (e.code) {
+      case 'Space':
+        if (options.isActive()) e.preventDefault();
+        // キーリピート（押しっぱなし）は無視する（仕様書 §4.1-4）
+        if (!e.repeat) launchRequested = true;
+        break;
+      case 'KeyP':
+      case 'Escape':
+        if (!e.repeat) {
+          e.preventDefault();
+          options.onTogglePause();
+        }
+        break;
+    }
+  }
+
   function onPointerUp(e: PointerEvent): void {
     if (e.pointerId !== activePointerId || downX === null) return;
     // 押してから離すまでの横の移動が 10 以内ならタップ（パドルを動かしただけなら発射しない）
@@ -103,6 +135,7 @@ export function createInput(canvas: HTMLCanvasElement): Input {
     usingMouse() {
       return source === 'pointer' && pointerType === 'mouse';
     },
+    release,
     attach() {
       controller?.abort();
       controller = new AbortController();
@@ -115,6 +148,7 @@ export function createInput(canvas: HTMLCanvasElement): Input {
       window.addEventListener('pointercancel', onPointerCancel, { signal });
       canvas.addEventListener('lostpointercapture', onPointerCancel, { signal });
       window.addEventListener('blur', release, { signal });
+      window.addEventListener('keydown', onKeyDown, { signal });
       // 長押しメニューを出さない
       canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { signal });
     },

@@ -1,13 +1,14 @@
-import { createGame, step, type GameEvent, type GameState, type GameStatus } from './game';
+import { createGame, pause, resume, step, type GameEvent, type GameState, type GameStatus } from './game';
 import { createInput } from './input';
 import { computeDisplaySize, isMinimumSize } from './layout';
 import { advance, createAccumulator, resetAccumulator } from './loop';
 import { readPalette, render } from './render';
 import { hideResultPanel, showResultPanel } from './result-panel';
 import { summarize } from './score';
+import { icon } from './ui';
 
 // プレイ画面（TD-0003 §1・§2・§5・§7）。
-// 一時停止・効果音・読み上げは後のタスクで足す
+// 効果音・読み上げは後のタスクで足す
 
 /** プレイ画面から頼む画面の切替え（main.ts が渡す） */
 export interface PlayDeps {
@@ -44,7 +45,10 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
   const orientationNotice = document.getElementById('orientation-notice') as HTMLElement;
   const pauseButton = document.getElementById('pause-button') as HTMLButtonElement;
   const palette = readPalette();
-  const input = createInput(canvas);
+  const input = createInput(canvas, {
+    onTogglePause: () => togglePause(),
+    isActive: () => isRunning(state) || state.status === 'paused',
+  });
   const acc = createAccumulator();
   // フレームごとに使い回す
   const events: GameEvent[] = [];
@@ -110,11 +114,55 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     frameId = requestAnimationFrame(frame);
   }
 
+  /** 一時停止ボタンの表示：止めていないとき「一時停止」、一時停止中は「再開」。押せるのは発射前・プレイ中・一時停止中（GUI-0003 §2.3） */
+  function updatePauseButton(): void {
+    const paused = state.status === 'paused';
+    pauseButton.setAttribute('aria-pressed', String(paused));
+    pauseButton.disabled = isOver(state);
+    const label = pauseButton.querySelector('.toggle-label');
+    if (label) label.textContent = paused ? '再開' : '一時停止';
+    pauseButton.querySelector('svg')?.replaceWith(icon(paused ? 'play' : 'pause'));
+  }
+
+  /** 一時停止：ループを止め、押下中の指・キーを離した扱いにして、幕を描く（TD-0003 §1） */
+  function pauseGame(): void {
+    if (!pause(state)) return;
+    stopLoop();
+    input.release();
+    draw();
+    updatePauseButton();
+  }
+
+  /** 再開：一時停止中に出た発射要求を捨て、止まっていた時間を進めずにループを始める */
+  function resumeGame(): void {
+    if (!resume(state)) return;
+    input.discardLaunch();
+    draw();
+    updatePauseButton();
+    startLoop();
+  }
+
+  function togglePause(): void {
+    if (state.status === 'paused') resumeGame();
+    else pauseGame();
+  }
+
+  /** 画面が隠れたら一時停止する。表示に戻っても自動では再開しない（仕様書 §7.2） */
+  function onVisibilityChange(): void {
+    if (document.hidden) pauseGame();
+  }
+
+  function onPauseButton(): void {
+    togglePause();
+    // 指で押したあとも、ゲームのキー操作が効くよう、ゲーム領域にフォーカスを戻す（GUI-0003 §2.3）
+    canvas.focus();
+  }
+
   /** 終了の処理：ループと入力を止め、暗くした盤面の上に結果パネルを出す（TD-0003 §1・§7） */
   function finish(): void {
     stopLoop();
     input.detach();
-    pauseButton.disabled = true;
+    updatePauseButton();
     document.title = 'ブロック崩し - 結果';
     showResultPanel(summarize(state), { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking });
   }
@@ -136,10 +184,17 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     if (layout(false)) draw();
   }
 
-  function listenResize(on: boolean): void {
+  /** プレイ画面にいる間だけ受けるイベント */
+  function listen(on: boolean): void {
     for (const type of ['resize', 'orientationchange']) {
       window.removeEventListener(type, onResize);
       if (on) window.addEventListener(type, onResize);
+    }
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    pauseButton.removeEventListener('click', onPauseButton);
+    if (on) {
+      document.addEventListener('visibilitychange', onVisibilityChange);
+      pauseButton.addEventListener('click', onPauseButton);
     }
   }
 
@@ -147,14 +202,14 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     start() {
       stopLoop();
       hideResultPanel();
-      pauseButton.disabled = false;
       document.title = 'ブロック崩し - プレイ';
       state = createGame();
       lastStatus = null;
       input.detach();
       input.attach();
       layout(true);
-      listenResize(true);
+      listen(true);
+      updatePauseButton();
       canvas.focus();
       draw();
       startLoop();
@@ -163,13 +218,14 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
       stopLoop();
       input.detach();
       hideResultPanel();
-      listenResize(false);
+      listen(false);
     },
     getState() {
       return state;
     },
     refresh() {
       draw();
+      updatePauseButton();
       if (isRunning(state)) startLoop();
       else if (isOver(state)) finish();
       else stopLoop();
