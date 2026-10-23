@@ -19,6 +19,32 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // ロジック層は DOM・時刻・乱数に触れない（TD-0001 §2、ADR-0004）。時刻は引数で受け取る
+    files: [
+      'src/config.ts',
+      'src/game.ts',
+      'src/collision.ts',
+      'src/score.ts',
+      'src/loop.ts',
+      'src/layout.ts',
+      'src/ranking.ts',
+      'src/backup.ts',
+      'src/sound-plan.ts',
+      'src/format.ts',
+    ],
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        ...['window', 'document', 'navigator', 'location', 'localStorage', 'sessionStorage', 'performance', 'requestAnimationFrame', 'setTimeout', 'setInterval', 'Date'].map((name) => ({
+          name,
+          message: 'ロジック層では DOM・時刻を使わないでください（時刻は引数で受け取る）',
+        })),
+      ],
+      'no-restricted-properties': ['error', { object: 'Math', property: 'random', message: 'ロジック層では乱数を使わないでください' }],
+      'no-restricted-imports': ['error', { patterns: [{ group: ['./main', './play', './input', './render', './result-panel', './ranking-view', './sound', './announce', './ui', './icons', './debug', './storage', './records', './pwa', './install'], message: 'ロジック層から画面層・基盤を import しないでください' }] }],
+    },
+  },
   // public/ のスクリプトは、ビルドを通さずにそのまま配信される（普通の <script>）
   { files: ['public/**/*.js'], languageOptions: { sourceType: 'script', globals: globals.browser } },
   { files: ['tests/**/*.ts', 'scripts/**/*.mjs', 'vite.config.ts', 'playwright.config.ts', '*.js'], languageOptions: { globals: globals.node } },
