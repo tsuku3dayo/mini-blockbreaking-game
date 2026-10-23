@@ -1,10 +1,14 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import { readFileSync } from 'node:fs';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const { version, name: appId } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string; name: string };
 
-// PWA（manifest・Service Worker）の設定は TASK-0002 で足す（TD-0001 §5）
+// アプリ名・色はここと index.html の 2 か所だけ（TD-0001 §5）
+const APP_NAME = 'ブロック崩し';
+const THEME_COLOR = '#0B1020';
+const BACKGROUND_COLOR = '#0B1020';
 
 export default defineConfig({
   // GitHub Pages のサブパス配信でも動くよう、相対パスにする
@@ -22,6 +26,34 @@ export default defineConfig({
       name: 'app-id-meta',
       transformIndexHtml: (html) => html.replace('__APP_ID__', appId),
     },
+    VitePWA({
+      // 'prompt': 新版は待機させ、画面の「更新」ボタンで切り替える（プレイ中に勝手に切り替えない）
+      registerType: 'prompt',
+      includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],
+      manifest: {
+        name: APP_NAME,
+        short_name: APP_NAME,
+        description: 'スマートフォンで遊べる、1 ステージのブロック崩し',
+        lang: 'ja',
+        display: 'standalone',
+        // インストールしたアプリは縦向きで開く
+        orientation: 'portrait',
+        start_url: './',
+        scope: './',
+        theme_color: THEME_COLOR,
+        background_color: BACKGROUND_COLOR,
+        icons: [
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icons/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        navigateFallback: 'index.html',
+      },
+    }),
   ],
   test: { environment: 'node', include: ['tests/**/*.test.ts'] },
 });
