@@ -3,7 +3,7 @@ id: MBRK-TST-0001
 type: Test Strategy
 title: テスト戦略
 status: stable
-version: 1.0
+version: 1.1
 updated: 2026-10-23
 sources:
   - MBRK-PB-0001
