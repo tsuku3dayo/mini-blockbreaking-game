@@ -27,14 +27,28 @@
           <span></span><span></span><span></span><span></span><span></span>
         </div>
         <nav class="menu" aria-label="メニュー">
-          <button id="title-start" type="button" class="primary start">START</button>
+          <button id="title-start" type="button" class="primary start">
+            <span data-icon="play"></span>
+            START
+            <!-- PC だけ出す（タッチだけの端末では CSS で隠す） -->
+            <kbd class="key-hint" aria-hidden="true">Enter</kbd>
+          </button>
           <button id="title-ranking" type="button">RANKING</button>
         </nav>
+        <section class="howto" aria-labelledby="howto-heading">
+          <h2 id="howto-heading">操作方法</h2>
+          <dl>
+            <dt>パドル移動</dt>
+            <dd>画面をなぞる<br />マウス / ← → ・ A D</dd>
+            <dt>発射</dt>
+            <dd>タップ / クリック<br />/ Space</dd>
+            <dt>一時停止</dt>
+            <dd>一時停止ボタン<br />/ P ・ Esc</dd>
+          </dl>
+        </section>
+        <!-- 効果音ボタンは TASK-0018 でここに置く -->
         <button id="install-open" type="button" class="link install-open">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="6" y="2" width="12" height="20" rx="2" />
-            <path d="M12 7v8M8.5 11.5 12 15l3.5-3.5M10 19h4" />
-          </svg>
+          <span data-icon="install"></span>
           アプリとしてインストールする方法
         </button>
         <p class="muted version">v<span id="version"></span></p>
@@ -44,10 +58,7 @@
       <section id="screen-play" class="screen" aria-label="プレイ" hidden>
         <!-- 横向きで、ゲーム領域が最小でしか出せないときだけ出す（GUI-0006 §5） -->
         <p id="orientation-notice" class="notice" hidden>
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12a9 9 0 1 1-3-6.7L21 8" />
-            <path d="M21 3v5h-5" />
-          </svg>
+          <span data-icon="rotate"></span>
           縦向きでのプレイをおすすめします
         </p>
         <!-- Canvas と結果パネルを重ねる箱 -->
@@ -58,17 +69,26 @@
         <!-- 操作欄（GUI-0003 §2.3）。一時停止の動きは TASK-0011、効果音ボタンは TASK-0018 で入れる -->
         <div class="play-controls">
           <button id="pause-button" type="button" class="toggle" aria-pressed="false">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M9 5v14M15 5v14" />
-            </svg>
+            <span data-icon="pause"></span>
             <span class="toggle-label">一時停止</span>
           </button>
         </div>
       </section>
 
-      <!-- ランキング（GUI-0005） -->
+      <!-- ランキング（GUI-0005）。表とバックアップは TASK-0016 -->
       <section id="screen-ranking" class="screen" aria-labelledby="ranking-heading" hidden>
-        <h2 id="ranking-heading" tabindex="-1">ハイスコアランキング</h2>
+        <header class="bar">
+          <button id="ranking-back" type="button" class="bar-button">
+            <span data-icon="arrow-left"></span>
+            BACK
+          </button>
+          <h2 id="ranking-heading" class="bar-title" tabindex="-1">ハイスコアランキング</h2>
+          <span class="bar-spacer"></span>
+        </header>
+        <div id="ranking-empty" class="empty">
+          <p class="muted">まだ記録がありません</p>
+          <button id="ranking-empty-title" type="button">タイトルへ戻る</button>
+        </div>
       </section>
     </main>
 

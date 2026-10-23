@@ -1,12 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { appEvents, openApp, recordAppEvents, setup, snapshot } from './helpers';
+import { appEvents, openGame, recordAppEvents, setup, snapshot } from './helpers';
 
 test('TC-0005-09 終わったら物理が止まる', async ({ page }) => {
   // 時計を止めて、テストから進める（requestAnimationFrame も止まる）
   await page.clock.install();
   await recordAppEvents(page);
-  await openApp(page);
-  await expect(page.locator('body')).toHaveAttribute('data-game-state', 'ready');
+  await openGame(page);
 
   // パドル（200〜280）から離れた所で、下端の直前から落とす
   await setup(page, { status: 'playing', ball: { x: 100, y: 630, vx: 0, vy: 300 } });
