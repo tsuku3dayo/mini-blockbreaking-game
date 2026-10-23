@@ -45,6 +45,53 @@ export async function toScreen(page: Page, x: number, y: number): Promise<{ x: n
   return { x: box.x + (x * box.width) / 480, y: box.y + (y * box.height) / 640 };
 }
 
+export type TouchType = 'pointerdown' | 'pointermove' | 'pointerup' | 'pointercancel';
+
+/**
+ * タッチの PointerEvent を送る。位置は論理座標（Canvas の外も可）で、ページ上のその位置にある要素に送る。
+ * id が 1 の指を「最初の指」（isPrimary）とする
+ */
+export async function touch(page: Page, type: TouchType, x: number, y: number, id = 1): Promise<void> {
+  await touchAt(page, type, await toScreen(page, x, y), id);
+}
+
+/** touch と同じ。位置をページ上の座標で渡す（Canvas の外の部品を押すとき） */
+export async function touchAt(page: Page, type: TouchType, point: { x: number; y: number }, id = 1): Promise<void> {
+  await page.evaluate(
+    ({ type, point, id }) => {
+      const target = document.elementFromPoint(point.x, point.y) ?? document.body;
+      target.dispatchEvent(
+        new PointerEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          composed: true,
+          pointerId: id,
+          pointerType: 'touch',
+          isPrimary: id === 1,
+          clientX: point.x,
+          clientY: point.y,
+          button: type === 'pointermove' ? -1 : 0,
+          buttons: type === 'pointerdown' || type === 'pointermove' ? 1 : 0,
+        }),
+      );
+    },
+    { type, point, id },
+  );
+}
+
+/** ブラウザで次の描画まで待つ（入力がステップに取り込まれるまで） */
+export function nextFrames(page: Page, count = 3): Promise<void> {
+  return page.evaluate(
+    (n) =>
+      new Promise<void>((resolve) => {
+        let left = n;
+        const tick = () => (--left <= 0 ? resolve() : requestAnimationFrame(tick));
+        requestAnimationFrame(tick);
+      }),
+    count,
+  );
+}
+
 /** app:state・app:sound を記録する。page.goto の前に呼ぶ */
 export async function recordAppEvents(page: Page): Promise<void> {
   await page.addInitScript(() => {
