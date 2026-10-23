@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openGame, setup, snapshot } from './helpers';
+import { openGame, setup, snapshot, startGame } from './helpers';
 
 // 前提：/?debug=1 で START、setup で終了の直前を作り、時計を進めて終わらせる（TC-0006）
 
@@ -142,4 +142,65 @@ test('TC-0010-05 結果パネルのボタンは 44 px 以上', async ({ page }) 
     expect(b.width).toBeGreaterThanOrEqual(44);
     expect(b.height).toBeGreaterThanOrEqual(44);
   }
+});
+
+test.describe('誤操作を防ぐ（TC-0011、page.clock）', () => {
+  /** 時計を止めて開き直し、ゲームオーバーで終わらせる。終わった時点から時計を進めるのはテストの側 */
+  async function finishWithClock(page: Page): Promise<void> {
+    await page.clock.install();
+    await page.reload();
+    await expect.poll(() => page.evaluate(() => window.__appStarted === true)).toBe(true);
+    await startGame(page);
+    // install() だけでは時計は実時間で進み続ける。止めて、runFor で進めた分だけ進むようにする
+    const now = await page.evaluate(() => Date.now());
+    await page.clock.pauseAt(now + 100);
+    await setup(page, { status: 'playing', broken: 12, speedLevel: 1, ball: { x: 100, y: 630, vx: 0, vy: 330 } });
+    await page.clock.runFor(100);
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'gameOver');
+    await expect(page.locator('#result-panel')).toBeVisible();
+  }
+
+  test('TC-0011-01・02 出てから 500 ms は Enter・Space・タップが効かず、過ぎれば効く', async ({ page }) => {
+    await finishWithClock(page);
+    // 終わってから 400 ms 以内
+    await page.clock.runFor(300);
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Space');
+    // 時計を止めていると Playwright の「動きが落ち着くまで待つ」が終わらないので、force で押す
+    await page.locator('#result-retry').tap({ force: true });
+    await page.locator('#result-retry').click({ force: true });
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'gameOver');
+    await expect(page.locator('#result-panel')).toBeVisible();
+
+    // 500 ms を過ぎれば Enter で新しいゲーム
+    await page.clock.runFor(200);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'ready');
+    await expect(page.locator('#result-panel')).toBeHidden();
+  });
+
+  test('TC-0011-03 TITLE にフォーカスがあるときの Enter はタイトルへ（リトライしない）', async ({ page }) => {
+    await finishWithClock(page);
+    await page.clock.runFor(600);
+    await page.locator('#result-title').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#screen-title')).toBeVisible();
+    await expect(page.locator('#screen-play')).toBeHidden();
+  });
+
+  test('TC-0011-04 終わったらゲーム用の入力を受け付けない', async ({ page }) => {
+    await finishWithClock(page);
+    await page.clock.runFor(600);
+    const before = await snapshot(page);
+    // ゲーム中なら効くキー・ポインタを送っても、状態は変わらず、Space の既定の動きも止められない
+    await page.mouse.move(10, 10);
+    const notPrevented = await page.evaluate(() =>
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space', key: ' ', bubbles: true, cancelable: true })),
+    );
+    expect(notPrevented).toBe(true);
+    await page.keyboard.press('p');
+    await page.clock.runFor(200);
+    expect(await snapshot(page)).toEqual(before);
+  });
 });
