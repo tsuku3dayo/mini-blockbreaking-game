@@ -8,4 +8,6 @@ declare const __APP_ID__: string;
 interface Window {
   /** 起動できたら true。public/boot.js が、起動に失敗したかの判定に使う */
   __appStarted?: boolean;
+  /** ?debug=1 のときだけある、テスト用の入口（src/debug.ts） */
+  __breakout?: import('./debug').DebugApi;
 }
