@@ -1,4 +1,6 @@
 import './style.css';
+import { setupInstall } from './install';
+import { setupUpdateBanner } from './pwa';
 
 // 起動の手順（TD-0001 §8）。画面の切替え・各画面の配線は、以後のタスクで足す
 
@@ -11,6 +13,11 @@ function showTitle(): void {
   document.title = 'ブロック崩し - タイトル';
   document.getElementById('title-start')?.focus();
 }
+
+const version = document.getElementById('version');
+if (version) version.textContent = __APP_VERSION__;
+setupUpdateBanner();
+setupInstall();
 
 showTitle();
 

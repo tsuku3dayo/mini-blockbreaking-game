@@ -216,6 +216,95 @@ input[aria-invalid='true'] {
   min-height: 56px;
 }
 
+.install-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.version {
+  text-align: center;
+}
+
+/* アイコン（GUI-0001 §5.3）：線の太さ 2、20 × 20、色は文字と同じ */
+.icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── ダイアログ（GUI-0006） ── */
+.modal {
+  width: min(343px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+}
+
+.modal details {
+  border-top: 1px solid var(--border);
+}
+
+/* display: flex にすると開閉の印（▶ / ▼）が消えるので、上下の余白で高さ 48 にする */
+.modal summary {
+  min-height: 48px;
+  padding: 11px 0;
+  cursor: pointer;
+}
+
+.modal ol {
+  margin: 0 0 12px;
+  padding-left: 1.5em;
+}
+
+.modal > .muted {
+  margin-top: 12px;
+}
+
+.modal .wide {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* ── 更新のお知らせ（GUI-0006 §3）。下端の安全領域を避ける ── */
+.update-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px var(--gutter) max(8px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
 /* 数字は桁をそろえる（スコア・タイム） */
 .num {
   font-family: var(--font-mono);

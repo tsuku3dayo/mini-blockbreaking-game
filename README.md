@@ -26,6 +26,8 @@ npm run dev
 | `npm run lint` | ESLint で検査する |
 | `npm test` | 単体テスト（Vitest） |
 | `npm run test:e2e` | 画面のテスト（Playwright。Pixel 7 と 375 × 667 の 2 つ） |
-| `npm run verify` | lint → 単体テスト → build をまとめて行う |
+| `npm run check:dist` | `dist/` が PWA として成り立つか（manifest・アイコン・バージョン表示・起動の見張り）を確かめる |
+| `npm run icons` | アイコンを `public/icons/` に作り直す |
+| `npm run verify` | lint → 単体テスト → build → check:dist をまとめて行う |
 
 初めて E2E を動かすときは、`npx playwright install chromium` でブラウザを入れてください。
