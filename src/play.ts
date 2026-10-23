@@ -1,12 +1,14 @@
-import { FIELD_WIDTH } from './config';
 import { createGame, step, type GameEvent, type GameState, type GameStatus } from './game';
 import { createInput } from './input';
+import { computeDisplaySize, isMinimumSize } from './layout';
 import { advance, createAccumulator, resetAccumulator } from './loop';
 import { readPalette, render } from './render';
 
-// プレイ画面（TD-0003 §1・§2）。
-// この段階では、表示サイズは最大 448 px 幅の固定（TASK-0007 で仕様書 §2.1 の計算にする）。
+// プレイ画面（TD-0003 §1・§2・§5）。
 // 一時停止・結果パネル・効果音・読み上げは後のタスクで足す
+
+/** ゲーム領域の下の操作欄の高さ（間隔 8 + ボタン 48。GUI-0003 §1.2） */
+const CONTROLS_HEIGHT = 56;
 
 export interface PlayScreen {
   /** 新しいゲームを始める */
@@ -28,6 +30,10 @@ function notifyState(status: GameStatus): void {
 export function createPlayScreen(): PlayScreen {
   const canvas = document.getElementById('field') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const section = document.getElementById('screen-play') as HTMLElement;
+  const stage = document.getElementById('stage') as HTMLElement;
+  const main = document.getElementById('app') as HTMLElement;
+  const orientationNotice = document.getElementById('orientation-notice') as HTMLElement;
   const palette = readPalette();
   const input = createInput(canvas);
   const acc = createAccumulator();
@@ -36,16 +42,43 @@ export function createPlayScreen(): PlayScreen {
   let state = createGame();
   let lastStatus: GameStatus | null = null;
   let frameId: number | null = null;
+  /** 最後に大きさを決めたときの表示領域の幅 */
+  let layoutViewportWidth: number | null = null;
 
   const isRunning = (s: GameState) => s.status === 'ready' || s.status === 'playing';
   const isOver = (s: GameState) => s.status === 'cleared' || s.status === 'gameOver';
 
-  /** Canvas の実ピクセルを、表示の大きさ × 画素密度にそろえる（ぼやけさせない） */
-  function fitCanvas(): void {
-    const width = canvas.clientWidth || FIELD_WIDTH;
+  /**
+   * 画面の大きさから、ゲーム領域の表示の大きさと実ピクセルを決める（仕様書 §2.1）。
+   * 終了後（結果パネルを出している間）は、幅が変わったときだけ計算し直す
+   * （名前の入力でソフトウェアキーボードが出て、高さだけ縮んだときにゲーム領域を縮めないため）
+   */
+  function layout(force: boolean): boolean {
+    const viewportWidth = window.innerWidth;
+    if (!force && isOver(state) && viewportWidth === layoutViewportWidth) return false;
+    layoutViewportWidth = viewportWidth;
+
+    const style = getComputedStyle(main);
+    const { width, height } = computeDisplaySize({
+      width: viewportWidth,
+      height: window.innerHeight,
+      topInset: parseFloat(style.paddingTop) || 0,
+      bottomInset: parseFloat(style.paddingBottom) || 0,
+      controlsHeight: CONTROLS_HEIGHT,
+    });
+    // 操作欄もゲーム領域と同じ幅にする
+    section.style.setProperty('--stage-width', `${width}px`);
+    stage.style.width = `${width}px`;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    // 実ピクセルは表示の大きさ × 画素密度（ぼやけさせない）
     const dpr = window.devicePixelRatio || 1;
     canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(((width * 4) / 3) * dpr);
+    canvas.height = Math.round(height * dpr);
+
+    // 横向きで、最小の大きさでしか出せないときは、縦向きをすすめる
+    orientationNotice.hidden = !(viewportWidth > window.innerHeight && isMinimumSize(width));
+    return true;
   }
 
   function draw(): void {
@@ -87,8 +120,14 @@ export function createPlayScreen(): PlayScreen {
   }
 
   function onResize(): void {
-    fitCanvas();
-    draw();
+    if (layout(false)) draw();
+  }
+
+  function listenResize(on: boolean): void {
+    for (const type of ['resize', 'orientationchange']) {
+      window.removeEventListener(type, onResize);
+      if (on) window.addEventListener(type, onResize);
+    }
   }
 
   return {
@@ -98,9 +137,8 @@ export function createPlayScreen(): PlayScreen {
       lastStatus = null;
       input.detach();
       input.attach();
-      fitCanvas();
-      window.removeEventListener('resize', onResize);
-      window.addEventListener('resize', onResize);
+      layout(true);
+      listenResize(true);
       canvas.focus();
       draw();
       startLoop();
@@ -108,7 +146,7 @@ export function createPlayScreen(): PlayScreen {
     stop() {
       stopLoop();
       input.detach();
-      window.removeEventListener('resize', onResize);
+      listenResize(false);
     },
     getState() {
       return state;
