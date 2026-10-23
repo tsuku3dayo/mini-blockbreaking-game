@@ -38,11 +38,12 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      # ブラウザと OS の部品の取得が止まることがあるので、4 分で打ち切って 3 回まで試す
+      # --with-deps（apt での OS の部品の取得）は途中で止まることがあった。ubuntu-latest には Chromium に
+      # 要る部品がそろっているので、ブラウザだけを入れる。取得が止まったときに備え、4 分で打ち切って 3 回まで試す
       - name: Install Playwright browser
         run: |
           for i in 1 2 3; do
-            timeout 240 npx playwright install --with-deps chromium && exit 0
+            timeout 240 npx playwright install chromium && exit 0
             echo "Playwright install attempt $i failed or timed out; retrying"
           done
           exit 1
