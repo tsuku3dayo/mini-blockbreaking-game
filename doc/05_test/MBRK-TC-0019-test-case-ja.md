@@ -3,7 +3,7 @@ id: MBRK-TC-0019
 type: Test Case
 title: 新しい版に自分のタイミングで更新する
 status: stable
-version: 1.0
+version: 1.1
 updated: 2026-10-23
 sources:
   - MBRK-US-0019
