@@ -2,19 +2,19 @@
 id: MBRK-US-0002
 type: User Story
 title: ボールを発射する
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0001
   - doc/specification.md (v1.1) §2、§3、§5.2、§5.3、§12.1
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0002 ボールを発射する
 
 - エピック：[MBRK-EP-0001](MBRK-EP-0001-epic-ja.md)
-- 優先度：P1
+- 優先順位：1 / 21（段階 1：ゲームの芯）
 
 ## ストーリー
 

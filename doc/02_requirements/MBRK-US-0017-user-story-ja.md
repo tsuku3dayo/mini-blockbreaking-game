@@ -2,19 +2,19 @@
 id: MBRK-US-0017
 type: User Story
 title: ホーム画面に追加して開く
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0005
   - doc/specification.md (v1.1) §8.2、§8.6、§12.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0017 ホーム画面に追加して開く
 
 - エピック：[MBRK-EP-0005](MBRK-EP-0005-epic-ja.md)
-- 優先度：P3
+- 優先順位：16 / 21（段階 6：アプリとして配る）
 
 ## ストーリー
 

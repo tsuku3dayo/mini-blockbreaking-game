@@ -2,19 +2,19 @@
 id: MBRK-US-0010
 type: User Story
 title: スマートフォンの画面に合った大きさで遊ぶ
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0002
   - doc/specification.md (v1.1) §2.1、§8.1、§12.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0010 スマートフォンの画面に合った大きさで遊ぶ
 
 - エピック：[MBRK-EP-0002](MBRK-EP-0002-epic-ja.md)
-- 優先度：P1
+- 優先順位：5 / 21（段階 2：スマホで最後まで遊べる）
 
 ## ストーリー
 

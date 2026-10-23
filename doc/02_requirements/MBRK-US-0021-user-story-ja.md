@@ -2,19 +2,19 @@
 id: MBRK-US-0021
 type: User Story
 title: 画面の読み上げで状況が分かる
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0002
   - doc/specification.md (v1.1) §8.1、§8.4、§8.5
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0021 画面の読み上げで状況が分かる
 
 - エピック：[MBRK-EP-0002](MBRK-EP-0002-epic-ja.md)
-- 優先度：P3
+- 優先順位：21 / 21（段階 7：仕上げ）
 
 ## ストーリー
 

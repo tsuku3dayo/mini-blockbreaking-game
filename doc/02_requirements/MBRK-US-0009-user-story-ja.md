@@ -2,19 +2,19 @@
 id: MBRK-US-0009
 type: User Story
 title: 一時停止・再開する
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0002
   - doc/specification.md (v1.1) §2.2、§4、§4.1、§5.1、§7、§8.3、§12.2
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0009 一時停止・再開する
 
 - エピック：[MBRK-EP-0002](MBRK-EP-0002-epic-ja.md)
-- 優先度：P2
+- 優先順位：9 / 21（段階 3：中断・誤操作に強くする）
 
 ## ストーリー
 

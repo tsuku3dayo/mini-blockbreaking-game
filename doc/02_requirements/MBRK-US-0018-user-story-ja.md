@@ -2,20 +2,20 @@
 id: MBRK-US-0018
 type: User Story
 title: 電波がなくても遊ぶ
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0005
   - MBRK-ADR-0001
   - doc/specification.md (v1.1) §1.2、§8.6、§10、§12.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0018 電波がなくても遊ぶ
 
 - エピック：[MBRK-EP-0005](MBRK-EP-0005-epic-ja.md)
-- 優先度：P3
+- 優先順位：17 / 21（段階 6：アプリとして配る）
 
 ## ストーリー
 

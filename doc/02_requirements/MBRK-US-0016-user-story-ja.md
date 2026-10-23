@@ -2,19 +2,19 @@
 id: MBRK-US-0016
 type: User Story
 title: 効果音をオン / オフする
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0004
   - doc/specification.md (v1.1) §8.2、§8.3、§8.5、§8.7、§12.6
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0016 効果音をオン / オフする
 
 - エピック：[MBRK-EP-0004](MBRK-EP-0004-epic-ja.md)
-- 優先度：P2
+- 優先順位：15 / 21（段階 5：効果音）
 
 ## ストーリー
 

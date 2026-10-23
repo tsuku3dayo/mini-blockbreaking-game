@@ -2,13 +2,13 @@
 id: MBRK-EP-0002
 type: Epic
 title: スマートフォンで快適に操作し、誰でも使える
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-PB-0001
   - doc/specification.md (v1.1) §2.1、§4、§7.2、§8.1、§8.3、§8.5
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # EP-0002 スマートフォンで快適に操作し、誰でも使える
@@ -27,16 +27,16 @@ verified: null
 
 ## ユーザーストーリー
 
-| ID | ストーリー | 優先度 |
+| ID | ストーリー | 優先順位 |
 | --- | --- | --- |
-| [MBRK-US-0007](MBRK-US-0007-user-story-ja.md) | 指でパドルを動かし、タップで発射する | P1 |
-| [MBRK-US-0008](MBRK-US-0008-user-story-ja.md) | マウス・キーボードでも遊ぶ | P2 |
-| [MBRK-US-0009](MBRK-US-0009-user-story-ja.md) | 一時停止・再開する | P2 |
-| [MBRK-US-0010](MBRK-US-0010-user-story-ja.md) | スマートフォンの画面に合った大きさで遊ぶ | P1 |
-| [MBRK-US-0011](MBRK-US-0011-user-story-ja.md) | 結果画面での誤操作を防ぐ | P2 |
-| [MBRK-US-0021](MBRK-US-0021-user-story-ja.md) | 画面の読み上げで状況が分かる | P3 |
+| [MBRK-US-0010](MBRK-US-0010-user-story-ja.md) | スマートフォンの画面に合った大きさで遊ぶ | 5（段階 2） |
+| [MBRK-US-0007](MBRK-US-0007-user-story-ja.md) | 指でパドルを動かし、タップで発射する | 6（段階 2） |
+| [MBRK-US-0009](MBRK-US-0009-user-story-ja.md) | 一時停止・再開する | 9（段階 3） |
+| [MBRK-US-0011](MBRK-US-0011-user-story-ja.md) | 結果画面での誤操作を防ぐ | 10（段階 3） |
+| [MBRK-US-0008](MBRK-US-0008-user-story-ja.md) | マウス・キーボードでも遊ぶ | 11（段階 3） |
+| [MBRK-US-0021](MBRK-US-0021-user-story-ja.md) | 画面の読み上げで状況が分かる | 21（段階 7） |
 
-優先度の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) と同じ。
+優先順位と段階の意味は [EP-0001](MBRK-EP-0001-epic-ja.md) の「優先順位」を参照。
 
 ## 仕様書 §12 との対応
 

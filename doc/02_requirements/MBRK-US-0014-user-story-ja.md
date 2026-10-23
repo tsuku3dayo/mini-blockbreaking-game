@@ -2,20 +2,20 @@
 id: MBRK-US-0014
 type: User Story
 title: 記録をファイルに書き出して戻す
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0003
   - MBRK-ADR-0006
   - doc/specification.md (v1.1) §9.3、§9.6、§12.5
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0014 記録をファイルに書き出して戻す
 
 - エピック：[MBRK-EP-0003](MBRK-EP-0003-epic-ja.md)
-- 優先度：P3
+- 優先順位：20 / 21（段階 7：仕上げ）
 
 ## ストーリー
 

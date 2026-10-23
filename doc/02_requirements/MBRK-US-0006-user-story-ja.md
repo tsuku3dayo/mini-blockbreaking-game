@@ -2,19 +2,19 @@
 id: MBRK-US-0006
 type: User Story
 title: 結果とスコアの内訳を見る
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0001
   - doc/specification.md (v1.1) §6、§7.2、§8.3、§12.3
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0006 結果とスコアの内訳を見る
 
 - エピック：[MBRK-EP-0001](MBRK-EP-0001-epic-ja.md)
-- 優先度：P1
+- 優先順位：8 / 21（段階 2：スマホで最後まで遊べる）
 
 ## ストーリー
 

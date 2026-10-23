@@ -2,19 +2,19 @@
 id: MBRK-US-0011
 type: User Story
 title: 結果画面での誤操作を防ぐ
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0002
   - doc/specification.md (v1.1) §4.1、§12.2
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0011 結果画面での誤操作を防ぐ
 
 - エピック：[MBRK-EP-0002](MBRK-EP-0002-epic-ja.md)
-- 優先度：P2
+- 優先順位：10 / 21（段階 3：中断・誤操作に強くする）
 
 ## ストーリー
 

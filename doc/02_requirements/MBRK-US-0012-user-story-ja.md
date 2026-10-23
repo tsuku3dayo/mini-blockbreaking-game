@@ -2,20 +2,20 @@
 id: MBRK-US-0012
 type: User Story
 title: スコアを名前つきで登録する
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-EP-0003
   - MBRK-ADR-0006
   - doc/specification.md (v1.1) §9.1、§9.3、§9.4、§9.5、§10、§12.4
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 ---
 
 # US-0012 スコアを名前つきで登録する
 
 - エピック：[MBRK-EP-0003](MBRK-EP-0003-epic-ja.md)
-- 優先度：P2
+- 優先順位：12 / 21（段階 4：記録を残す）
 
 ## ストーリー
 
