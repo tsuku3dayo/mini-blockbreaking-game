@@ -2,7 +2,7 @@
 id: MBRK-AC-0004
 type: Attested Computation
 title: パラメータと衝突判定の実施記録
-status: draft
+status: review
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -48,11 +48,16 @@ verified: null
 - `collision.ts` が DOM・時刻・乱数を使っていないことを、ESLint のルールで確かめるようにした（`eslint.config.js`：ロジック層のファイルで `window`・`document`・`Date`・`setTimeout` などのグローバル、`Math.random`、画面層・基盤の import を禁止）。`Math.random()`・`Date.now()`・`window`・`./ui` の import を書いたコードで 4 件とも検出されることを確かめた。
 - `npm run verify`・`npm run test:e2e`（4 件）：成功。
 - 仮のテスト `tests/smoke.test.ts` は、本物の単体テストができたので消した。
+- PR #21 の CI（`check`・`e2e`）は緑。2026-10-23 にマージ。
+
+### 2.1 手動の確認（WS-0002 の終わり、2026-10-23）
+
+オーナーがパソコンの Chrome で公開 URL を開き、マウスで遊んで、ボールが壁・天井・パドル・ブロックで跳ね返り、ゲームオーバーとクリアまで遊べることを確かめた（OK）。詳しくは [MBRK-AC-0006](MBRK-AC-0006-attested-computation-ja.md) §2.4。
 
 ## 3. 確認できなかったこと
 
-- TC-0003-09 の「決まった入力列で 10,000 ステップ動かして、毎ステップ `|vy| ≥ 0.5 × 速さ`」は、`step` がまだないので確かめていない（TASK-0005）。
-- TC-0004-01・02 の得点（10 点・20 点）と `block` の出来事、TC-0004-05・06（加速）は、`step` の部分なので TASK-0005 で確かめる。
+- TC-0003-09 の「決まった入力列で 10,000 ステップ動かして、毎ステップ `|vy| ≥ 0.5 × 速さ`」は、`step` の部分なので TASK-0005 で確かめた（AC-0005）。
+- TC-0004-01・02 の得点（10 点・20 点）と `block` の出来事、TC-0004-05・06（加速）も、TASK-0005 で確かめた（AC-0005）。
 - `config.ts` は、仕様書 §11 の名前をそのまま使った。ただし `STEP` は TD-0002 §1 のとおり `STEP_MS`・`STEP_SEC` にした。
 - 画面の変更はないので、スクリーンショットは撮っていない。
 
@@ -66,6 +71,6 @@ verified: null
 - [x] 対象の確認 ID のテストが、名前に確認 ID を付けて書かれ、通っている
 - [x] `collision.ts` が DOM・時刻・乱数を使っていない（ESLint で確かめる）
 - [x] `npm run verify` と `npm run test:e2e` が手元で通る
-- [ ] PR の CI が緑
+- [x] PR の CI が緑
 - [x] 設計と違う作りにしていない（設計書の修正なし）
-- [ ] PR がマージされた
+- [x] PR がマージされた（PR #21）
