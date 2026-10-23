@@ -2,7 +2,7 @@
 id: MBRK-AC-0006
 type: Attested Computation
 title: 描画・ゲームループ・ポインタの基本・テスト用の入口の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -11,7 +11,7 @@ sources:
   - MBRK-TC-0004
   - MBRK-TC-0005
   - MBRK-TC-0009
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T20:11:59+09:00" }
 ---
 
 # AC-0006 描画・ゲームループ・ポインタの基本・テスト用の入口の実施記録

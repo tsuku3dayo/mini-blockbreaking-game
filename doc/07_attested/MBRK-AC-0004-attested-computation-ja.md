@@ -2,14 +2,14 @@
 id: MBRK-AC-0004
 type: Attested Computation
 title: パラメータと衝突判定の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-TASK-0004
   - MBRK-TC-0003
   - MBRK-TC-0004
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T20:11:59+09:00" }
 ---
 
 # AC-0004 パラメータと衝突判定の実施記録

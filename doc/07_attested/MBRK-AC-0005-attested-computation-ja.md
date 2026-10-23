@@ -2,7 +2,7 @@
 id: MBRK-AC-0005
 type: Attested Computation
 title: ゲームの状態・1 ステップ・スコア・ループの時間計算の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
@@ -14,7 +14,7 @@ sources:
   - MBRK-TC-0006
   - MBRK-TC-0008
   - MBRK-TC-0009
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T20:11:59+09:00" }
 ---
 
 # AC-0005 ゲームの状態・1 ステップ・スコア・ループの時間計算の実施記録
