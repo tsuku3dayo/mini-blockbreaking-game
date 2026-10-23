@@ -141,6 +141,11 @@ button.link {
   outline-offset: 2px;
 }
 
+/* 画面の切替えで読み上げのためにフォーカスを移す見出し（tabindex="-1"）には、輪を出さない。Tab では止まらない */
+h2[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
 /* ── 入力欄（GUI-0001 §5.2）。iPhone で入力時に拡大されないよう 16px 以上 ── */
 input[type='text'] {
   min-height: 48px;
@@ -410,6 +415,101 @@ input[aria-invalid='true'] {
 
 #field[data-hide-cursor] {
   cursor: none;
+}
+
+/* ── 結果パネル（GUI-0004）：暗くしたゲーム領域の上に、同じ大きさで重ねる。収まらないときは中をスクロール ── */
+.result-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  border-radius: 4px;
+  /* 下の盤面の色が透けると内訳が読みにくいので、不透明にする */
+  background: var(--surface);
+  animation: result-rise 200ms ease-out;
+}
+
+@keyframes result-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 28px;
+}
+
+.result-heading .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.result-heading.is-clear {
+  color: var(--success);
+}
+
+.result-heading.is-over {
+  color: var(--danger);
+}
+
+.result-breakdown,
+.result-total {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.result-breakdown dt,
+.result-total dt {
+  color: var(--muted);
+}
+
+.result-breakdown dd,
+.result-total dd {
+  margin: 0;
+  text-align: right;
+}
+
+.result-total {
+  align-items: baseline;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-total dd {
+  color: var(--accent);
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* 3 つのボタンは横に等分。入りきらないときは 2 段に折り返す */
+.result-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: auto;
+}
+
+.result-actions button {
+  position: relative;
+  padding: 8px 4px;
+}
+
+.result-actions .key-hint {
+  position: static;
+  margin-left: 4px;
+  font-size: 10px;
 }
 
 /* 操作欄：ゲーム領域のすぐ下に、ゲーム領域と同じ幅で、左右に分けて置く（間隔 8 + ボタン 48 = 56） */

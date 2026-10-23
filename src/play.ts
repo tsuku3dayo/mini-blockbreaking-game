@@ -3,9 +3,17 @@ import { createInput } from './input';
 import { computeDisplaySize, isMinimumSize } from './layout';
 import { advance, createAccumulator, resetAccumulator } from './loop';
 import { readPalette, render } from './render';
+import { hideResultPanel, showResultPanel } from './result-panel';
+import { summarize } from './score';
 
-// プレイ画面（TD-0003 §1・§2・§5）。
-// 一時停止・結果パネル・効果音・読み上げは後のタスクで足す
+// プレイ画面（TD-0003 §1・§2・§5・§7）。
+// 一時停止・効果音・読み上げは後のタスクで足す
+
+/** プレイ画面から頼む画面の切替え（main.ts が渡す） */
+export interface PlayDeps {
+  onTitle(): void;
+  onRanking(): void;
+}
 
 /** ゲーム領域の下の操作欄の高さ（間隔 8 + ボタン 48。GUI-0003 §1.2） */
 const CONTROLS_HEIGHT = 56;
@@ -27,13 +35,14 @@ function notifyState(status: GameStatus): void {
   window.dispatchEvent(new CustomEvent('app:state', { detail: status }));
 }
 
-export function createPlayScreen(): PlayScreen {
+export function createPlayScreen(deps: PlayDeps): PlayScreen {
   const canvas = document.getElementById('field') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   const section = document.getElementById('screen-play') as HTMLElement;
   const stage = document.getElementById('stage') as HTMLElement;
   const main = document.getElementById('app') as HTMLElement;
   const orientationNotice = document.getElementById('orientation-notice') as HTMLElement;
+  const pauseButton = document.getElementById('pause-button') as HTMLButtonElement;
   const palette = readPalette();
   const input = createInput(canvas);
   const acc = createAccumulator();
@@ -101,9 +110,13 @@ export function createPlayScreen(): PlayScreen {
     frameId = requestAnimationFrame(frame);
   }
 
+  /** 終了の処理：ループと入力を止め、暗くした盤面の上に結果パネルを出す（TD-0003 §1・§7） */
   function finish(): void {
     stopLoop();
     input.detach();
+    pauseButton.disabled = true;
+    document.title = 'ブロック崩し - 結果';
+    showResultPanel(summarize(state), { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking });
   }
 
   function frame(now: number): void {
@@ -130,9 +143,12 @@ export function createPlayScreen(): PlayScreen {
     }
   }
 
-  return {
+  const api: PlayScreen = {
     start() {
       stopLoop();
+      hideResultPanel();
+      pauseButton.disabled = false;
+      document.title = 'ブロック崩し - プレイ';
       state = createGame();
       lastStatus = null;
       input.detach();
@@ -146,6 +162,7 @@ export function createPlayScreen(): PlayScreen {
     stop() {
       stopLoop();
       input.detach();
+      hideResultPanel();
       listenResize(false);
     },
     getState() {
@@ -158,4 +175,5 @@ export function createPlayScreen(): PlayScreen {
       else stopLoop();
     },
   };
+  return api;
 }
