@@ -16,7 +16,7 @@ const SCREENS: Record<ScreenName, { section: string; title: string; focus: strin
   ranking: { section: 'screen-ranking', title: 'ブロック崩し - ランキング', focus: 'ranking-heading' },
 };
 
-const play = createPlayScreen();
+const play = createPlayScreen({ onTitle: () => navigate('title'), onRanking: () => navigate('ranking') });
 let current: ScreenName | null = null;
 
 /** ハッシュから画面を決める。不明なものは null */
