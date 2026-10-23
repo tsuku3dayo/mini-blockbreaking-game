@@ -9,6 +9,12 @@ updates:
       # 開発用の道具はまとめて 1 つの PR にする
       dev-dependencies:
         dependency-type: development
+    # 大きな版上げは、ビルドが通らなくなることがあるので自動では提案させない（2026-10-23 オーナー決定）
+    ignore:
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
