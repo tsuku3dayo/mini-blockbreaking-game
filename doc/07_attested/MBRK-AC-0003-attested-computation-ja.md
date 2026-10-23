@@ -2,13 +2,13 @@
 id: MBRK-AC-0003
 type: Attested Computation
 title: CI と GitHub Pages への公開の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-TASK-0003
   - MBRK-WS-0001
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T18:34:10+09:00" }
 ---
 
 # AC-0003 CI と GitHub Pages への公開の実施記録
