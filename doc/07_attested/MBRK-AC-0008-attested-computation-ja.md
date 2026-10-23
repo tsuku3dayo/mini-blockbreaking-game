@@ -2,13 +2,13 @@
 id: MBRK-AC-0008
 type: Attested Computation
 title: 指の操作の仕上げの実施記録
-status: draft
+status: stable
 version: 1.0
 updated: 2026-10-23
 sources:
   - MBRK-TASK-0008
   - MBRK-TC-0007
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-23T21:03:34+09:00" }
 ---
 
 # AC-0008 指の操作の仕上げの実施記録
@@ -41,10 +41,20 @@ verified: null
 
 実装（`src/input.ts`）：押したら `setPointerCapture`、最初の指（`isPrimary` で、追従中でない）だけを使う、押すのは Canvas だけで受ける（外で押したら追従しない）、`pointercancel`・`lostpointercapture`・`window` の `blur` で追従をやめる。リスナーは `AbortController` でまとめて外す。Canvas の CSS と `contextmenu` の抑止は TASK-0006 で入れたものを確かめた。
 
+PR #26 の CI（`check`・`e2e`）は緑。2026-10-23 にマージ。
+
+### 2.1 段階の終わりの確認（WS-0003、手動、2026-10-23）
+
+| 確認 ID | 端末 | 結果 |
+| --- | --- | --- |
+| TC-0007-08 | iPhone（Safari） | OK（案内した確認項目「指でパドルが動く・位置を合わせてからタップで発射できる・なぞってもページが動かず拡大しない・長押ししてもメニューや文字選択が出ない」を含め、すべて OK とオーナーが報告） |
+| TC-0007-08 | Android | 未実施（§3） |
+
 ## 3. 確認できなかったこと
 
-- 実機での操作感（TC-0007-08）は、WS-0003 の終わりに iPhone・Android で確かめる。E2E のタッチは、ほとんどが組み立てた `PointerEvent` で、ブラウザのスクロールや拡大の振る舞いそのものは再現していない（本物のタッチは `touchscreen.tap` の 1 件だけ）。
-- 手順の前提「START」は、まだタイトル画面からの流れがない（TASK-0009）ので、開いてすぐのプレイ画面で確かめた。
+- **Android の実機では確かめていない**（オーナーが Android の端末を持っていないため、2026-10-23）。Android の Chrome での指の操作は、E2E（Pixel 7 の設定、組み立てた `PointerEvent`）だけで確かめた。
+- E2E のタッチは、ほとんどが組み立てた `PointerEvent` で、ブラウザのスクロールや拡大の振る舞いそのものは再現していない（本物のタッチは `touchscreen.tap` の 1 件だけ）。iPhone の実機の確認で補った。
+- 手順の前提「START」は、この PR の時点ではタイトル画面からの流れがなかったので、開いてすぐのプレイ画面で確かめた。TASK-0009 で START からの形に直し、通っている（AC-0009）。
 - 動かす・離すは、TD-0003 §3.3 の「Canvas（キャプチャ中）」ではなく `window` で受けている。捕まえた Canvas のイベントは `window` に伝わるので、動きは同じ。組み立てたイベントでは捕まえが効かないため、この形にした。
 
 ## 4. 後片付け
@@ -56,6 +66,6 @@ verified: null
 - [x] タスクの「やること」がすべてできている
 - [x] TC-0007-01〜07 が、名前に確認 ID を付けて書かれ、両プロジェクトで通っている
 - [x] `npm run verify` と `npm run test:e2e` が手元で通る
-- [ ] PR の CI が緑
+- [x] PR の CI が緑
 - [x] 設計と違う作りにしたところ（動かす・離すを `window` で受ける）は §3 に書いた。動きは設計と同じなので、設計書は直していない
-- [ ] PR がマージされた
+- [x] PR がマージされた（PR #26）
