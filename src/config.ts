@@ -88,5 +88,7 @@ export const CONTROL_AREA_HEIGHT = 96;
 export const MIN_TAP_TARGET = 44;
 /** 表示の最小倍率 */
 export const DISPLAY_MIN_SCALE = 0.6;
+/** 保存データ・バックアップの形の版（TD-0004 §1。形を変えたら上げて移行を足す） */
+export const SCHEMA_VERSION = 1;
 /** 効果音の初期設定 */
 export const SOUND_DEFAULT = true;

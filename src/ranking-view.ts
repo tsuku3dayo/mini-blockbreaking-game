@@ -1,9 +1,10 @@
+import { BACKUP_ERROR_MESSAGES, backupFileName, createBackup, parseBackup, type BackupData } from './backup';
 import { formatDateTime, formatNumber, rankLabel } from './format';
 import type { ScoreRecord } from './ranking';
-import { loadRanking } from './records';
+import { loadBackupData, loadRanking, restoreBackup } from './records';
 import { el, icon } from './ui';
 
-// ランキング画面（TD-0004 §6、GUI-0005）。バックアップの欄は TASK-0021
+// ランキング画面とバックアップ（TD-0004 §4・§6、GUI-0005）
 
 export interface RankingView {
   /** 保存から読み直して、表・0 件・読み込み失敗のどれかを出す（開くたびに呼ぶ） */
@@ -50,8 +51,16 @@ function table(scores: ScoreRecord[], myId: number | null): HTMLTableElement {
 export function createRankingView(deps: { onTitle(): void }): RankingView {
   const content = document.getElementById('ranking-content') as HTMLElement;
   const heading = document.getElementById('ranking-heading') as HTMLElement;
+  const message = document.getElementById('backup-message') as HTMLElement;
 
+  function showMessage(kind: 'success' | 'danger', text: string): void {
+    message.className = `backup-message is-${kind}`;
+    message.textContent = text;
+  }
+
+  /** 開くたび・読み込みに成功するたびに、保存から読み直して表を作り直す */
   function show(): void {
+    message.textContent = '';
     const ranking = loadRanking();
     if (!ranking.ok) {
       const reload = el('button', { text: '再読み込み', attrs: { type: 'button', id: 'ranking-reload' } });
@@ -75,5 +84,77 @@ export function createRankingView(deps: { onTitle(): void }): RankingView {
     }
   }
 
+  setupBackup(show, showMessage);
   return { show };
+}
+
+/** 記録の書き出し・読み込み（TD-0004 §4、GUI-0005・GUI-0006 §2） */
+function setupBackup(show: () => void, showMessage: (kind: 'success' | 'danger', text: string) => void): void {
+  const exportButton = document.getElementById('backup-export') as HTMLButtonElement;
+  const importButton = document.getElementById('backup-import') as HTMLButtonElement;
+  const fileInput = document.getElementById('backup-file') as HTMLInputElement;
+  const dialog = document.getElementById('import-dialog') as HTMLDialogElement;
+  const cancel = document.getElementById('import-cancel') as HTMLButtonElement;
+  const confirm = document.getElementById('import-confirm') as HTMLButtonElement;
+  /** 確認を待っている、読み込む中身 */
+  let pending: BackupData | null = null;
+
+  // 書き出し：JSON を Blob にし、<a download> をクリックして保存する。0 件でも書き出せる
+  exportButton.addEventListener('click', () => {
+    const data = loadBackupData();
+    if (!data) {
+      showMessage('danger', 'ランキングを読み込めないため、書き出せませんでした');
+      return;
+    }
+    const now = new Date();
+    const url = URL.createObjectURL(new Blob([createBackup(data, now)], { type: 'application/json' }));
+    const link = el('a', { attrs: { href: url, download: backupFileName(now) } });
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // ダウンロードが始まってから解放する
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  // 読み込み：ファイルを選ぶ → 検証 → 確認 → 保存 → 表を作り直す
+  importButton.addEventListener('click', () => {
+    fileInput.value = '';
+    fileInput.click();
+  });
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    void file.text().then(
+      (text) => {
+        const parsed = parseBackup(text);
+        if (!parsed.ok) {
+          // 中身に問題があるときは、確認を出さずに理由を出す（今の記録は変えない）
+          showMessage('danger', BACKUP_ERROR_MESSAGES[parsed.error]);
+          return;
+        }
+        pending = parsed.data;
+        dialog.showModal();
+        // 誤って置き換えないよう、最初のフォーカスはキャンセル
+        cancel.focus();
+      },
+      () => showMessage('danger', BACKUP_ERROR_MESSAGES.unreadable),
+    );
+  });
+  cancel.addEventListener('click', () => dialog.close());
+  confirm.addEventListener('click', () => {
+    const data = pending;
+    dialog.close();
+    if (!data) return;
+    if (!restoreBackup(data)) {
+      showMessage('danger', '保存できませんでした。もう一度お試しください');
+      return;
+    }
+    show();
+    showMessage('success', `記録を読み込みました（${data.scores.length} 件）`);
+  });
+  // キャンセル・Esc・読み込む、どれで閉じても確認を待つ中身を捨て、押したボタンにフォーカスを戻す
+  dialog.addEventListener('close', () => {
+    pending = null;
+    importButton.focus();
+  });
 }

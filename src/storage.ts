@@ -1,7 +1,10 @@
+import { SCHEMA_VERSION } from './config';
+
 // localStorage の読み書き・版番号と移行（TD-0004 §1、ADR-0006）
 
+export { SCHEMA_VERSION };
+
 const PREFIX = __APP_ID__;
-export const SCHEMA_VERSION = 1;
 
 function keyOf(name: string): string {
   return `${PREFIX}-${name}`;

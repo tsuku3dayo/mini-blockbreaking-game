@@ -732,9 +732,53 @@ button.toggle {
   color: var(--danger);
 }
 
-/* 確認の 2 つのボタンは左右に分ける（GUI-0006 §2.1） */
-#clear-dialog .modal-actions {
+/* 確認の 2 つのボタンは左右に分ける（GUI-0006 §2・§2.1） */
+#clear-dialog .modal-actions,
+#import-dialog .modal-actions {
   justify-content: space-between;
+}
+
+/* 記録のバックアップ（GUI-0005 §1）：枠で囲み、2 つのボタンを横に並べる */
+.backup {
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.backup h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.backup-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.backup-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+}
+
+.backup-message {
+  margin: 12px 0 0;
+}
+
+.backup-message:empty {
+  display: none;
+}
+
+.backup-message.is-success {
+  color: var(--success);
+}
+
+.backup-message.is-danger {
+  color: var(--danger);
 }
 
 /* 縦向きのおすすめ（GUI-0006 §5） */
