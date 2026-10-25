@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { controlPoint, nextFrames, openGame, snapshot, touch, touchAt, type TouchType } from './helpers';
+import { controlPoint, finishCleared, finishGameOver, nextFrames, openGame, snapshot, touch, touchAt, type TouchType } from './helpers';
 
 // 前提：/?debug=1 を開いて START（TC-0007）
 
@@ -155,6 +155,26 @@ test.describe('操作空間（仕様書 v1.2）', () => {
     expect(await page.evaluate(() => window.scrollY)).toBe(before);
     const prevented = await area.evaluate((el) => !el.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true })));
     expect(prevented).toBe(true);
+  });
+
+  test('TC-0007-14 クリア・ゲームオーバーの結果パネルの間は操作空間を出さず、ゲーム領域の大きさは変えない', async ({ page }) => {
+    const area = page.locator('#control-area');
+    await expect(area).toBeVisible();
+    const before = await page.locator('#field').boundingBox();
+
+    await finishGameOver(page);
+    await expect(area).toBeHidden();
+    expect(await page.locator('#field').boundingBox()).toEqual(before);
+
+    // RETRY で新しいゲームに戻ると、また出る
+    await page.waitForTimeout(500);
+    await page.locator('#result-retry').click();
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'ready');
+    await expect(area).toBeVisible();
+
+    await finishCleared(page);
+    await expect(area).toBeHidden();
+    expect(await page.locator('#field').boundingBox()).toEqual(before);
   });
 
   test('TC-0007-12 操作空間から外に出ても追従する', async ({ page }) => {

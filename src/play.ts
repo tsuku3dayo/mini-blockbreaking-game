@@ -83,15 +83,17 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     if (!force && isOver(state) && viewportWidth === layoutViewportWidth) return false;
     layoutViewportWidth = viewportWidth;
 
-    // タッチ端末では、ゲーム領域の下に操作空間を出し、その分ゲーム領域の高さを譲る
-    controlArea.hidden = !coarsePointer.matches;
+    // タッチ端末では、ゲーム領域の下に操作空間を出し、その分ゲーム領域の高さを譲る。
+    // 結果パネルを出している間は操作空間を隠すが、ゲーム領域の大きさはプレイ中と同じにする（GUI-0003 §2.3）
+    const useControlArea = coarsePointer.matches;
+    controlArea.hidden = !useControlArea || isOver(state);
     const style = getComputedStyle(main);
     const { width, height } = computeDisplaySize({
       width: viewportWidth,
       height: window.innerHeight,
       topInset: parseFloat(style.paddingTop) || 0,
       bottomInset: parseFloat(style.paddingBottom) || 0,
-      controlsHeight: CONTROLS_HEIGHT + (controlArea.hidden ? 0 : CONTROL_AREA_SPACE),
+      controlsHeight: CONTROLS_HEIGHT + (useControlArea ? CONTROL_AREA_SPACE : 0),
     });
     // 操作欄もゲーム領域と同じ幅にする
     section.style.setProperty('--stage-width', `${width}px`);
@@ -178,6 +180,8 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     stopLoop();
     input.detach();
     updatePauseButton();
+    // 結果パネルの間は操作空間を出さない（ゲーム用の入力を受け付けないため）
+    controlArea.hidden = true;
     document.title = 'ブロック崩し - 結果';
     showResultPanel(summarize(state), { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking }, { sound: deps.sound });
   }

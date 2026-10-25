@@ -3,7 +3,7 @@ id: MBRK-TD-0003
 type: Technical Design
 title: プレイ画面（入力・ゲームループ・描画・一時停止・表示サイズ・読み上げ）
 status: stable
-version: 1.1
+version: 1.2
 updated: 2026-10-25
 sources:
   - MBRK-TD-0001
@@ -123,7 +123,8 @@ interface InputState {
 - `index.html` のプレイ画面に、Canvas と操作欄の間に `<div id="control-area" class="control-area" aria-hidden="true">` を置く（中に案内の文字）。
 - `createInput(canvas, options, controlArea)` で受け取り、`pointerdown`・`lostpointercapture`・`contextmenu` を Canvas と同じに付ける。
 - 位置の変換は Canvas の外形で行う（`toLogicalX` はそのまま）。操作空間は Canvas と左右の端がそろっている（幅は `--stage-width`）ので、指の真上のパドルの位置になる。
-- 出す・出さないは `play.ts` が決める：`matchMedia('(pointer: coarse)').matches` なら `hidden` を外す。`change` イベントでも合わせ直す（タブレットにマウスをつないだ場合など）。
+- 出す・出さないは `play.ts` が決める：`matchMedia('(pointer: coarse)').matches` で、かつ終了後（結果パネルを出している間）でなければ `hidden` を外す。`change` イベントでも合わせ直す（タブレットにマウスをつないだ場合など）。
+- 終了の処理で操作空間を隠す。表示サイズの計算では、隠していても操作空間の高さを引いたままにする（結果パネルの間にゲーム領域の大きさが変わらないようにするため。GUI-0003 v1.3 §2.3）。`start()` の `layout(true)` で、また出す。
 - CSS：Canvas と同じ `touch-action: none`・`user-select: none`・`-webkit-touch-callout: none`。高さ 96、ゲーム領域との間 8。
 
 ## 4. 描画（`render.ts`）
