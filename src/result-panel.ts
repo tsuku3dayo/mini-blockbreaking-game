@@ -3,6 +3,7 @@ import { formatNumber, formatSeconds } from './format';
 import type { ResultSummary } from './game';
 import { countChars, normalizeName, validateName, type NameError } from './ranking';
 import { loadLastName, register as registerRecord } from './records';
+import type { Sound } from './sound';
 import { el, icon } from './ui';
 
 // 結果パネルとスコア登録（TD-0004 §5、GUI-0004）
@@ -34,7 +35,7 @@ function isInteractive(element: Element | null): boolean {
   return !!element && element.matches('button, input, select, textarea, a[href], summary');
 }
 
-export function showResultPanel(summary: ResultSummary, actions: ResultActions): void {
+export function showResultPanel(summary: ResultSummary, actions: ResultActions, deps: { sound: Sound }): void {
   const root = panel();
   const cleared = summary.result === 'cleared';
 
@@ -154,6 +155,7 @@ export function showResultPanel(summary: ResultSummary, actions: ResultActions):
     registered = true;
     nameInput.disabled = true;
     update();
+    deps.sound.play('register');
     if (saved.rank === null) showMessage('muted', 'ランキング外でした（上位 10 件に入りませんでした）');
     else showMessage('success', `${saved.rank} 位で登録しました`);
     retry.focus();
