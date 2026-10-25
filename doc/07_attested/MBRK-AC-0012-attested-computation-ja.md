@@ -2,9 +2,9 @@
 id: MBRK-AC-0012
 type: Attested Computation
 title: 結果パネルの入力ガードと Enter の扱いの実施記録
-status: draft
+status: review
 version: 1.0
-updated: 2026-10-23
+updated: 2026-10-25
 sources:
   - MBRK-TASK-0012
   - MBRK-TC-0011
@@ -41,13 +41,19 @@ verified: null
 - 単体 57 件・E2E 84 件、`npm run verify` は成功。
 - 実装（`src/result-panel.ts`）：パネルを出した時刻を覚え、500 ms 以内の Enter・Space（`keydown`・`keyup`、`window` のキャプチャ段階）と、パネル上の `pointerdown`・`pointerup`・`click`（パネルのキャプチャ段階）を `preventDefault()` と `stopImmediatePropagation()` で止める。見た目は変えない。フォーカスのない Enter は RETRY、部品にフォーカスがあるときの Enter は部品だけ（TASK-0010 で入れたもの）。終わったらゲーム用の入力の受付をやめる（TASK-0006 の `input.detach()`）。
 
+PR #32 の CI（`check`・`e2e`）は緑。2026-10-23 にマージ。
+
+### 2.1 段階の終わりの確認（WS-0004、手動、2026-10-25）
+
+オーナーが iPhone で公開 URL を開き、結果パネルが出てから 0.5 秒ほどはボタンが反応しないことを確かめた（OK とオーナーが報告）。
+
 ## 3. 確認できなかったこと
 
 - **名前の入力欄と REGISTER がまだない（TASK-0015）ので、次は確かめていない。** TASK-0015 で足す。
   - TC-0011-01 の「REGISTER のクリックが効かず、登録されない」
   - TC-0011-03 の「名前の入力欄で Enter → 登録され、結果パネルのまま」
   - TC-0011-04 の「入力欄に『A B』と入力できる」（代わりに、終わったあと Space の既定の動きが止められていないことを確かめた）
-- 実機（iPhone）で、プレイ中の指のまま結果パネルのボタンが押されないかは、WS-0004 の終わりの確認に含めてもらう。
+- 実機での確認は iPhone だけ。Android は端末がないため確かめていない。
 
 ## 4. 後片付け
 
@@ -58,6 +64,7 @@ verified: null
 - [x] タスクの「やること」がすべてできている
 - [x] TC-0011-01〜04 のうち、この時点で確かめられる部分が、名前に確認 ID を付けて書かれ、通っている
 - [x] `npm run verify` と `npm run test:e2e` が手元で通る
-- [ ] PR の CI が緑
+- [x] PR の CI が緑
 - [x] 設計と違う作りにしていない（設計書の修正なし）
-- [ ] PR がマージされた
+- [x] PR がマージされた（PR #32）
+- [x] 実機（iPhone）で入力ガードを確かめた
