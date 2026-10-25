@@ -1,0 +1,64 @@
+---
+id: MBRK-AC-0019
+type: Attested Computation
+title: インストールとオフラインの仕上げの実施記録
+status: draft
+version: 1.0
+updated: 2026-10-25
+sources:
+  - MBRK-TASK-0019
+  - MBRK-TC-0017
+  - MBRK-TC-0018
+verified: null
+---
+
+# AC-0019 インストールとオフラインの仕上げの実施記録
+
+## 1. 実施概要
+
+| 項目 | 内容 |
+| --- | --- |
+| タスク | [MBRK-TASK-0019](../06_plan/MBRK-TASK-0019-implementation-task-ja.md) インストールとオフラインの仕上げ |
+| テストケース | TC-0017-01〜04、TC-0018-01〜03（TC-0017-05・TC-0018-04 は WS-0007 の終わりの手動） |
+| 実施者 | Claude Code（Opus 5.5） |
+| 環境 | Windows 11 Pro、Node.js 24.0.0、Playwright（Chrome for Testing 156）。E2E は build 済みの成果物を `vite preview` で配信（Service Worker も本物が動く） |
+| ブランチ | `feat/0019-install-offline` |
+
+## 2. 確認結果（自動テスト・2026-10-25）
+
+`e2e/pwa.spec.ts`（pixel7・small の両プロジェクト。どちらも Pixel 7 の UA）と `scripts/check-dist.mjs`。
+
+| 確認 ID | 種類 | 確かめたこと | 結果 |
+| --- | --- | --- | --- |
+| TC-0017-01 | E2E | 普通に開くとインストール方法の入口が見える。`matchMedia('(display-mode: standalone)')` だけを真にして開くと、アプリは起動し（START が見える）、入口は見えない | 成功 |
+| TC-0017-02 | E2E | 入口を押すとダイアログ。見出し「アプリとしてインストールする方法」、3 つの項目（iPhone / iPad・Android・パソコン）、Android の項目だけが開いていて手順が 3 つ。「ホーム画面から開くと、電波がなくても遊べます。」。閉じると入口にフォーカスが戻る | 成功 |
+| TC-0017-03 | E2E | `beforeinstallprompt` を送る前は「今すぐインストール」が見えない。送ったあとは見え、押すと `prompt()` が 1 回呼ばれ、ボタンは隠れる | 成功 |
+| TC-0017-04 | ビルド検査 | `npm run build && npm run check:dist`：manifest（name・display・start_url・orientation）、アイコン 192 / 512 / maskable 512、apple-touch-icon、sw.js、入口 | 成功 |
+| TC-0018-01 | E2E | 開く → Service Worker の準備を待って読み込み直し、ページを制御させる → 通信を切る（`context.setOffline(true)`）→ 読み込み直す → 起動してタイトルが出る → START → 終わらせて登録「1 位で登録しました」→ ランキングに「OFFLINE」 | 成功 |
+| TC-0018-02 | E2E | タイトル → インストール方法 → プレイ → 結果（登録）→ ランキング → タイトルを回る間のリクエストが、すべて同じオリジン（`localhost:4173`） | 成功 |
+| TC-0018-03 | E2E | 同上の間に、`GET` 以外のリクエストがない | 成功 |
+
+そのほか：
+
+- インストール方法のダイアログ（文言・今の端末の判定・「今すぐインストール」・インストール済みで入口を隠す）は、TASK-0002 で作ったものが GUI-0006 §1 のとおりだったので、作りは直していない。
+- オフラインで全画面が動くこと：Service Worker のキャッシュ対象（`js・css・html・svg・png・webmanifest`）で足りていた。Web フォント・外部のスクリプトは使っていない。
+- 最初、TC-0017-01（インストール済み）でアプリが起動しなかった。テストで `matchMedia` を差し替えるときに、読み取り専用の `matches` に値を入れようとして例外が出ていたため（テストの作りの誤り）。同じ形のふつうのオブジェクトを返すように直した。
+- 単体 95 件・E2E 199 件、`npm run verify` は成功。
+
+## 3. 確認できなかったこと
+
+- 実機でのインストール（TC-0017-05）と機内モードでの起動・プレイ・登録（TC-0018-04）は、WS-0007 の終わりに iPhone で確かめる。Android は端末がないため確かめない。
+- 「今すぐインストール」で実際にブラウザのインストールの画面が出るかは、E2E では確かめていない（偽のイベントで `prompt()` が呼ばれることだけを確かめた）。
+
+## 4. 後片付け
+
+- なし（一時ファイルは作っていない。前のタスクの `e2e/zz-shot.spec.ts` は作業フォルダに残ったままで、コミットしていない）。
+
+## 5. 完了定義のチェックリスト
+
+- [x] タスクの「やること」がすべてできている
+- [x] TC-0017-01〜04、TC-0018-01〜03 が、名前に確認 ID を付けて書かれ、通っている
+- [x] `npm run verify` と `npm run test:e2e` が手元で通る
+- [ ] PR の CI が緑
+- [x] 設計と違う作りにしていない（設計書の修正なし）
+- [ ] PR がマージされた
