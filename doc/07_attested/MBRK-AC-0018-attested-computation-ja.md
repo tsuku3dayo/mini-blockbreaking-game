@@ -2,13 +2,13 @@
 id: MBRK-AC-0018
 type: Attested Computation
 title: 効果音のオン / オフの実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0018
   - MBRK-TC-0016
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T17:24:48+09:00" }
 ---
 
 # AC-0018 効果音のオン / オフの実施記録
