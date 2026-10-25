@@ -98,9 +98,11 @@ test('TC-0013-05 列と順位の表示（1〜3 位は強調）', async ({ page }
 });
 
 test('TC-0013-06 長い名前は省略記号で切れ、title に全文。「（あなた）」は見える', async ({ page }) => {
-  // 全角でいちばん幅の広い文字。かなの 12 文字は幅 412 なら収まって切れない
-  const name = 'ＷＷＷＷＷＷＷＷＷＷＷＷ';
+  const name = 'とても長い名前のプレイヤ';
   expect([...name]).toHaveLength(12);
+  // 文字の幅はフォントで変わり、幅 375・412 では収まって切れないことがある（CI の Linux など）。
+  // どのフォントでも切れるよう、幅を 320 に狭めて確かめる（名前に使える幅は約 97 px）
+  await page.setViewportSize({ width: 320, height: 667 });
   await openApp(page);
   await writeStorage(page, { scores: [makeRecord(1, 1250, name)], lastRecordId: 1 });
   await openRanking(page);
