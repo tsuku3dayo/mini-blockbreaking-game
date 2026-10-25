@@ -3,12 +3,13 @@ id: MBRK-TD-0004
 type: Technical Design
 title: 記録（保存・ランキング・バックアップ・結果パネル・ランキング画面）
 status: stable
-version: 1.0
-updated: 2026-10-23
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-TD-0001
   - MBRK-ADR-0006
   - MBRK-ADR-0007
+  - MBRK-GUI-0002
   - MBRK-GUI-0004
   - MBRK-GUI-0005
   - MBRK-GUI-0006
@@ -17,7 +18,8 @@ sources:
   - MBRK-US-0012
   - MBRK-US-0013
   - MBRK-US-0014
-  - doc/specification.md (v1.1) §4.1-8、§8.3、§8.4、§9
+  - MBRK-US-0022
+  - doc/specification.md (v1.2) §4.1-8、§8.2、§8.3、§8.4、§9
   - simple_shogi src/storage.ts、src/backup.ts
 verified: null
 ---
@@ -90,7 +92,11 @@ export function loadRanking(): { ok: true; scores: ScoreRecord[]; myId: number |
 export function register(name: string, summary: ResultSummary, now: Date):
   { ok: true; rank: number | null; record: ScoreRecord } | { ok: false };
 export function loadLastName(): string;
+/** 記録の全消去（仕様書 v1.2 §9.2）。書けたら true */
+export function clearRanking(): boolean;
 ```
+
+`clearRanking` は `saveAll({ scores: [], lastRecordId: null })`。`nextId`・`lastName`・`sound` には触れない（id を再利用しないため）。途中で失敗したら `saveAll` が元に戻すので、何も変わらない。`scores` が壊れていても消せる（読まずに書く）。
 
 `register` の処理：
 
@@ -156,6 +162,19 @@ export function hideResultPanel(): void;
 | 表の行 | 順位（1〜3 は `1st` など）、名前（`textContent`、`title` に全文）、自分の記録なら「（あなた）」と行のクラス、2 段目に結果と日時、スコア |
 | 再読み込み | もう一度 `loadRanking()` |
 | Esc / BACK | タイトルへ（`main.ts` のコールバック） |
+
+## 6.1 記録の全消去（タイトル画面、`main.ts`）
+
+| 場面 | 処理 |
+| --- | --- |
+| 「記録を全部消す」（`#title-clear`） | 結果のメッセージを空にし、`#clear-dialog`（GUI-0006 §2.1）を `showModal()`。最初のフォーカスは「キャンセル」 |
+| 「消す」 | ダイアログを閉じて `clearRanking()`。成功：「記録を消しました」（`is-success`）、失敗：「消せませんでした。もう一度お試しください」（`is-danger`） |
+| 「キャンセル」・Esc | ダイアログを閉じるだけ |
+| 閉じたあと | `#title-clear` にフォーカスを戻す |
+| タイトル画面を開き直したとき | 結果のメッセージを空にする |
+
+- ダイアログは `index.html` に置く（インストール方法のダイアログと同じ作り）。「消す」は `<button class="danger">`。
+- タイトル画面の Enter（START）は、ダイアログが開いている間は動かさない（`main.ts` の `onKeyDown` はすでに `dialog[open]` を見て止めている）。
 
 ## 7. 表示の形式（`format.ts`、ロジック層）
 
