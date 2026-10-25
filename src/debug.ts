@@ -1,5 +1,6 @@
 import type { Ball, GameState } from './game';
 import type { PlayScreen } from './play';
+import { onNeedRefresh } from './pwa';
 
 // テスト用の入口（TD-0001 §7）。URL に ?debug=1 を付けて開いたときだけ window.__breakout を用意する。
 // Canvas の中身は E2E から読めないため（ADR-0003）、状態の写しを返し、状態の一部を書き換えられるようにする
@@ -19,6 +20,8 @@ export interface DebugSetup {
 export interface DebugApi {
   snapshot(): GameState;
   setup(partial: DebugSetup): void;
+  /** 新しい版の準備ができたことにする（更新の帯を出す。TC-0019-03） */
+  showUpdateBanner(): void;
 }
 
 export function isDebugMode(search: string): boolean {
@@ -43,6 +46,9 @@ export function installDebug(play: PlayScreen): void {
       if (partial.speedLevel !== undefined) state.speedLevel = partial.speedLevel;
       if (partial.elapsedMs !== undefined) state.elapsedMs = partial.elapsedMs;
       play.refresh();
+    },
+    showUpdateBanner() {
+      onNeedRefresh();
     },
   };
   window.__breakout = api;
