@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { appEvents, finishCleared, finishGameOver, openGame, recordAppEvents, setup } from './helpers';
+import { appEvents, breakStorage, finishCleared, finishGameOver, openApp, readStorage, recordAppEvents, setup, startGame } from './helpers';
 
 // 前提：app:sound イベントの detail（name・muted）を addInitScript で記録する（TC-0015）
 
@@ -27,10 +27,11 @@ async function expectSound(page: Page, name: string): Promise<void> {
 
 test.beforeEach(async ({ page }) => {
   await recordAppEvents(page);
-  await openGame(page);
+  await openApp(page);
 });
 
 test('TC-0015-01 8 種類の音が鳴る', async ({ page }) => {
+  await startGame(page);
   // 発射。START のクリックで鳴らせる状態になっている（muted でない）
   await page.keyboard.press('Space');
   await expectSound(page, 'launch');
@@ -76,11 +77,96 @@ test('TC-0015-01 8 種類の音が鳴る', async ({ page }) => {
 });
 
 test('TC-0015-04 最後のブロックを壊したフレームは clear だけ', async ({ page }) => {
+  await startGame(page);
   await clearEvents(page);
   // 加速の境目（39 → 40）でもあるが、clear だけになる
   await finishCleared(page);
   await expectSound(page, 'clear');
   expect((await sounds(page)).map((s) => s.name)).toEqual(['clear']);
+});
+
+test.describe('効果音のオン / オフ（TC-0016）', () => {
+  const titleButton = (page: Page) => page.locator('#title-sound');
+  const playButton = (page: Page) => page.locator('#play-sound');
+
+  /** 発射して、launch の音の記録を返す */
+  async function launchSound(page: Page): Promise<SoundDetail | undefined> {
+    await startGame(page);
+    await page.keyboard.press('Space');
+    await expectSound(page, 'launch');
+    return (await sounds(page)).find((s) => s.name === 'launch');
+  }
+
+  test('TC-0016-01 タイトルでオフにすると鳴らない', async ({ page }) => {
+    await titleButton(page).click();
+    expect((await launchSound(page))?.muted).toBe(true);
+  });
+
+  test('TC-0016-03 開き直しても設定を引き継ぐ', async ({ page }) => {
+    await titleButton(page).click();
+    expect(await readStorage(page, 'sound')).toBe(false);
+    await page.reload();
+    await expect.poll(() => page.evaluate(() => window.__appStarted === true)).toBe(true);
+    await expect(titleButton(page)).toHaveText('効果音：オフ');
+    await expect(titleButton(page)).toHaveAttribute('aria-pressed', 'false');
+    await expect(playButton(page)).toHaveText('効果音：オフ');
+  });
+
+  test('TC-0016-04 保存データが空なら、初めはオン', async ({ page }) => {
+    expect(await readStorage(page, 'sound')).toBeNull();
+    await expect(titleButton(page)).toHaveText('効果音：オン');
+    await expect(titleButton(page)).toHaveAttribute('aria-pressed', 'true');
+    await expect(playButton(page)).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('TC-0016-05 操作欄でオフにすると、タイトルのボタンもそろう', async ({ page }) => {
+    await startGame(page);
+    await playButton(page).click();
+    await expect(playButton(page)).toHaveText('効果音：オフ');
+    await page.goBack();
+    await expect(page.locator('#screen-title')).toBeVisible();
+    await expect(titleButton(page)).toHaveText('効果音：オフ');
+    await expect(titleButton(page)).toHaveAttribute('aria-pressed', 'false');
+    await expect(titleButton(page).locator('svg')).toHaveCount(1);
+  });
+
+  test('TC-0016-06 プレイ中に押してもゲームは止まらず、Canvas にフォーカスが戻る', async ({ page }) => {
+    await startGame(page);
+    await page.keyboard.press('Space');
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'playing');
+    await playButton(page).click();
+    await expect(page.locator('#field')).toBeFocused();
+    await page.waitForTimeout(200);
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'playing');
+  });
+
+  test('TC-0016-08 aria-pressed がオン ⇔ オフで変わる', async ({ page }) => {
+    await titleButton(page).click();
+    await expect(titleButton(page)).toHaveAttribute('aria-pressed', 'false');
+    await expect(titleButton(page)).toHaveText('効果音：オフ');
+    await titleButton(page).click();
+    await expect(titleButton(page)).toHaveAttribute('aria-pressed', 'true');
+    await expect(titleButton(page)).toHaveText('効果音：オン');
+    // オンに戻せば鳴る
+    expect((await launchSound(page))?.muted).toBe(false);
+  });
+});
+
+test.describe('保存できない環境（TC-0016）', () => {
+  test.beforeEach(async ({ page }) => {
+    await breakStorage(page);
+    await page.reload();
+    await expect.poll(() => page.evaluate(() => window.__appStarted === true)).toBe(true);
+  });
+
+  test('TC-0016-07 保存できなくてもオフが効く', async ({ page }) => {
+    await page.locator('#title-sound').click();
+    await expect(page.locator('#title-sound')).toHaveText('効果音：オフ');
+    await startGame(page);
+    await page.keyboard.press('Space');
+    await expectSound(page, 'launch');
+    expect((await sounds(page)).find((s) => s.name === 'launch')?.muted).toBe(true);
+  });
 });
 
 test.describe('音が使えない環境', () => {

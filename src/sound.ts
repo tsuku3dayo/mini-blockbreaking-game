@@ -1,13 +1,15 @@
 import { SOUND_DEFAULT } from './config';
 import type { GameEvent } from './game';
 import { planSounds, type SoundName } from './sound-plan';
-import { load } from './storage';
+import { load, save } from './storage';
 
 // Web Audio の合成と再生（TD-0005 §2・§3、ADR-0005）。音が鳴らなくてもゲームは続ける（例外を外に出さない）
 
 export interface Sound {
-  /** オン / オフ（保存した設定。切り替えのボタンは TASK-0018） */
+  /** オン / オフ（起動時に保存した設定を読む） */
   readonly enabled: boolean;
+  /** 切り替えて保存する。保存できなくても切り替える。オフにしたら鳴っている音を止める */
+  setEnabled(on: boolean): void;
   /** 最初の操作で呼ぶ（AudioContext の作成・resume） */
   unlock(): void;
   /** 1 フレームの出来事から鳴らす */
@@ -90,7 +92,7 @@ export function createSound(): Sound {
   /** 作成に失敗したら、以後は作らない */
   let failed = false;
   const playing = new Set<OscillatorNode>();
-  const enabled = load<unknown>('sound', SOUND_DEFAULT) !== false;
+  let enabled = load<unknown>('sound', SOUND_DEFAULT) !== false;
 
   function unlock(): void {
     if (failed || document.hidden) return;
@@ -200,6 +202,11 @@ export function createSound(): Sound {
   return {
     get enabled() {
       return enabled;
+    },
+    setEnabled(on) {
+      enabled = on;
+      save('sound', on);
+      if (!on) stopAll();
     },
     unlock,
     playFrame,

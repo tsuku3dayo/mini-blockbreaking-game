@@ -1,0 +1,66 @@
+---
+id: MBRK-AC-0018
+type: Attested Computation
+title: 効果音のオン / オフの実施記録
+status: draft
+version: 1.0
+updated: 2026-10-25
+sources:
+  - MBRK-TASK-0018
+  - MBRK-TC-0016
+verified: null
+---
+
+# AC-0018 効果音のオン / オフの実施記録
+
+## 1. 実施概要
+
+| 項目 | 内容 |
+| --- | --- |
+| タスク | [MBRK-TASK-0018](../06_plan/MBRK-TASK-0018-implementation-task-ja.md) 効果音のオン / オフ |
+| テストケース | TC-0016-01・03〜08（TC-0016-02 は WS-0006 の終わりの手動） |
+| 実施者 | Claude Code（Opus 5.5） |
+| 環境 | Windows 11 Pro、Node.js 24.0.0、Playwright（Chrome for Testing 156） |
+| ブランチ | `feat/0018-sound-toggle` |
+
+## 2. 確認結果（自動テスト・2026-10-25）
+
+`e2e/sound.spec.ts`（pixel7・small の両プロジェクト）。`app:sound` の `muted` と、ボタンの文字・`aria-pressed`・保存データを見た。
+
+| 確認 ID | 確かめたこと | 結果 |
+| --- | --- | --- |
+| TC-0016-01 | タイトルで効果音をオフ → START → 発射 → `launch` が `muted: true` | 成功 |
+| TC-0016-03 | オフ → 保存データの `sound` が `false` → 読み込み直す → タイトル・操作欄のボタンが「効果音：オフ」、`aria-pressed="false"` | 成功 |
+| TC-0016-04 | 保存データが空で開く → 「効果音：オン」、`aria-pressed="true"`（2 つとも） | 成功 |
+| TC-0016-05 | プレイ画面の操作欄でオフ → 戻るでタイトルへ → タイトルのボタンも「効果音：オフ」、アイコンあり | 成功 |
+| TC-0016-06 | 発射後に操作欄の効果音ボタンを押す → `playing` のまま、Canvas にフォーカスが戻る | 成功 |
+| TC-0016-07 | `setItem` が例外を出す環境で開く → オフ → 発射 → `muted: true` | 成功 |
+| TC-0016-08 | オフ ⇔ オンで `aria-pressed` が false ⇔ true、文字も変わる。オンに戻すと発射の音が `muted: false` | 成功 |
+
+そのほか：
+
+- TC-0015 のテストは、共通の前準備を「START まで」から「タイトルを開くまで」に変え、必要なテストで START を押すようにした（結果は同じく成功）。
+- 単体 91 件・E2E 163 件、`npm run verify` は成功。
+- スクリーンショット（375 × 667）：タイトル画面で「効果音：オン」+ sound-on のアイコンが中央寄せで、操作方法とインストール方法の間（GUI-0002）。プレイ画面の操作欄で、左に一時停止、右に「効果音：オフ」+ sound-off（GUI-0003）。
+- 実装：
+  - `index.html`：タイトル（`#title-sound`）と操作欄（`#play-sound`）に効果音ボタン。Tab の順は START → RANKING → 効果音 → インストール方法。
+  - `src/sound.ts`：`setEnabled`（保存し、保存に失敗してもその値で動く。オフで `stopAll()`）。
+  - `src/main.ts`：起動時と押したときに、2 つのボタンの文字・アイコン・`aria-pressed` をそろえる。操作欄のボタンは押したあと Canvas にフォーカスを戻す。一時停止は変えない。
+
+## 3. 確認できなかったこと
+
+- 鳴っている音がボタンを押してすぐ止まること（TC-0016-02）は、WS-0006 の終わりに iPhone で聞いて確かめる。Android は端末がないため確かめない。
+
+## 4. 後片付け
+
+- スクリーンショット用の一時的なテスト `e2e/zz-shot.spec.ts` は、コミットしていない（作業フォルダに残っている。削除してよい）。撮った画像は `test-results/`（Git の対象外）。
+
+## 5. 完了定義のチェックリスト
+
+- [x] タスクの「やること」がすべてできている
+- [x] TC-0016-01・03〜08 が、名前に確認 ID を付けて書かれ、通っている
+- [x] `npm run verify` と `npm run test:e2e` が手元で通る
+- [ ] PR の CI が緑
+- [x] 画面に関わる変更を、スクリーンショットで確かめた（375 × 667）
+- [x] 設計と違う作りにしていない（設計書の修正なし）
+- [ ] PR がマージされた

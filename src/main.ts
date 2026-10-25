@@ -6,7 +6,7 @@ import { setUpdateBannerAllowed, setupUpdateBanner } from './pwa';
 import { createRankingView } from './ranking-view';
 import { createSound } from './sound';
 import { migrateStorage, requestPersist } from './storage';
-import { renderIcons } from './ui';
+import { icon, renderIcons } from './ui';
 
 // 起動と画面の切替え（TD-0001 §3・§8）
 
@@ -80,6 +80,27 @@ function isInteractive(element: Element | null): boolean {
   return !!element && element.matches('button, input, select, textarea, a[href], summary, [contenteditable="true"]');
 }
 
+const SOUND_BUTTONS = ['title-sound', 'play-sound'];
+
+/** 効果音ボタン（タイトル・操作欄）の文字・アイコン・aria-pressed を設定にそろえる（TD-0005 §4） */
+function updateSoundButtons(): void {
+  for (const id of SOUND_BUTTONS) {
+    const button = document.getElementById(id);
+    if (!button) continue;
+    button.setAttribute('aria-pressed', String(sound.enabled));
+    const label = button.querySelector('.toggle-label');
+    if (label) label.textContent = sound.enabled ? '効果音：オン' : '効果音：オフ';
+    button.querySelector('svg')?.replaceWith(icon(sound.enabled ? 'sound-on' : 'sound-off'));
+  }
+}
+
+/** 押しても一時停止・フォーカスは変えない。操作欄のボタンは、ゲームのキー操作が効くよう Canvas にフォーカスを戻す */
+function onSoundButton(e: Event): void {
+  sound.setEnabled(!sound.enabled);
+  updateSoundButtons();
+  if ((e.currentTarget as HTMLElement).id === 'play-sound') document.getElementById('field')?.focus();
+}
+
 function onKeyDown(e: KeyboardEvent): void {
   if (e.repeat || e.isComposing) return;
   if (document.querySelector('dialog[open]')) return;
@@ -96,12 +117,14 @@ function onKeyDown(e: KeyboardEvent): void {
 migrateStorage();
 requestPersist();
 renderIcons();
+updateSoundButtons();
 const version = document.getElementById('version');
 if (version) version.textContent = __APP_VERSION__;
 
 document.getElementById('title-start')?.addEventListener('click', () => navigate('play'));
 document.getElementById('title-ranking')?.addEventListener('click', () => navigate('ranking'));
 document.getElementById('ranking-back')?.addEventListener('click', () => navigate('title'));
+for (const id of SOUND_BUTTONS) document.getElementById(id)?.addEventListener('click', onSoundButton);
 document.addEventListener('keydown', onKeyDown);
 window.addEventListener('hashchange', onHashChange);
 setupUpdateBanner();
