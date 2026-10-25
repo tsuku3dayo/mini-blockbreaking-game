@@ -1,0 +1,70 @@
+---
+id: MBRK-AC-0026
+type: Attested Computation
+title: クレジット画面の実施記録
+status: draft
+version: 1.0
+updated: 2026-10-25
+sources:
+  - MBRK-TASK-0026
+  - MBRK-TC-0024
+verified: null
+---
+
+# AC-0026 クレジット画面の実施記録
+
+## 1. 実施概要
+
+| 項目 | 内容 |
+| --- | --- |
+| タスク | [MBRK-TASK-0026](../06_plan/MBRK-TASK-0026-implementation-task-ja.md) クレジット画面 |
+| テストケース | TC-0024-01〜06（TC-0024-07 は TASK-0023 の全体の手動確認に含める） |
+| 実施者 | Claude Code（Opus 5.5） |
+| 環境 | Windows 11 Pro、Node.js 24.0.0、Playwright（Chrome for Testing 156） |
+| ブランチ | `feat/0026-credits` |
+
+## 2. 確認結果（自動テスト・2026-10-25）
+
+`e2e/credits.spec.ts`（pixel7・small の両プロジェクト）。
+
+| 確認 ID | 確かめたこと | 結果 |
+| --- | --- | --- |
+| TC-0024-01 | タイトル画面のメニューのボタンが START → RANKING → クレジット の順。「クレジット」の文字 | 成功 |
+| TC-0024-02 | 「クレジット」でクレジット画面。タイトル画面は隠れ、ページタイトル「ブロック崩し - クレジット」、ハッシュ `#/credits`、見出し「クレジット」に初期フォーカス | 成功 |
+| TC-0024-03 | `dt` が PRODUCER・DIRECTOR・GAME DESIGNER・GRAPHIC DESIGNER・SOUND CREATOR・PROGRAMMER、`dd` が YOSHIHARU TSUKUDA × 3・CLAUDE CODE × 3 の順（仕様書 §8.8）。すべて `text-align: center`、名前が一覧の真ん中にある | 成功 |
+| TC-0024-04 | BACK でタイトル。もう一度開いて Esc でタイトル | 成功 |
+| TC-0024-05 | `#/credits` を付けて開くとクレジット画面。BACK → ブラウザの戻るでクレジット、進むでタイトル | 成功 |
+| TC-0024-06 | 横スクロールなし。「クレジット」・BACK が 44 × 44 以上 | 成功 |
+
+そのほか：
+
+- タイトル画面の Tab の順のテスト（TC-0021-07）に「クレジット」を足した（START → RANKING → クレジット → 効果音 → 記録を全部消す → インストール方法）。通った。
+- 単体 101 件・E2E 247 件、`npm run verify` は成功。
+- スクリーンショット（375 × 667）：タイトル画面の RANKING の下に「クレジット」（GUI-0002 v1.2）。クレジット画面は、上部のバー（BACK・見出し）の下に、役職（小さめ・`--muted`・字間）と名前（太字）を中央揃えで 6 組（GUI-0007）。
+- 実装：
+  - `index.html`：`#title-credits`、`section#screen-credits`（上部のバー、`dl.credits` に 6 組。文字で書く）。
+  - `src/main.ts`：画面 `credits`（ページタイトル・初期フォーカス・`#/credits`・起動時・戻る進む・Esc）。ハッシュの判定を画面の一覧（`SCREENS`）から行うようにした（`Object.hasOwn` で、`#/toString` のような名前を通さない）。
+  - `src/style.css`：クレジットの一覧の見た目。
+  - `README.md`：機能の表にクレジット、仕様書の版を v1.3 に。
+  - AC-0023：§12 の一覧を 55 項目にし（§12.7-7）、手動確認の表に TC-0024-07 を足した。
+- 版は 1.0.0 のまま（オーナー決定）。
+
+## 3. 確認できなかったこと
+
+- 実機（iPhone）での見え方（TC-0024-07）は、TASK-0023 の全体の手動確認で行う。
+- SPECIAL THANKS（TANIGAWA・MISHINA）は、本人の了承がとれてから足す（オーナーの指示）ので、今は載せていない。
+- 版を 1.0.0 のまま公開し直すので、すでに v1.0.0 を開いた端末では、画面の版の表示は「v1.0.0」のまま変わらない。中身は「新しい版があります」の「更新」で切り替わる。
+
+## 4. 後片付け
+
+- スクリーンショット用の一時的なテスト `e2e/zz-shot.spec.ts` は、コミットしていない（作業フォルダに残っている。削除してよい）。画像は `test-results/`（Git の対象外）。
+
+## 5. 完了定義のチェックリスト
+
+- [x] タスクの「やること」がすべてできている
+- [x] TC-0024-01〜06 が、名前に確認 ID を付けて書かれ、通っている
+- [x] クレジット画面のスクリーンショット（375 × 667）が GUI-0007 の形になっている
+- [x] `npm run verify` と `npm run test:e2e` が手元で通る
+- [ ] PR の CI が緑
+- [x] 設計と違う作りにしていない（設計書の修正なし）
+- [ ] PR がマージされた

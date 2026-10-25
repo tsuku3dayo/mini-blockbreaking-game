@@ -116,9 +116,9 @@ test.describe('キーボード（パソコン）', () => {
   test('TC-0021-07 タイトル・ランキング・プレイ・結果のボタンに Tab で届き、フォーカスの輪が見える', async ({ page }) => {
     await openApp(page);
     await writeStorage(page, { scores: [makeRecord(1, 1250)] });
-    // タイトル：START に初期フォーカス → RANKING → 効果音 → 記録を全部消す → インストール方法
-    const title = await tabThrough(page, 4);
-    expect(title.map((s) => s.id)).toEqual(['title-ranking', 'title-sound', 'title-clear', 'install-open']);
+    // タイトル：START に初期フォーカス → RANKING → クレジット → 効果音 → 記録を全部消す → インストール方法
+    const title = await tabThrough(page, 5);
+    expect(title.map((s) => s.id)).toEqual(['title-ranking', 'title-credits', 'title-sound', 'title-clear', 'install-open']);
     expect(title.every((s) => s.outline)).toBe(true);
 
     // ランキング：見出しに初期フォーカス。見出しは BACK より後ろにあるので、Shift+Tab で BACK、

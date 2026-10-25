@@ -34,6 +34,7 @@
             <kbd class="key-hint" aria-hidden="true">Enter</kbd>
           </button>
           <button id="title-ranking" type="button">RANKING</button>
+          <button id="title-credits" type="button">クレジット</button>
         </nav>
         <section class="howto" aria-labelledby="howto-heading">
           <h2 id="howto-heading">操作方法</h2>
@@ -116,6 +117,44 @@
           <input id="backup-file" type="file" accept=".json,application/json" hidden />
           <p id="backup-message" class="backup-message" role="status"></p>
         </section>
+      </section>
+
+      <!-- クレジット（GUI-0007、仕様書 §8.8）。中身は固定 -->
+      <section id="screen-credits" class="screen" aria-labelledby="credits-heading" hidden>
+        <header class="bar">
+          <button id="credits-back" type="button" class="bar-button">
+            <span data-icon="arrow-left"></span>
+            BACK
+          </button>
+          <h2 id="credits-heading" class="bar-title" tabindex="-1">クレジット</h2>
+          <span class="bar-spacer"></span>
+        </header>
+        <dl class="credits">
+          <div>
+            <dt>PRODUCER</dt>
+            <dd>YOSHIHARU TSUKUDA</dd>
+          </div>
+          <div>
+            <dt>DIRECTOR</dt>
+            <dd>YOSHIHARU TSUKUDA</dd>
+          </div>
+          <div>
+            <dt>GAME DESIGNER</dt>
+            <dd>YOSHIHARU TSUKUDA</dd>
+          </div>
+          <div>
+            <dt>GRAPHIC DESIGNER</dt>
+            <dd>CLAUDE CODE</dd>
+          </div>
+          <div>
+            <dt>SOUND CREATOR</dt>
+            <dd>CLAUDE CODE</dd>
+          </div>
+          <div>
+            <dt>PROGRAMMER</dt>
+            <dd>CLAUDE CODE</dd>
+          </div>
+        </dl>
       </section>
     </main>
 

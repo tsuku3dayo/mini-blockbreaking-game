@@ -304,6 +304,29 @@ input[aria-invalid='true'] {
   text-align: center;
 }
 
+/* クレジット（GUI-0007）：役職（小さめ・--muted）と名前（太字）を中央揃えで縦に並べる。役職ごとに間 24 */
+.credits {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0;
+  padding: 8px 0 24px;
+  text-align: center;
+}
+
+.credits dt {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
+.credits dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
 .empty {
   display: flex;
   flex-direction: column;
