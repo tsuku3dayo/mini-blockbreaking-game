@@ -4,6 +4,7 @@ import { setupInstall } from './install';
 import { createPlayScreen } from './play';
 import { setUpdateBannerAllowed, setupUpdateBanner } from './pwa';
 import { createRankingView } from './ranking-view';
+import { createSound } from './sound';
 import { migrateStorage, requestPersist } from './storage';
 import { renderIcons } from './ui';
 
@@ -18,7 +19,8 @@ const SCREENS: Record<ScreenName, { section: string; title: string; focus: strin
   ranking: { section: 'screen-ranking', title: 'ブロック崩し - ランキング', focus: 'ranking-heading' },
 };
 
-const play = createPlayScreen({ onTitle: () => navigate('title'), onRanking: () => navigate('ranking') });
+const sound = createSound();
+const play = createPlayScreen({ onTitle: () => navigate('title'), onRanking: () => navigate('ranking'), sound });
 const rankingView = createRankingView({ onTitle: () => navigate('title') });
 let current: ScreenName | null = null;
 

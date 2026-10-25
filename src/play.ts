@@ -5,15 +5,17 @@ import { advance, createAccumulator, resetAccumulator } from './loop';
 import { readPalette, render } from './render';
 import { hideResultPanel, showResultPanel } from './result-panel';
 import { summarize } from './score';
+import type { Sound } from './sound';
 import { icon } from './ui';
 
 // プレイ画面（TD-0003 §1・§2・§5・§7）。
-// 効果音・読み上げは後のタスクで足す
+// 読み上げは後のタスクで足す
 
-/** プレイ画面から頼む画面の切替え（main.ts が渡す） */
+/** プレイ画面から頼む画面の切替えと、効果音（main.ts が渡す） */
 export interface PlayDeps {
   onTitle(): void;
   onRanking(): void;
+  sound: Sound;
 }
 
 /** ゲーム領域の下の操作欄の高さ（間隔 8 + ボタン 48。GUI-0003 §1.2） */
@@ -128,6 +130,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
   function pauseGame(): void {
     if (!pause(state)) return;
     stopLoop();
+    deps.sound.stopAll();
     input.release();
     draw();
     updatePauseButton();
@@ -164,7 +167,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     input.detach();
     updatePauseButton();
     document.title = 'ブロック崩し - 結果';
-    showResultPanel(summarize(state), { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking });
+    showResultPanel(summarize(state), { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking }, { sound: deps.sound });
   }
 
   function frame(now: number): void {
@@ -175,6 +178,8 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
       step(state, input.take(), events);
       if (!isRunning(state)) break;
     }
+    // このフレームの出来事をまとめて鳴らす（同じ種類は 1 回。TD-0005 §1）
+    deps.sound.playFrame(events);
     draw();
     if (isOver(state)) finish();
     else if (isRunning(state)) frameId = requestAnimationFrame(frame);
@@ -216,6 +221,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     },
     stop() {
       stopLoop();
+      deps.sound.stopAll();
       input.detach();
       hideResultPanel();
       listen(false);
