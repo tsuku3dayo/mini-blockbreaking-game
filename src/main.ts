@@ -3,6 +3,7 @@ import { installDebug, isDebugMode } from './debug';
 import { setupInstall } from './install';
 import { createPlayScreen } from './play';
 import { setUpdateBannerAllowed, setupUpdateBanner } from './pwa';
+import { migrateStorage, requestPersist } from './storage';
 import { renderIcons } from './ui';
 
 // 起動と画面の切替え（TD-0001 §3・§8）
@@ -87,6 +88,8 @@ function onKeyDown(e: KeyboardEvent): void {
 }
 
 // 起動の手順（TD-0001 §8）
+migrateStorage();
+requestPersist();
 renderIcons();
 const version = document.getElementById('version');
 if (version) version.textContent = __APP_VERSION__;
