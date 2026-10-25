@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatNumber, formatSeconds } from '../src/format';
+import { formatNumber, formatSeconds, rankLabel } from '../src/format';
 
 describe('表示の形式', () => {
   it('TC-0004-07 3 桁区切り', () => {
@@ -13,5 +13,9 @@ describe('表示の形式', () => {
     expect(formatSeconds(95789)).toBe('95.7');
     expect(formatSeconds(0)).toBe('0.0');
     expect(formatSeconds(180000)).toBe('180.0');
+  });
+
+  it('TC-0013-05 順位は 1st・2nd・3rd、4 位からは数字', () => {
+    expect([1, 2, 3, 4, 10].map(rankLabel)).toEqual(['1st', '2nd', '3rd', '4', '10']);
   });
 });

@@ -11,3 +11,10 @@ export function formatNumber(value: number): string {
 export function formatSeconds(ms: number): string {
   return (Math.floor(ms / 100) / 10).toFixed(1);
 }
+
+const RANK_LABELS = ['1st', '2nd', '3rd'];
+
+/** 順位：1〜3 位は 1st・2nd・3rd、4 位からは数字だけ */
+export function rankLabel(rank: number): string {
+  return RANK_LABELS[rank - 1] ?? String(rank);
+}
