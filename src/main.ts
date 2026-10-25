@@ -1,4 +1,5 @@
 import './style.css';
+import { createAnnounce } from './announce';
 import { installDebug, isDebugMode } from './debug';
 import { setupInstall } from './install';
 import { createPlayScreen } from './play';
@@ -21,7 +22,8 @@ const SCREENS: Record<ScreenName, { section: string; title: string; focus: strin
 };
 
 const sound = createSound();
-const play = createPlayScreen({ onTitle: () => navigate('title'), onRanking: () => navigate('ranking'), sound });
+const announce = createAnnounce();
+const play = createPlayScreen({ onTitle: () => navigate('title'), onRanking: () => navigate('ranking'), sound, announce });
 const rankingView = createRankingView({ onTitle: () => navigate('title') });
 let current: ScreenName | null = null;
 
