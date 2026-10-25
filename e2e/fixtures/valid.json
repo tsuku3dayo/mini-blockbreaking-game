@@ -1,0 +1,13 @@
+{
+  "app": "mini-blockbreaking-game",
+  "schemaVersion": 1,
+  "exportedAt": "2026-10-23T03:15:00.123Z",
+  "nextId": 4,
+  "lastPlayerName": "TSUKU",
+  "lastRecordId": 2,
+  "scores": [
+    { "id": 1, "playerName": "HARU", "score": 1250, "result": "cleared", "createdAt": "2026-10-22T00:00:01.000Z" },
+    { "id": 2, "playerName": "TSUKU", "score": 980, "result": "cleared", "createdAt": "2026-10-22T00:00:02.000Z" },
+    { "id": 3, "playerName": "AKI", "score": 120, "result": "gameOver", "createdAt": "2026-10-22T00:00:03.000Z" }
+  ]
+}

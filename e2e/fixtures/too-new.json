@@ -1,0 +1,11 @@
+{
+  "app": "mini-blockbreaking-game",
+  "schemaVersion": 2,
+  "exportedAt": "2026-10-23T03:15:00.123Z",
+  "nextId": 2,
+  "lastPlayerName": "TSUKU",
+  "lastRecordId": 1,
+  "scores": [
+    { "id": 1, "playerName": "TSUKU", "score": 1250, "result": "cleared", "createdAt": "2026-10-22T00:00:01.000Z" }
+  ]
+}

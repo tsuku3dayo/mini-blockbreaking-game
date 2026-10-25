@@ -100,8 +100,22 @@
         </header>
         <!-- 表・0 件・読み込み失敗のどれか -->
         <div id="ranking-content" class="ranking-content"></div>
-        <!-- 記録のバックアップ（GUI-0005 §2）。中身は TASK-0021 -->
-        <div id="ranking-backup" hidden></div>
+        <!-- 記録のバックアップ（GUI-0005 §2）。表の状態によらず出す -->
+        <section id="ranking-backup" class="backup" aria-labelledby="backup-title">
+          <h3 id="backup-title">記録のバックアップ</h3>
+          <div class="backup-actions">
+            <button id="backup-export" type="button">
+              <span data-icon="download"></span>
+              記録を書き出す
+            </button>
+            <button id="backup-import" type="button">
+              <span data-icon="upload"></span>
+              記録を読み込む
+            </button>
+          </div>
+          <input id="backup-file" type="file" accept=".json,application/json" hidden />
+          <p id="backup-message" class="backup-message" role="status"></p>
+        </section>
       </section>
     </main>
 
@@ -151,7 +165,15 @@
       </div>
     </dialog>
 
-    <!-- 記録の読み込みの確認（#import-dialog）は TASK-0021 で置く -->
+    <!-- 記録の読み込みの確認（GUI-0006 §2）。最初のフォーカスはキャンセル -->
+    <dialog id="import-dialog" class="modal" aria-labelledby="import-title" aria-describedby="import-description">
+      <h2 id="import-title">記録を読み込みますか？</h2>
+      <p id="import-description">今の記録は置き換わります。読み込みますか？</p>
+      <div class="modal-actions">
+        <button id="import-cancel" type="button">キャンセル</button>
+        <button id="import-confirm" type="button" class="primary">読み込む</button>
+      </div>
+    </dialog>
 
     <!-- 新しい版があるときに出る。タイトル・ランキング画面だけ（GUI-0006 §3） -->
     <div id="update-banner" class="update-banner" role="status" hidden>

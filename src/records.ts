@@ -1,3 +1,4 @@
+import type { BackupData } from './backup';
 import type { ResultSummary } from './game';
 import { addRecord, validateName, validateRecord, type ScoreRecord } from './ranking';
 import { load, saveAll, tryLoad } from './storage';
@@ -44,6 +45,18 @@ export function register(
     entries.lastRecordId = record.id;
   }
   return saveAll(entries) ? { ok: true, rank, record } : { ok: false };
+}
+
+/** 書き出す中身。記録が読めないときは null */
+export function loadBackupData(): BackupData | null {
+  const ranking = loadRanking();
+  if (!ranking.ok) return null;
+  return { nextId: loadNextId(ranking.scores), lastPlayerName: loadLastName(), lastRecordId: ranking.myId, scores: ranking.scores };
+}
+
+/** 読み込んだ記録で置き換える（TD-0004 §4）。書けたら true（失敗したら元のまま） */
+export function restoreBackup(data: BackupData): boolean {
+  return saveAll({ scores: data.scores, nextId: data.nextId, lastName: data.lastPlayerName, lastRecordId: data.lastRecordId });
 }
 
 /**

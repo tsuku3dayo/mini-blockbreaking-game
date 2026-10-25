@@ -3,7 +3,7 @@ id: MBRK-TD-0004
 type: Technical Design
 title: 記録（保存・ランキング・バックアップ・結果パネル・ランキング画面）
 status: stable
-version: 1.1
+version: 1.2
 updated: 2026-10-25
 sources:
   - MBRK-TD-0001
@@ -34,7 +34,7 @@ verified: null
 
 ```ts
 const PREFIX = __APP_ID__;                     // 'mini-blockbreaking-game'
-export const SCHEMA_VERSION = 1;
+export { SCHEMA_VERSION };                     // 値（1）は config.ts に置く（ロジック層の backup.ts からも使うため）
 
 /** 読めないとき・値がないときは fallback */
 export function load<T>(key: string, fallback: T): T;
@@ -94,6 +94,10 @@ export function register(name: string, summary: ResultSummary, now: Date):
 export function loadLastName(): string;
 /** 記録の全消去（仕様書 v1.2 §9.2）。書けたら true */
 export function clearRanking(): boolean;
+/** 書き出す中身（§4 の BackupData）。記録が読めないときは null */
+export function loadBackupData(): BackupData | null;
+/** 読み込んだ記録で置き換える。saveAll（scores・nextId・lastName・lastRecordId）。書けたら true */
+export function restoreBackup(data: BackupData): boolean;
 ```
 
 `clearRanking` は `saveAll({ scores: [], lastRecordId: null })`。`nextId`・`lastName`・`sound` には触れない（id を再利用しないため）。途中で失敗したら `saveAll` が元に戻すので、何も変わらない。`scores` が壊れていても消せる（読まずに書く）。
@@ -134,8 +138,8 @@ export function backupFileName(now: Date): string;                   // 'mini-bl
 
 画面での書き出し・読み込み（`ranking-view.ts`）：
 
-- 書き出し：`createBackup` の文字列を `Blob`（`application/json`）にし、`<a download>` をクリックして保存する。
-- 読み込み：`<input type="file">` で選ぶ → `file.text()` → `parseBackup`。失敗なら理由を表示（仕様書 §9.6 の文）。成功なら確認ダイアログ（GUI-0006 §2）→「読み込む」で `saveAll`（`scores`・`nextId`・`lastName`・`lastRecordId`）→ 成功「記録を読み込みました（n 件）」と表を作り直す。保存に失敗したら「保存できませんでした。もう一度お試しください」。
+- 書き出し：`loadBackupData()` → `createBackup` の文字列を `Blob`（`application/json`）にし、`<a download>` をクリックして保存する。記録が読めないとき（`null`）は書き出さず、「ランキングを読み込めないため、書き出せませんでした」を出す（壊れた記録をファイルに残さないため。読み込みで正しい記録に戻せる）。
+- 読み込み：`<input type="file">` で選ぶ → `file.text()` → `parseBackup`。失敗なら理由を表示（仕様書 §9.6 の文）。成功なら確認ダイアログ（GUI-0006 §2）→「読み込む」で `restoreBackup`（`saveAll` で `scores`・`nextId`・`lastName`・`lastRecordId`）→ 成功「記録を読み込みました（n 件）」と表を作り直す。保存に失敗したら「保存できませんでした。もう一度お試しください」。
 
 ## 5. 結果パネル（`result-panel.ts`）
 
