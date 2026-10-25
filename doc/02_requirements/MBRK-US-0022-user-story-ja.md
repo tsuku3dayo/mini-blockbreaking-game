@@ -2,13 +2,13 @@
 id: MBRK-US-0022
 type: User Story
 title: ランキングの記録を全部消す
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-EP-0003
   - doc/specification.md (v1.2) §8.2、§9.2、§12.4
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 ---
 
 # US-0022 ランキングの記録を全部消す

@@ -2,7 +2,7 @@
 id: MBRK-EP-0003
 type: Epic
 title: 記録を残して自己ベストを目指す
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-25
 sources:
@@ -10,7 +10,7 @@ sources:
   - MBRK-ADR-0001
   - MBRK-ADR-0006
   - doc/specification.md (v1.2) §8.2、§8.4、§9
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 ---
 
 # EP-0003 記録を残して自己ベストを目指す

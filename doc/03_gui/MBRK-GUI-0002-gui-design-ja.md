@@ -2,7 +2,7 @@
 id: MBRK-GUI-0002
 type: GUI Design
 title: タイトル画面
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-25
 sources:
@@ -13,7 +13,7 @@ sources:
   - MBRK-US-0019
   - MBRK-US-0022
   - doc/specification.md (v1.2) §8.2、§8.6、§8.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 ---
 
 # GUI-0002 タイトル画面

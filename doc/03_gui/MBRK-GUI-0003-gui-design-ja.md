@@ -2,7 +2,7 @@
 id: MBRK-GUI-0003
 type: GUI Design
 title: プレイ画面（ゲーム領域・操作欄・オーバーレイ）
-status: review
+status: stable
 version: 1.2
 updated: 2026-10-25
 sources:
@@ -17,7 +17,7 @@ sources:
   - MBRK-US-0021
   - MBRK-ADR-0003
   - doc/specification.md (v1.2) §2、§3、§4、§7、§8.3、§8.5、§8.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 ---
 
 # GUI-0003 プレイ画面

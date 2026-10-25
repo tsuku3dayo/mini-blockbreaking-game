@@ -2,7 +2,7 @@
 id: MBRK-GUI-0001
 type: GUI Design
 title: 画面設計 共通（デザインの決まり・画面遷移・部品）
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-25
 sources:
@@ -14,7 +14,7 @@ sources:
   - MBRK-ADR-0003
   - doc/specification.md (v1.2) §2.1、§3.4、§8、§8.1、§8.5
   - simple_shogi index.html、src/style.css
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 ---
 
 # GUI-0001 画面設計 共通

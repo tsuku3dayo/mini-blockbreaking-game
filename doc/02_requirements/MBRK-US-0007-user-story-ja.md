@@ -2,13 +2,13 @@
 id: MBRK-US-0007
 type: User Story
 title: 指でパドルを動かし、タップで発射する
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-25
 sources:
   - MBRK-EP-0002
   - doc/specification.md (v1.2) §2、§4、§4.1、§8.3、§12.2
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 ---
 
 # US-0007 指でパドルを動かし、タップで発射する
