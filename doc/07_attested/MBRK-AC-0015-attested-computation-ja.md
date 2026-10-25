@@ -2,14 +2,14 @@
 id: MBRK-AC-0015
 type: Attested Computation
 title: 結果パネルでのスコア登録の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0015
   - MBRK-TC-0012
   - MBRK-TC-0011
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T16:51:56+09:00" }
 ---
 
 # AC-0015 結果パネルでのスコア登録の実施記録

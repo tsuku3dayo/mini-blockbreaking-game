@@ -2,14 +2,14 @@
 id: MBRK-AC-0016
 type: Attested Computation
 title: ランキング画面の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0016
   - MBRK-TC-0013
   - MBRK-TC-0012
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T16:51:56+09:00" }
 ---
 
 # AC-0016 ランキング画面の実施記録

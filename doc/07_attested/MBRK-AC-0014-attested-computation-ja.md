@@ -2,14 +2,14 @@
 id: MBRK-AC-0014
 type: Attested Computation
 title: 保存とランキングの規則の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0014
   - MBRK-TC-0012
   - MBRK-TC-0013
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T16:51:56+09:00" }
 ---
 
 # AC-0014 保存とランキングの規則の実施記録
