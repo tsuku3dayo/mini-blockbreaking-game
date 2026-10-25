@@ -39,7 +39,7 @@
           <h2 id="howto-heading">操作方法</h2>
           <dl>
             <dt>パドル移動</dt>
-            <dd>画面をなぞる<br />マウス / ← → ・ A D</dd>
+            <dd>画面の下をなぞる<br />マウス / ← → ・ A D</dd>
             <dt>発射</dt>
             <dd>タップ / クリック<br />/ Space</dd>
             <dt>一時停止</dt>
@@ -70,6 +70,8 @@
           <canvas id="field" role="img" aria-label="ブロック崩しのゲーム画面" tabindex="0"></canvas>
           <div id="result-panel" class="result-panel" role="region" aria-labelledby="result-heading" hidden></div>
         </div>
+        <!-- 操作空間（GUI-0003 §2.3）。タッチ端末だけ play.ts が出す。指でゲーム領域を隠さずに操作するための場所 -->
+        <div id="control-area" class="control-area" aria-hidden="true" hidden>ここをなぞって移動・タップで発射</div>
         <!-- 操作欄（GUI-0003 §2.3）：左に一時停止、右に効果音 -->
         <div class="play-controls">
           <button id="pause-button" type="button" class="toggle" aria-pressed="false">

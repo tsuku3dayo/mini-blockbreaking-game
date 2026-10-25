@@ -82,6 +82,8 @@ export const RANKING_LIMIT = 10;
 export const PAGE_MAX_WIDTH = 480;
 /** ゲーム領域の左右の余白（画面の px） */
 export const PAGE_GUTTER = 16;
+/** 操作空間の高さ（タッチ端末だけ。画面の px） */
+export const CONTROL_AREA_HEIGHT = 96;
 /** タップできる部品の最小の大きさ（画面の px） */
 export const MIN_TAP_TARGET = 44;
 /** 表示の最小倍率 */

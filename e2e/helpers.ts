@@ -100,6 +100,13 @@ export async function touchAt(page: Page, type: TouchType, point: { x: number; y
   );
 }
 
+/** 操作空間の中で、論理 x にあたる位置（縦は操作空間の真ん中。x は外にはみ出してもよい） */
+export async function controlPoint(page: Page, x: number): Promise<{ x: number; y: number }> {
+  const area = await page.locator('#control-area').boundingBox();
+  if (!area) throw new Error('#control-area が見えません');
+  return { x: (await toScreen(page, x, 0)).x, y: area.y + area.height / 2 };
+}
+
 /** ブラウザで次の描画まで待つ（入力がステップに取り込まれるまで） */
 export function nextFrames(page: Page, count = 3): Promise<void> {
   return page.evaluate(

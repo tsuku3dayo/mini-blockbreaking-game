@@ -1,16 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { computeDisplaySize, isMinimumSize } from '../src/layout';
 
+/** 操作欄だけ（パソコン）：間隔 8 + ボタン 48 */
 const insets = { topInset: 24, bottomInset: 16, controlsHeight: 56 };
+/** 操作空間あり（タッチ端末）：操作欄 56 + 間隔 8 + 操作空間 96 */
+const touchInsets = { ...insets, controlsHeight: 160 };
 
 describe('表示サイズ（TC-0010）', () => {
   it.each([
-    ['375 × 667（iPhone SE）', 375, 667, 343, 457],
-    ['375 × 548（iPhone SE の Safari、ツールバーあり）', 375, 548, 339, 452],
-    ['412 × 839（Pixel 7）', 412, 839, 380, 506],
-    ['1280 × 800（パソコン）', 1280, 800, 448, 597],
-  ])('TC-0010-01 %s → %i × %i', (_, width, height, w, h) => {
-    expect(computeDisplaySize({ width, height, ...insets })).toEqual({ width: w, height: h });
+    ['375 × 667（iPhone SE）', 375, 667, touchInsets, 343, 457],
+    ['375 × 548（iPhone SE の Safari、ツールバーあり）', 375, 548, touchInsets, 288, 384],
+    ['412 × 839（Pixel 7）', 412, 839, touchInsets, 380, 506],
+    ['1280 × 800（パソコン、操作空間なし）', 1280, 800, insets, 448, 597],
+    ['375 × 548（操作空間なし。v1.1 までの値）', 375, 548, insets, 339, 452],
+  ])('TC-0010-01 %s → %i × %i', (_, width, height, v, w, h) => {
+    expect(computeDisplaySize({ width, height, ...v })).toEqual({ width: w, height: h });
   });
 
   it('TC-0010-02 最小は 288 × 384、最大は 448 × 597', () => {

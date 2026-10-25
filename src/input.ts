@@ -31,7 +31,11 @@ export interface Input {
   detach(): void;
 }
 
-export function createInput(canvas: HTMLCanvasElement, options: InputOptions): Input {
+/**
+ * canvas はゲーム領域。controlArea は、その下の操作空間（タッチ端末だけ出す。TD-0003 §3.7）。
+ * どちらで押しても同じように扱い、位置はゲーム領域の外形で論理座標に直す（左右の端がそろっているため）
+ */
+export function createInput(canvas: HTMLCanvasElement, options: InputOptions, controlArea: HTMLElement | null = null): Input {
   let source: StepInput['source'] = 'pointer';
   /** 押下中の左右キー */
   let left = false;
@@ -68,9 +72,9 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     pointerType = e.pointerType;
     activePointerId = e.pointerId;
-    // 押したまま指がゲーム領域の外に出ても、離すまで追従を続ける
+    // 押したまま指がゲーム領域（操作空間）の外に出ても、離すまで追従を続ける
     try {
-      canvas.setPointerCapture(e.pointerId);
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
     } catch {
       // すでに離れたポインタなどでは捕まえられない。追従は window の pointermove で続ける
     }
@@ -173,18 +177,20 @@ export function createInput(canvas: HTMLCanvasElement, options: InputOptions): I
       controller?.abort();
       controller = new AbortController();
       const { signal } = controller;
-      // ゲーム領域の外で押したときは追従しないので、押すのは Canvas だけで受ける
-      canvas.addEventListener('pointerdown', onPointerDown, { signal });
-      // 動かす・離すは、捕まえた Canvas から window に伝わるものも含めて window で受ける
+      // ゲーム領域・操作空間の外で押したときは追従しないので、押すのはこの 2 つだけで受ける
+      for (const target of controlArea ? [canvas, controlArea] : [canvas]) {
+        target.addEventListener('pointerdown', onPointerDown, { signal });
+        target.addEventListener('lostpointercapture', onPointerCancel, { signal });
+        // 長押しメニューを出さない
+        target.addEventListener('contextmenu', (e) => e.preventDefault(), { signal });
+      }
+      // 動かす・離すは、捕まえた要素から window に伝わるものも含めて window で受ける
       window.addEventListener('pointermove', onPointerMove, { signal });
       window.addEventListener('pointerup', onPointerUp, { signal });
       window.addEventListener('pointercancel', onPointerCancel, { signal });
-      canvas.addEventListener('lostpointercapture', onPointerCancel, { signal });
       window.addEventListener('blur', release, { signal });
       window.addEventListener('keydown', onKeyDown, { signal });
       window.addEventListener('keyup', onKeyUp, { signal });
-      // 長押しメニューを出さない
-      canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { signal });
     },
     detach() {
       controller?.abort();
