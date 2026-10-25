@@ -12,13 +12,14 @@ import { icon, renderIcons } from './ui';
 
 // 起動と画面の切替え（TD-0001 §3・§8）
 
-type ScreenName = 'title' | 'play' | 'ranking';
+type ScreenName = 'title' | 'play' | 'ranking' | 'credits';
 
 const SCREENS: Record<ScreenName, { section: string; title: string; focus: string | null }> = {
   title: { section: 'screen-title', title: 'ブロック崩し - タイトル', focus: 'title-start' },
   // プレイ画面のフォーカスは、play.start() がゲーム領域に移す
   play: { section: 'screen-play', title: 'ブロック崩し - プレイ', focus: null },
   ranking: { section: 'screen-ranking', title: 'ブロック崩し - ランキング', focus: 'ranking-heading' },
+  credits: { section: 'screen-credits', title: 'ブロック崩し - クレジット', focus: 'credits-heading' },
 };
 
 const sound = createSound();
@@ -30,7 +31,7 @@ let current: ScreenName | null = null;
 /** ハッシュから画面を決める。不明なものは null */
 function parseHash(hash: string): ScreenName | null {
   const name = hash.replace(/^#\//, '');
-  return name === 'title' || name === 'play' || name === 'ranking' ? name : null;
+  return Object.hasOwn(SCREENS, name) ? (name as ScreenName) : null;
 }
 
 /** 画面を切り替える（TD-0001 §3.2） */
@@ -140,7 +141,7 @@ function onKeyDown(e: KeyboardEvent): void {
   if (current === 'title' && (e.code === 'Enter' || e.code === 'NumpadEnter') && !isInteractive(document.activeElement)) {
     e.preventDefault();
     navigate('play');
-  } else if (current === 'ranking' && e.code === 'Escape') {
+  } else if ((current === 'ranking' || current === 'credits') && e.code === 'Escape') {
     e.preventDefault();
     navigate('title');
   }
@@ -157,6 +158,8 @@ if (version) version.textContent = __APP_VERSION__;
 document.getElementById('title-start')?.addEventListener('click', () => navigate('play'));
 document.getElementById('title-ranking')?.addEventListener('click', () => navigate('ranking'));
 document.getElementById('ranking-back')?.addEventListener('click', () => navigate('title'));
+document.getElementById('title-credits')?.addEventListener('click', () => navigate('credits'));
+document.getElementById('credits-back')?.addEventListener('click', () => navigate('title'));
 for (const id of SOUND_BUTTONS) document.getElementById(id)?.addEventListener('click', onSoundButton);
 setupClearRanking();
 document.addEventListener('keydown', onKeyDown);
@@ -166,9 +169,10 @@ setupInstall();
 
 if (isDebugMode(location.search)) installDebug(play);
 
-// 最初の画面：#/ranking ならランキング、それ以外（#/play・空・不明）はタイトル。
+// 最初の画面：#/ranking・#/credits ならその画面、それ以外（#/play・空・不明）はタイトル。
 // 遊んでいる途中のゲームは保存しないため、#/play でもタイトルから始める（仕様書 §7.2）
-const first: ScreenName = parseHash(location.hash) === 'ranking' ? 'ranking' : 'title';
+const requested = parseHash(location.hash);
+const first: ScreenName = requested === 'ranking' || requested === 'credits' ? requested : 'title';
 history.replaceState(null, '', `#/${first}`);
 showScreen(first);
 
