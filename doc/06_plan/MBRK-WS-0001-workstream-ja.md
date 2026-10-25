@@ -3,7 +3,7 @@ id: MBRK-WS-0001
 type: Workstream
 title: 段階 0 土台（プロジェクト・CI・公開・PWA の骨組み）
 status: stable
-version: 1.1
+version: 1.2
 updated: 2026-10-25
 sources:
   - MBRK-EP-0001（優先順位）
@@ -28,7 +28,7 @@ verified: null
 | [WS-0006](MBRK-WS-0006-workstream-ja.md) | 5 効果音 | US-0015、0016 | TASK-0017〜0018 |
 | [WS-0009](MBRK-WS-0009-workstream-ja.md) | 5.5 修正（仕様書 v1.2） | US-0007・0010（v1.1）、US-0022 | TASK-0024〜0025 |
 | [WS-0007](MBRK-WS-0007-workstream-ja.md) | 6 アプリとして配る | US-0017〜0020 | TASK-0019〜0020 |
-| [WS-0008](MBRK-WS-0008-workstream-ja.md) | 7 仕上げとリリース | US-0014、0021、非機能 | TASK-0021〜0023 |
+| [WS-0008](MBRK-WS-0008-workstream-ja.md) | 7 仕上げとリリース | US-0014、0021、0023、非機能 | TASK-0021〜0023、0026 |
 
 ### 1.1 タスクの進め方（全 WS 共通）
 

@@ -3,15 +3,17 @@ id: MBRK-TD-0001
 type: Technical Design
 title: 詳細設計 全体（ファイル構成・画面の切替え・ビルド・PWA・CI・テスト用の入口）
 status: stable
-version: 1.0
-updated: 2026-10-23
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-SA-0001
   - MBRK-TS-0001
   - MBRK-ADR-0002
   - MBRK-ADR-0004
   - MBRK-ADR-0007
-  - MBRK-GUI-0001
+  - MBRK-GUI-0001（v1.2）
+  - MBRK-GUI-0007
+  - doc/specification.md (v1.3) §8、§8.8
   - simple_shogi（vite.config.ts、playwright.config.ts、public/boot.js、src/pwa.ts、src/install.ts、scripts/check-dist.mjs）
 verified: null
 ---
@@ -49,7 +51,7 @@ mini-blockbreaking-game/
 │  ├─ sound-plan.ts        出来事から鳴らす音を決める（TD-0005）
 │  ├─ format.ts            3 桁区切り・タイム・日時の表示形式
 │  ├─ ── 画面層 ──
-│  ├─ main.ts              起動、画面の切替え、タイトル画面
+│  ├─ main.ts              起動、画面の切替え、タイトル画面、クレジット画面（中身は index.html に固定で書く）
 │  ├─ play.ts              プレイ画面（ゲームループ・一時停止・結果パネルの呼び出し）（TD-0003）
 │  ├─ input.ts             ポインタ・キーボードの入力（TD-0003）
 │  ├─ render.ts            Canvas の描画（TD-0003）
@@ -110,9 +112,11 @@ main.ts ─┬─▶ play.ts ─┬─▶ input.ts ──▶ layout.ts, config.t
 | タイトル | `#/title` | `title` |
 | プレイ（結果パネルを含む） | `#/play` | `play` |
 | ランキング | `#/ranking` | `ranking` |
+| クレジット | `#/credits` | `credits` |
 
-- 起動したとき：ハッシュが `#/ranking` ならランキング画面、それ以外（`#/play`・空・不明）はタイトル画面にする（遊んでいる途中のゲームは保存しないため。仕様書 §7.2）。ハッシュは `history.replaceState` で書き直す。
-- 起動後にハッシュが変わったとき（戻るボタン・手入力）：`#/title`・`#/ranking` はその画面へ。`#/play` は新しいゲームを始める。不明なハッシュはタイトル画面へ（仕様書 §8）。
+- 起動したとき：ハッシュが `#/ranking`・`#/credits` ならその画面、それ以外（`#/play`・空・不明）はタイトル画面にする（遊んでいる途中のゲームは保存しないため。仕様書 §7.2）。ハッシュは `history.replaceState` で書き直す。
+- 起動後にハッシュが変わったとき（戻るボタン・手入力）：`#/title`・`#/ranking`・`#/credits` はその画面へ。`#/play` は新しいゲームを始める。不明なハッシュはタイトル画面へ（仕様書 §8）。
+- クレジット画面は、ランキング画面と同じく Esc・BACK でタイトルへ戻る（`main.ts` の `onKeyDown`）。中身は固定なので、開いたときの初期化はない。
 - 画面の切替えは `history.pushState` でハッシュを変える。プレイ中に「戻る」でタイトルに戻った場合、ゲームは捨てる。
 
 ### 3.2 切替えの処理（`main.ts` の `showScreen(name)`）
@@ -122,7 +126,7 @@ main.ts ─┬─▶ play.ts ─┬─▶ input.ts ──▶ layout.ts, config.t
 3. `window.scrollTo(0, 0)`。
 4. 画面の初期化を呼ぶ（プレイ：新しいゲーム、ランキング：保存から読み直す）。
 5. 初期フォーカスの部品にフォーカスを移す。
-6. 更新の帯は、タイトル・ランキングのときだけ出す（GUI-0006 §3）。
+6. 更新の帯は、プレイ画面以外（タイトル・ランキング・クレジット）のときだけ出す（GUI-0006 §3）。
 
 ## 4. HTML の骨組み（`index.html`）
 
@@ -142,6 +146,7 @@ main.ts ─┬─▶ play.ts ─┬─▶ input.ts ──▶ layout.ts, config.t
       </div>
     </section>
     <section id="screen-ranking" class="screen" aria-labelledby="ranking-heading" hidden> … </section>
+    <section id="screen-credits" class="screen" aria-labelledby="credits-heading" hidden> … </section>
   </main>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
   <div id="update-banner" class="update-banner" role="status" hidden> … </div>

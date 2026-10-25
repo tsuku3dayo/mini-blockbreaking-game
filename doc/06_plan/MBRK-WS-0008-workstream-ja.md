@@ -3,8 +3,8 @@ id: MBRK-WS-0008
 type: Workstream
 title: 段階 7 仕上げとリリース
 status: stable
-version: 1.0
-updated: 2026-10-23
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-EP-0001
   - MBRK-EP-0002
@@ -23,7 +23,7 @@ verified: null
 
 ## ストーリー
 
-US-0014 バックアップ（20）、US-0021 アクセシビリティ（21）。非機能（TC-0022）。
+US-0014 バックアップ（20）、US-0021 アクセシビリティ（21）、US-0023 クレジット（23、仕様書 v1.3 で追加）。非機能（TC-0022）。
 
 ## タスク
 
@@ -32,7 +32,8 @@ US-0014 バックアップ（20）、US-0021 アクセシビリティ（21）。
 | [TASK-0021](MBRK-TASK-0021-implementation-task-ja.md) | 記録の書き出し・読み込み | TC-0014 | M |
 | [TASK-0022](MBRK-TASK-0022-implementation-task-ja.md) | 読み上げ・キーボード操作の仕上げ | TC-0021 | M |
 | [TASK-0023](MBRK-TASK-0023-implementation-task-ja.md) | リリース v1.0.0（全体の手動テスト・README・公開） | TC-0022、全 TC の手動 | M |
+| [TASK-0026](MBRK-TASK-0026-implementation-task-ja.md) | クレジット画面（v1.0.0 の公開のあと、全体の手動テストの前に足す。版は 1.0.0 のまま） | TC-0024 | S |
 
 ## 段階の終わりの確認（手動）
 
-TASK-0023 で、全テストケースの手動の確認（TC-0019-04 を除く）をまとめて行う。
+TASK-0023 で、全テストケースの手動の確認（TC-0019-04 を除く）をまとめて行う。TASK-0026（クレジット画面）を公開し直してから行い、TC-0024-07 も含める。
