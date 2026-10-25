@@ -4,6 +4,7 @@ import { setupInstall } from './install';
 import { createPlayScreen } from './play';
 import { setUpdateBannerAllowed, setupUpdateBanner } from './pwa';
 import { createRankingView } from './ranking-view';
+import { clearRanking } from './records';
 import { createSound } from './sound';
 import { migrateStorage, requestPersist } from './storage';
 import { icon, renderIcons } from './ui';
@@ -47,9 +48,13 @@ function showScreen(name: ScreenName): void {
   // 3. ページの先頭へ
   window.scrollTo(0, 0);
 
-  // 4. 画面の初期化（プレイ：新しいゲーム、ランキング：保存から読み直す）
+  // 4. 画面の初期化（プレイ：新しいゲーム、ランキング：保存から読み直す、タイトル：全消去のメッセージを消す）
   if (name === 'play') play.start();
   else if (name === 'ranking') rankingView.show();
+  else {
+    const message = document.getElementById('title-clear-message');
+    if (message) message.textContent = '';
+  }
 
   // 5. 初期フォーカス
   if (screen.focus) document.getElementById(screen.focus)?.focus();
@@ -101,6 +106,32 @@ function onSoundButton(e: Event): void {
   if ((e.currentTarget as HTMLElement).id === 'play-sound') document.getElementById('field')?.focus();
 }
 
+/** 記録の全消去（TD-0004 §6.1）：確認ダイアログを出し、「消す」でランキングの記録を消す */
+function setupClearRanking(): void {
+  const button = document.getElementById('title-clear');
+  const message = document.getElementById('title-clear-message');
+  const dialog = document.getElementById('clear-dialog') as HTMLDialogElement | null;
+  const cancel = document.getElementById('clear-cancel');
+  const confirm = document.getElementById('clear-confirm');
+  if (!button || !message || !dialog || !cancel || !confirm) return;
+
+  button.addEventListener('click', () => {
+    message.textContent = '';
+    dialog.showModal();
+    // 誤って消さないよう、最初のフォーカスはキャンセル
+    cancel.focus();
+  });
+  cancel.addEventListener('click', () => dialog.close());
+  confirm.addEventListener('click', () => {
+    dialog.close();
+    const ok = clearRanking();
+    message.className = `clear-message ${ok ? 'is-success' : 'is-danger'}`;
+    message.textContent = ok ? '記録を消しました' : '消せませんでした。もう一度お試しください';
+  });
+  // キャンセル・Esc・消す、どれで閉じても押したボタンにフォーカスを戻す
+  dialog.addEventListener('close', () => button.focus());
+}
+
 function onKeyDown(e: KeyboardEvent): void {
   if (e.repeat || e.isComposing) return;
   if (document.querySelector('dialog[open]')) return;
@@ -125,6 +156,7 @@ document.getElementById('title-start')?.addEventListener('click', () => navigate
 document.getElementById('title-ranking')?.addEventListener('click', () => navigate('ranking'));
 document.getElementById('ranking-back')?.addEventListener('click', () => navigate('title'));
 for (const id of SOUND_BUTTONS) document.getElementById(id)?.addEventListener('click', onSoundButton);
+setupClearRanking();
 document.addEventListener('keydown', onKeyDown);
 window.addEventListener('hashchange', onHashChange);
 setupUpdateBanner();

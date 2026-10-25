@@ -46,6 +46,14 @@ export function register(
   return saveAll(entries) ? { ok: true, rank, record } : { ok: false };
 }
 
+/**
+ * 記録の全消去（仕様書 v1.2 §9.2）。記録一覧と自分の記録 id だけを消す。
+ * 次の id・前回の名前・効果音の設定は残す（id を再利用しないため）。記録が壊れていても読まずに消せる
+ */
+export function clearRanking(): boolean {
+  return saveAll({ scores: [], lastRecordId: null });
+}
+
 /** 前回の名前。規則に合わなければ '' */
 export function loadLastName(): string {
   const saved = load<unknown>('lastName', '');

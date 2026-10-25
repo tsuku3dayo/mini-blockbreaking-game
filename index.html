@@ -51,6 +51,9 @@
           <span data-icon="sound-on"></span>
           <span class="toggle-label">効果音：オン</span>
         </button>
+        <!-- 記録の全消去（GUI-0002 v1.1）。押すと確認（#clear-dialog）を出す -->
+        <button id="title-clear" type="button" class="clear-records">記録を全部消す</button>
+        <p id="title-clear-message" class="clear-message" role="status"></p>
         <button id="install-open" type="button" class="link install-open">
           <span data-icon="install"></span>
           アプリとしてインストールする方法
@@ -135,6 +138,16 @@
       <p class="muted">ホーム画面から開くと、電波がなくても遊べます。</p>
       <div class="modal-actions">
         <button type="button" data-close>閉じる</button>
+      </div>
+    </dialog>
+
+    <!-- 記録の全消去の確認（GUI-0006 §2.1）。最初のフォーカスはキャンセル -->
+    <dialog id="clear-dialog" class="modal" aria-labelledby="clear-title" aria-describedby="clear-description">
+      <h2 id="clear-title">記録を全部消しますか？</h2>
+      <p id="clear-description">ランキングの記録をすべて消します。元に戻せません。</p>
+      <div class="modal-actions">
+        <button id="clear-cancel" type="button" data-close>キャンセル</button>
+        <button id="clear-confirm" type="button" class="danger">消す</button>
       </div>
     </dialog>
 

@@ -128,6 +128,14 @@ button.primary {
   font-weight: bold;
 }
 
+/* 危険のボタン（GUI-0001 §5.1）：取り消せない操作の確定（記録の全消去の「消す」） */
+button.danger {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: var(--primary-text);
+  font-weight: bold;
+}
+
 button.link {
   min-height: 48px;
   border: none;
@@ -698,6 +706,35 @@ button.toggle {
 /* タイトル画面では中央寄せ（GUI-0002） */
 .title .sound-toggle {
   align-self: center;
+}
+
+/* 記録の全消去（GUI-0002 v1.1）：普通のボタンで、文字だけ --danger。中央寄せ */
+.title .clear-records {
+  align-self: center;
+  color: var(--danger);
+}
+
+/* 消した結果のメッセージ。出ていないときは場所を取らない */
+.clear-message {
+  margin: 0;
+  text-align: center;
+}
+
+.clear-message:empty {
+  display: none;
+}
+
+.clear-message.is-success {
+  color: var(--success);
+}
+
+.clear-message.is-danger {
+  color: var(--danger);
+}
+
+/* 確認の 2 つのボタンは左右に分ける（GUI-0006 §2.1） */
+#clear-dialog .modal-actions {
+  justify-content: space-between;
 }
 
 /* 縦向きのおすすめ（GUI-0006 §5） */
