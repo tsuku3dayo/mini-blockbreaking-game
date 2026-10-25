@@ -3,7 +3,7 @@ id: MBRK-TST-0001
 type: Test Strategy
 title: テスト戦略
 status: stable
-version: 1.2
+version: 1.3
 updated: 2026-10-25
 sources:
   - MBRK-PB-0001
@@ -23,7 +23,7 @@ verified: null
 
 ## 1. 目的
 
-仕様書 §12 の受け入れ基準 52 項目と、ユーザーストーリーの受け入れ条件のすべてを、どれかのテストで確かめる。確かめた結果は、実装タスクごとの attested-computation（AC）に残す。
+仕様書 §12 の受け入れ基準 54 項目（v1.1 の 52 項目に、v1.2 で操作空間・記録の全消去の 2 項目を足した）と、ユーザーストーリーの受け入れ条件のすべてを、どれかのテストで確かめる。確かめた結果は、実装タスクごとの attested-computation（AC）に残す。
 
 ## 2. テストの種類
 
