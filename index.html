@@ -75,7 +75,7 @@
         </div>
       </section>
 
-      <!-- ランキング（GUI-0005）。表とバックアップは TASK-0016 -->
+      <!-- ランキング（GUI-0005）。表は ranking-view.ts が作る。バックアップの欄は TASK-0021 -->
       <section id="screen-ranking" class="screen" aria-labelledby="ranking-heading" hidden>
         <header class="bar">
           <button id="ranking-back" type="button" class="bar-button">
@@ -85,10 +85,10 @@
           <h2 id="ranking-heading" class="bar-title" tabindex="-1">ハイスコアランキング</h2>
           <span class="bar-spacer"></span>
         </header>
-        <div id="ranking-empty" class="empty">
-          <p class="muted">まだ記録がありません</p>
-          <button id="ranking-empty-title" type="button">タイトルへ戻る</button>
-        </div>
+        <!-- 表・0 件・読み込み失敗のどれか -->
+        <div id="ranking-content" class="ranking-content"></div>
+        <!-- 記録のバックアップ（GUI-0005 §2）。中身は TASK-0021 -->
+        <div id="ranking-backup" hidden></div>
       </section>
     </main>
 

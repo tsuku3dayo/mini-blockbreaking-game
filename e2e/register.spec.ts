@@ -33,8 +33,9 @@ test('TC-0012-02 前後の空白を除いて保存する', async ({ page }) => {
   await waitGuard(page);
   await registerName(page, ' TSUKU ');
   await expect(page.locator('#result-message')).toHaveText('1 位で登録しました');
-  // ランキング画面の表での確認は TASK-0016
   expect(await readStorage(page, 'scores')).toMatchObject([{ playerName: 'TSUKU', score: 1250, result: 'cleared' }]);
+  await page.locator('#result-ranking').click();
+  await expect(page.locator('#ranking-table tbody .ranking-name')).toHaveText(['TSUKU']);
 });
 
 test('TC-0012-05 13 文字・ゼロ幅文字を含む名前は REGISTER が押せず、エラー文が出る', async ({ page }) => {
@@ -98,9 +99,12 @@ test('TC-0012-11 開き直しても記録が残り、入力欄の初期値が前
 
   await page.reload();
   await expect.poll(() => page.evaluate(() => window.__appStarted === true)).toBe(true);
-  // ランキング画面の表での確認は TASK-0016
   expect(await readStorage(page, 'scores')).toMatchObject([{ id: 1, playerName: 'TSUKU', score: 120 }]);
+  await page.locator('#title-ranking').click();
+  await expect(page.locator('#ranking-table tbody .ranking-name')).toHaveText(['TSUKU']);
+  await expect(page.locator('#ranking-table tbody .ranking-score')).toHaveText(['120']);
 
+  await page.locator('#ranking-back').click();
   await startGame(page);
   await finishCleared(page);
   await expect(page.locator('#result-name')).toHaveValue('TSUKU');
@@ -120,8 +124,10 @@ test('TC-0012-18 名前は文字として扱う', async ({ page }) => {
   await registerName(page, '<b>x</b>');
   await expect(page.locator('#result-message')).toHaveText('1 位で登録しました');
   expect(await readStorage(page, 'scores')).toMatchObject([{ playerName: '<b>x</b>' }]);
-  // ランキング画面の表での確認は TASK-0016
   await expect(page.locator('#result-panel b')).toHaveCount(0);
+  await page.locator('#result-ranking').click();
+  await expect(page.locator('#ranking-table tbody .ranking-name')).toHaveText(['<b>x</b>']);
+  await expect(page.locator('#ranking-table b')).toHaveCount(0);
 });
 
 test('TC-0012-14 補助の文字・文字数・空のエラー', async ({ page }) => {
