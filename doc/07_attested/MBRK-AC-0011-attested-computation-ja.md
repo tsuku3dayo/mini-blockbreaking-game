@@ -2,13 +2,13 @@
 id: MBRK-AC-0011
 type: Attested Computation
 title: 一時停止・再開・自動一時停止の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0011
   - MBRK-TC-0009
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T15:19:52+09:00" }
 ---
 
 # AC-0011 一時停止・再開・自動一時停止の実施記録

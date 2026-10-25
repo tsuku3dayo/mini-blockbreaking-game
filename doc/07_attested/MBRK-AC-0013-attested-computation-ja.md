@@ -2,13 +2,13 @@
 id: MBRK-AC-0013
 type: Attested Computation
 title: キーボード操作とマウスの仕上げの実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0013
   - MBRK-TC-0008
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T15:19:52+09:00" }
 ---
 
 # AC-0013 キーボード操作とマウスの仕上げの実施記録
