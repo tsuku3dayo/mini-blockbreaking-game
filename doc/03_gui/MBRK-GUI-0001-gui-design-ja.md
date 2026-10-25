@@ -2,18 +2,19 @@
 id: MBRK-GUI-0001
 type: GUI Design
 title: 画面設計 共通（デザインの決まり・画面遷移・部品）
-status: stable
-version: 1.0
-updated: 2026-10-23
+status: review
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-EP-0001
   - MBRK-EP-0002
   - MBRK-US-0010
   - MBRK-US-0021
+  - MBRK-US-0022
   - MBRK-ADR-0003
-  - doc/specification.md (v1.1) §2.1、§3.4、§8、§8.1、§8.5
+  - doc/specification.md (v1.2) §2.1、§3.4、§8、§8.1、§8.5
   - simple_shogi index.html、src/style.css
-verified: { by: "tsuku3dayo", at: "2026-10-23T16:58:18+09:00" }
+verified: null
 ---
 
 # GUI-0001 画面設計 共通
@@ -23,7 +24,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-23T16:58:18+09:00" }
 | ID | 画面・部品 |
 | --- | --- |
 | [MBRK-GUI-0002](MBRK-GUI-0002-gui-design-ja.md) | タイトル画面 |
-| [MBRK-GUI-0003](MBRK-GUI-0003-gui-design-ja.md) | プレイ画面（ゲーム領域・操作欄・オーバーレイ） |
+| [MBRK-GUI-0003](MBRK-GUI-0003-gui-design-ja.md) | プレイ画面（ゲーム領域・操作空間・操作欄・オーバーレイ） |
 | [MBRK-GUI-0004](MBRK-GUI-0004-gui-design-ja.md) | 結果パネル（スコア登録を含む） |
 | [MBRK-GUI-0005](MBRK-GUI-0005-gui-design-ja.md) | ランキング画面（バックアップを含む） |
 | [MBRK-GUI-0006](MBRK-GUI-0006-gui-design-ja.md) | ダイアログと通知（インストール方法・読み込みの確認・更新・復旧・縦向きの案内） |
@@ -89,7 +90,7 @@ stateDiagram-v2
 | `--primary-text` | #0B1020 | 主ボタンの文字 |
 | `--accent` | #FFD54F | 合計スコア、上位 3 位、自分の記録 |
 | `--success` | #66BB6A | クリア |
-| `--danger` | #FF6B6B | ゲームオーバー、入力エラー |
+| `--danger` | #FF6B6B | ゲームオーバー、入力エラー、危険のボタン |
 | `--ball` | #FFFFFF | ボール |
 | `--pause-veil` | rgb(11 16 32 / 0.75) | 一時停止の幕 |
 | `--result-dim` | 50% | 終了後のゲーム領域の不透明度 |
@@ -122,6 +123,7 @@ stateDiagram-v2
 | 普通のボタン | 地 `--surface-2`、枠 `--border`、文字 `--text` | RANKING、TITLE、BACK、記録の書き出し・読み込み など |
 | トグルボタン | 普通のボタン + 状態の文字とアイコン。`aria-pressed` で状態を伝える | 一時停止、効果音 |
 | リンク風ボタン | 枠なし、文字 `--primary`、下線 | インストール方法の入口 |
+| 危険のボタン | 地 `--danger`、文字 `--primary-text`、太字（コントラスト約 7:1） | 記録の全消去の確認の「消す」 |
 
 - 高さ 48 以上・幅 48 以上（仕様書 §8.1）。角丸 10。ボタンどうしの間隔は 8 以上。
 - 押せない状態（`disabled`）は不透明度 50%、カーソルは既定。
