@@ -3,7 +3,7 @@ id: MBRK-GUI-0001
 type: GUI Design
 title: 画面設計 共通（デザインの決まり・画面遷移・部品）
 status: stable
-version: 1.1
+version: 1.2
 updated: 2026-10-25
 sources:
   - MBRK-EP-0001
@@ -11,10 +11,11 @@ sources:
   - MBRK-US-0010
   - MBRK-US-0021
   - MBRK-US-0022
+  - MBRK-US-0023
   - MBRK-ADR-0003
-  - doc/specification.md (v1.2) §2.1、§3.4、§8、§8.1、§8.5
+  - doc/specification.md (v1.3) §2.1、§3.4、§8、§8.1、§8.5、§8.8
   - simple_shogi index.html、src/style.css
-verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
+verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
 ---
 
 # GUI-0001 画面設計 共通
@@ -28,6 +29,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-25T18:52:19+09:00" }
 | [MBRK-GUI-0004](MBRK-GUI-0004-gui-design-ja.md) | 結果パネル（スコア登録を含む） |
 | [MBRK-GUI-0005](MBRK-GUI-0005-gui-design-ja.md) | ランキング画面（バックアップを含む） |
 | [MBRK-GUI-0006](MBRK-GUI-0006-gui-design-ja.md) | ダイアログと通知（インストール方法・読み込みの確認・更新・復旧・縦向きの案内） |
+| [MBRK-GUI-0007](MBRK-GUI-0007-gui-design-ja.md) | クレジット画面 |
 
 図の寸法は、基準の画面（幅 375 × 高さ 667、iPhone SE 相当）での CSS px。
 
@@ -43,6 +45,8 @@ stateDiagram-v2
     結果 --> タイトル: TITLE
     結果 --> ランキング: RANKING
     ランキング --> タイトル: BACK / Esc
+    タイトル --> クレジット: クレジット
+    クレジット --> タイトル: BACK / Esc
 ```
 
 | 画面 | ページタイトル（`document.title`） | 初期フォーカス | 仕様書 |
@@ -51,8 +55,9 @@ stateDiagram-v2
 | プレイ | ブロック崩し - プレイ | ゲーム領域（キー操作を受けるため） | §8.3 |
 | 結果 | ブロック崩し - 結果 | PC：名前の入力欄 / スマホ：結果パネルの見出し | §8.3、§9.5 |
 | ランキング | ブロック崩し - ランキング | 見出し「ハイスコアランキング」 | §8.4 |
+| クレジット | ブロック崩し - クレジット | 見出し「クレジット」 | §8.8 |
 
-- ランキング画面から戻る先は、どこから来たかによらずタイトル（仕様書 §8）。
+- ランキング・クレジット画面から戻る先は、どこから来たかによらずタイトル（仕様書 §8）。
 - 画面を切り替えたら、ページの先頭までスクロールを戻す。
 - 画面の切替えは、`prefers-reduced-motion` が有効でなければ 150 ms のフェードにする（有効なら切替えは即時）。
 
@@ -120,7 +125,7 @@ stateDiagram-v2
 | 種類 | 見た目 | 使う所 |
 | --- | --- | --- |
 | 主ボタン | 地 `--primary`、文字 `--primary-text`、太字 | START、RETRY、REGISTER |
-| 普通のボタン | 地 `--surface-2`、枠 `--border`、文字 `--text` | RANKING、TITLE、BACK、記録の書き出し・読み込み など |
+| 普通のボタン | 地 `--surface-2`、枠 `--border`、文字 `--text` | RANKING、クレジット、TITLE、BACK、記録の書き出し・読み込み など |
 | トグルボタン | 普通のボタン + 状態の文字とアイコン。`aria-pressed` で状態を伝える | 一時停止、効果音 |
 | リンク風ボタン | 枠なし、文字 `--primary`、下線 | インストール方法の入口 |
 | 危険のボタン | 地 `--danger`、文字 `--primary-text`、太字（コントラスト約 7:1） | 記録の全消去の確認の「消す」 |
@@ -151,7 +156,7 @@ stateDiagram-v2
 | download / upload | 下向き / 上向きの矢印と受け皿 | 記録の書き出し / 読み込み |
 | install | 下向きの矢印とスマートフォン | インストール方法の入口 |
 
-### 5.4 画面上部のバー（ランキング画面）
+### 5.4 画面上部のバー（ランキング画面・クレジット画面）
 
 `simple_shogi` の `.bar` と同じ形。左に BACK（矢印 + 「BACK」）、中央に見出し、右は空き（左右の釣り合いを取る）。
 
