@@ -127,3 +127,74 @@ export async function recordAppEvents(page: Page): Promise<void> {
 export function appEvents(page: Page): Promise<AppEvent[]> {
   return page.evaluate(() => window.__appEvents ?? []);
 }
+
+/** 次のステップで最後のブロック（32）を壊してクリアする状態。経過は終わったときに 95,789 ms（合計 1,250） */
+export async function finishCleared(page: Page): Promise<void> {
+  await setup(page, {
+    status: 'playing',
+    aliveIds: [32],
+    broken: 39,
+    speedLevel: 3,
+    elapsedMs: 95789 - 1000 / 120,
+    ball: { x: 44, y: 212, vx: 0, vy: -390 },
+  });
+  await expect(page.locator('body')).toHaveAttribute('data-game-state', 'cleared');
+  await expect(page.locator('#result-panel')).toBeVisible();
+}
+
+/** 12 個壊した状態で、パドルから離れた所に落とす（合計 120） */
+export async function finishGameOver(page: Page): Promise<void> {
+  await setup(page, { status: 'playing', broken: 12, speedLevel: 1, ball: { x: 100, y: 630, vx: 0, vy: 330 } });
+  await expect(page.locator('body')).toHaveAttribute('data-game-state', 'gameOver');
+  await expect(page.locator('#result-panel')).toBeVisible();
+}
+
+// ── 保存データ（TD-0004 §1 のキー：mini-blockbreaking-game-<名前>、値は JSON） ──
+
+export const STORAGE_PREFIX = 'mini-blockbreaking-game-';
+
+export interface StoredRecord {
+  id: number;
+  playerName: string;
+  score: number;
+  result: 'cleared' | 'gameOver';
+  createdAt: string;
+}
+
+/** 記録を作る（score が 400 以上ならクリア） */
+export function makeRecord(id: number, score: number, playerName = `P${id}`): StoredRecord {
+  return {
+    id,
+    playerName,
+    score,
+    result: score >= 400 ? 'cleared' : 'gameOver',
+    createdAt: `2026-10-22T00:00:${String(id % 60).padStart(2, '0')}.000Z`,
+  };
+}
+
+/** 保存データを書く（開いたあとで呼ぶ。値は JSON にする） */
+export async function writeStorage(page: Page, entries: Record<string, unknown>): Promise<void> {
+  await page.evaluate(
+    ({ prefix, entries }) => {
+      for (const [name, value] of Object.entries(entries)) localStorage.setItem(prefix + name, JSON.stringify(value));
+    },
+    { prefix: STORAGE_PREFIX, entries },
+  );
+}
+
+/** 保存データを読む（なければ null） */
+export function readStorage(page: Page, name: string): Promise<unknown> {
+  return page.evaluate((key) => {
+    const text = localStorage.getItem(key);
+    return text === null ? null : (JSON.parse(text) as unknown);
+  }, STORAGE_PREFIX + name);
+}
+
+/** 保存できない環境にする（setItem が例外を出す）。page.goto の前に呼ぶ */
+export async function breakStorage(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    Storage.prototype.setItem = () => {
+      throw new DOMException('quota', 'QuotaExceededError');
+    };
+  });
+}

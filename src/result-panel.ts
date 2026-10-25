@@ -1,9 +1,19 @@
-import { BLOCK_COUNT, RESULT_INPUT_GUARD } from './config';
+import { BLOCK_COUNT, PLAYER_NAME_MAX, RESULT_INPUT_GUARD } from './config';
 import { formatNumber, formatSeconds } from './format';
 import type { ResultSummary } from './game';
+import { countChars, normalizeName, validateName, type NameError } from './ranking';
+import { loadLastName, register as registerRecord } from './records';
 import { el, icon } from './ui';
 
-// 結果パネル（TD-0004 §5、GUI-0004）。名前の登録は TASK-0015 で足す
+// 結果パネルとスコア登録（TD-0004 §5、GUI-0004）
+
+/** 名前の規則のエラー文（仕様書 §9.3） */
+const NAME_ERRORS: Record<NameError, string> = {
+  empty: '名前を入力してください',
+  invalidChar: '使用できない文字が含まれています',
+  tooLong: `${PLAYER_NAME_MAX} 文字以内で入力してください`,
+};
+const NAME_HINT = `1〜${PLAYER_NAME_MAX} 文字`;
 
 export interface ResultActions {
   retry(): void;
@@ -47,8 +57,21 @@ export function showResultPanel(summary: ResultSummary, actions: ResultActions):
 
   const total = el('dl', { className: 'result-total' }, row('合計', formatNumber(summary.total)));
 
-  // 名前の登録（TASK-0015）。場所だけ用意して隠しておく
-  const register = el('div', { className: 'result-register', attrs: { hidden: '' } });
+  // 名前の登録（GUI-0004 §2・§3）。maxlength は付けない（コードポイントで数え、超えたらエラーにする）
+  const nameInput = el('input', {
+    attrs: { type: 'text', id: 'result-name', autocomplete: 'off', enterkeyhint: 'done', 'aria-describedby': 'result-name-hint' },
+  });
+  nameInput.value = loadLastName();
+  const registerButton = el('button', { className: 'primary', text: 'REGISTER', attrs: { type: 'button', id: 'result-register' } });
+  const hint = el('span', { attrs: { id: 'result-name-hint' } });
+  const count = el('span', { className: 'num', attrs: { id: 'result-name-count' } });
+  const message = el('p', { className: 'result-message', attrs: { id: 'result-message', role: 'status' } });
+  const register = el('div', { className: 'result-register' }, [
+    el('label', { text: '名前を登録', attrs: { for: 'result-name' } }),
+    el('div', { className: 'register-row' }, [nameInput, registerButton]),
+    el('div', { className: 'register-help' }, [hint, count]),
+    message,
+  ]);
 
   const retry = el('button', { className: 'primary', attrs: { type: 'button', id: 'result-retry' } }, [
     'RETRY',
@@ -103,8 +126,67 @@ export function showResultPanel(summary: ResultSummary, actions: ResultActions):
     { signal },
   );
 
-  // 初期フォーカス：名前の入力欄ができるまで（TASK-0015）は、PC・スマホとも見出し
-  heading.focus();
+  // 名前の検証と登録。空のエラーは、一度入力欄から離れたあとだけ出す（仕様書 §9.5）
+  let blurred = false;
+  let registered = false;
+  const update = () => {
+    const r = validateName(nameInput.value);
+    const error = !r.ok && (r.error !== 'empty' || blurred) ? NAME_ERRORS[r.error] : null;
+    hint.textContent = error ?? NAME_HINT;
+    hint.classList.toggle('is-error', error !== null);
+    nameInput.setAttribute('aria-invalid', String(error !== null));
+    count.textContent = `${countChars(normalizeName(nameInput.value))} / ${PLAYER_NAME_MAX}`;
+    registerButton.disabled = !r.ok || registered;
+  };
+  const showMessage = (kind: 'success' | 'muted' | 'danger', text: string) => {
+    message.className = `result-message is-${kind}`;
+    message.replaceChildren(...(kind === 'muted' ? [] : [icon(kind === 'success' ? 'check-circle' : 'x-circle')]), text);
+  };
+  const doRegister = () => {
+    const r = validateName(nameInput.value);
+    if (!r.ok || registered) return;
+    const saved = registerRecord(r.name, summary, new Date());
+    if (!saved.ok) {
+      showMessage('danger', '保存できませんでした。もう一度お試しください');
+      return;
+    }
+    // 二重登録を防ぐ。新しいゲームでパネルを作り直すまで登録できない
+    registered = true;
+    nameInput.disabled = true;
+    update();
+    if (saved.rank === null) showMessage('muted', 'ランキング外でした（上位 10 件に入りませんでした）');
+    else showMessage('success', `${saved.rank} 位で登録しました`);
+    retry.focus();
+  };
+  nameInput.addEventListener('input', update, { signal });
+  nameInput.addEventListener(
+    'blur',
+    () => {
+      blurred = true;
+      update();
+    },
+    { signal },
+  );
+  // 入力欄の Enter は登録だけ（RETRY は動かさない。仕様書 §4.1-9）
+  nameInput.addEventListener(
+    'keydown',
+    (e) => {
+      if (e.repeat || e.isComposing || (e.code !== 'Enter' && e.code !== 'NumpadEnter')) return;
+      e.preventDefault();
+      doRegister();
+    },
+    { signal },
+  );
+  registerButton.addEventListener('click', doRegister, { signal });
+  update();
+
+  // 初期フォーカス：パソコンは入力欄（カーソルを末尾に）、スマホは見出し（ソフトウェアキーボードを出さない）
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    nameInput.focus();
+    nameInput.setSelectionRange(nameInput.value.length, nameInput.value.length);
+  } else {
+    heading.focus();
+  }
 }
 
 export function hideResultPanel(): void {

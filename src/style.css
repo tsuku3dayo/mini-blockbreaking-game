@@ -493,6 +493,65 @@ input[aria-invalid='true'] {
   font-weight: bold;
 }
 
+/* 名前の登録（GUI-0004 §2）：入力欄 + REGISTER（幅 112）を横に並べ、下に補助の文字と文字数 */
+.result-register {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.register-row {
+  display: flex;
+  gap: 8px;
+}
+
+.register-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.register-row button {
+  flex: 0 0 112px;
+}
+
+.register-help {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.register-help .is-error {
+  color: var(--danger);
+}
+
+/* 結果のメッセージ。出ていないときも 1 行分の高さを取り、ボタンの位置をずらさない */
+.result-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 1.5em;
+  margin: 0;
+}
+
+.result-message .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.result-message.is-success {
+  color: var(--success);
+}
+
+.result-message.is-muted {
+  color: var(--muted);
+}
+
+.result-message.is-danger {
+  color: var(--danger);
+}
+
 /* 3 つのボタンは横に等分。入りきらないときは 2 段に折り返す */
 .result-actions {
   display: grid;

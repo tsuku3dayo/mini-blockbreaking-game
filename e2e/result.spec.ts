@@ -1,28 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openGame, setup, snapshot, startGame } from './helpers';
+import { finishCleared, finishGameOver, openGame, readStorage, setup, snapshot, startGame, writeStorage } from './helpers';
 
 // 前提：/?debug=1 で START、setup で終了の直前を作り、時計を進めて終わらせる（TC-0006）
-
-/** 次のステップで最後のブロック（32）を壊してクリアする状態。経過は終わったときに 95,789 ms */
-async function finishCleared(page: Page): Promise<void> {
-  await setup(page, {
-    status: 'playing',
-    aliveIds: [32],
-    broken: 39,
-    speedLevel: 3,
-    elapsedMs: 95789 - 1000 / 120,
-    ball: { x: 44, y: 212, vx: 0, vy: -390 },
-  });
-  await expect(page.locator('body')).toHaveAttribute('data-game-state', 'cleared');
-  await expect(page.locator('#result-panel')).toBeVisible();
-}
-
-/** 12 個壊した状態で、パドルから離れた所に落とす */
-async function finishGameOver(page: Page): Promise<void> {
-  await setup(page, { status: 'playing', broken: 12, speedLevel: 1, ball: { x: 100, y: 630, vx: 0, vy: 330 } });
-  await expect(page.locator('body')).toHaveAttribute('data-game-state', 'gameOver');
-  await expect(page.locator('#result-panel')).toBeVisible();
-}
 
 test.beforeEach(async ({ page }) => {
   await openGame(page);
@@ -56,7 +35,7 @@ test('TC-0006-06 見出しの文字とアイコン', async ({ page }) => {
   const clear = page.locator('#result-heading');
   await expect(clear).toHaveText('CLEAR!');
   await expect(clear.locator('svg')).toHaveCount(1);
-  // 名前の入力欄ができるまでは、見出しに初期フォーカス
+  // スマホ（両プロジェクトともタッチ端末）では見出しに初期フォーカス
   await expect(clear).toBeFocused();
 
   await page.waitForTimeout(500);
@@ -134,10 +113,11 @@ test('TC-0010-04 結果パネルの間は、高さだけ変わってもゲーム
   await expect.poll(async () => (await page.locator('#field').boundingBox())?.width).not.toBe(before?.width);
 });
 
-test('TC-0010-05 結果パネルのボタンは 44 px 以上', async ({ page }) => {
+test('TC-0010-05 結果パネルのボタン・入力欄は 44 px 以上', async ({ page }) => {
   await finishCleared(page);
   const boxes = await page.locator('#result-panel button:visible, #result-panel input:visible').evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON() as DOMRect));
-  expect(boxes).toHaveLength(3);
+  // 入力欄・REGISTER・RETRY・TITLE・RANKING
+  expect(boxes).toHaveLength(5);
   for (const b of boxes) {
     expect(b.width).toBeGreaterThanOrEqual(44);
     expect(b.height).toBeGreaterThanOrEqual(44);
@@ -147,6 +127,8 @@ test('TC-0010-05 結果パネルのボタンは 44 px 以上', async ({ page }) 
 test.describe('誤操作を防ぐ（TC-0011、page.clock）', () => {
   /** 時計を止めて開き直し、ゲームオーバーで終わらせる。終わった時点から時計を進めるのはテストの側 */
   async function finishWithClock(page: Page): Promise<void> {
+    // 前回の名前を入れておき、REGISTER が押せる状態にする
+    await writeStorage(page, { lastName: 'A' });
     await page.clock.install();
     await page.reload();
     await expect.poll(() => page.evaluate(() => window.__appStarted === true)).toBe(true);
@@ -160,8 +142,9 @@ test.describe('誤操作を防ぐ（TC-0011、page.clock）', () => {
     await expect(page.locator('#result-panel')).toBeVisible();
   }
 
-  test('TC-0011-01・02 出てから 500 ms は Enter・Space・タップが効かず、過ぎれば効く', async ({ page }) => {
+  test('TC-0011-01・02 出てから 500 ms は Enter・Space・タップ・REGISTER が効かず、過ぎれば効く', async ({ page }) => {
     await finishWithClock(page);
+    await expect(page.locator('#result-register')).toBeEnabled();
     // 終わってから 400 ms 以内
     await page.clock.runFor(300);
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
@@ -170,8 +153,15 @@ test.describe('誤操作を防ぐ（TC-0011、page.clock）', () => {
     // 時計を止めていると Playwright の「動きが落ち着くまで待つ」が終わらないので、force で押す
     await page.locator('#result-retry').tap({ force: true });
     await page.locator('#result-retry').click({ force: true });
+    await page.locator('#result-register').click({ force: true });
+    // 入力欄の Enter でも登録されない
+    await page.locator('#result-name').focus();
+    await page.keyboard.press('Enter');
     await expect(page.locator('body')).toHaveAttribute('data-game-state', 'gameOver');
     await expect(page.locator('#result-panel')).toBeVisible();
+    expect(await readStorage(page, 'scores')).toBeNull();
+    await expect(page.locator('#result-message')).toHaveText('');
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
 
     // 500 ms を過ぎれば Enter で新しいゲーム
     await page.clock.runFor(200);
@@ -187,6 +177,27 @@ test.describe('誤操作を防ぐ（TC-0011、page.clock）', () => {
     await page.keyboard.press('Enter');
     await expect(page.locator('#screen-title')).toBeVisible();
     await expect(page.locator('#screen-play')).toBeHidden();
+  });
+
+  test('TC-0011-03 名前の入力欄の Enter は登録だけ（結果パネルのまま）', async ({ page }) => {
+    await finishWithClock(page);
+    await page.clock.runFor(600);
+    await page.locator('#result-name').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#result-message')).toHaveText('1 位で登録しました');
+    expect(await readStorage(page, 'scores')).toMatchObject([{ playerName: 'A', score: 120 }]);
+    await expect(page.locator('body')).toHaveAttribute('data-game-state', 'gameOver');
+    await expect(page.locator('#result-panel')).toBeVisible();
+  });
+
+  test('TC-0011-04 結果パネルの入力欄に「A B」と入力できる', async ({ page }) => {
+    await finishWithClock(page);
+    await page.clock.runFor(600);
+    await page.locator('#result-name').focus();
+    await page.keyboard.press('Control+A');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.type('A B');
+    await expect(page.locator('#result-name')).toHaveValue('A B');
   });
 
   test('TC-0011-04 終わったらゲーム用の入力を受け付けない', async ({ page }) => {
