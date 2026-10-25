@@ -3,8 +3,8 @@ id: MBRK-TD-0005
 type: Technical Design
 title: 効果音
 status: stable
-version: 1.0
-updated: 2026-10-23
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-TD-0001
   - MBRK-TD-0002
@@ -66,7 +66,7 @@ export interface Sound {
 
 | 項目 | 処理 |
 | --- | --- |
-| `AudioContext` の作成 | 最初の `pointerdown`・`keydown`（`document` にキャプチャで 1 回だけ付ける）で `unlock()`。作成・`resume()` に失敗したら、以後 `play` は何もしない |
+| `AudioContext` の作成 | `pointerdown`・`pointerup`・`touchend`・`click`・`keydown`（`document` にキャプチャで付ける）で `unlock()` を試し、鳴らせる状態（`running`）になったら外す。タッチの `pointerdown` は「利用者の操作」と認められないブラウザがあるため、指を離したとき・クリックでも試す。作成に失敗したら、以後 `play` は何もしない |
 | `play` | `enabled` でない、または `AudioContext` がないときは何もしない（ただし `app:sound` イベントは出す。E2E で鳴らす判断を確かめるため。`detail` に `{ name, muted }`） |
 | 鳴っている音 | 作ったオシレーターを `Set` で持ち、`ended` で外す。`stopAll()` は全部 `stop()` して空にする |
 | 画面の非表示 | `visibilitychange` で `hidden` なら `stopAll()`、`AudioContext.suspend()`。表示に戻ったら `resume()` |
