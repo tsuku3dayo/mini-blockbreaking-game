@@ -3,8 +3,8 @@ id: MBRK-TST-0001
 type: Test Strategy
 title: テスト戦略
 status: stable
-version: 1.1
-updated: 2026-10-23
+version: 1.2
+updated: 2026-10-25
 sources:
   - MBRK-PB-0001
   - MBRK-ADR-0003
@@ -14,7 +14,7 @@ sources:
   - MBRK-TD-0001
   - MBRK-TD-0002
   - MBRK-TD-0005
-  - doc/specification.md (v1.1) §10、§12
+  - doc/specification.md (v1.2) §10、§12
   - simple_shogi CLAUDE.md（テスト）、e2e/app.spec.ts
 verified: null
 ---
@@ -86,7 +86,7 @@ verified: null
 
 ## 7. テストケースの一覧
 
-テストケースはユーザーストーリーと同じ番号にする（TC-0001 = US-0001 のテスト）。TC-0022 は非機能要件。
+テストケースはユーザーストーリーと同じ番号にする（TC-0001 = US-0001 のテスト）。TC-0022 は非機能要件。仕様書 v1.2 で足した US-0022 のテストは、TC-0022 が使用済みのため TC-0023 にした。
 
 | TC | 対象 | 主な種類 |
 | --- | --- | --- |
@@ -112,6 +112,7 @@ verified: null
 | [TC-0020](MBRK-TC-0020-test-case-ja.md) | US-0020 起動失敗の復旧 | E2E |
 | [TC-0021](MBRK-TC-0021-test-case-ja.md) | US-0021 読み上げ・キーボード | E2E・手動 |
 | [TC-0022](MBRK-TC-0022-test-case-ja.md) | 非機能（60 fps・入力の遅れ） | 手動 |
+| [TC-0023](MBRK-TC-0023-test-case-ja.md) | US-0022 記録の全消去 | 単体・E2E・手動 |
 
 テストケースの各行の「確認 ID」（例：`TC-0002-03`）を、テストコードの `test()` の名前の先頭に付ける（例：`test('TC-0002-03 発射直後の速度', …)`）。AC で結果を引けるようにするため。
 

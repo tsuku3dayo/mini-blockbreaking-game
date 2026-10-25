@@ -3,21 +3,21 @@ id: MBRK-TD-0003
 type: Technical Design
 title: プレイ画面（入力・ゲームループ・描画・一時停止・表示サイズ・読み上げ）
 status: stable
-version: 1.0
-updated: 2026-10-23
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-TD-0001
   - MBRK-TD-0002
   - MBRK-GUI-0003
   - MBRK-ADR-0003
   - MBRK-US-0005
-  - MBRK-US-0007
+  - MBRK-US-0007（v1.1）
   - MBRK-US-0008
   - MBRK-US-0009
-  - MBRK-US-0010
+  - MBRK-US-0010（v1.1）
   - MBRK-US-0011
   - MBRK-US-0021
-  - doc/specification.md (v1.1) §2、§4、§5.1、§7、§8.3、§8.5
+  - doc/specification.md (v1.2) §2、§4、§5.1、§7、§8.3、§8.5
 verified: null
 ---
 
@@ -97,10 +97,10 @@ interface InputState {
 
 | イベント | 付ける所 | 処理 |
 | --- | --- | --- |
-| `pointerdown` | Canvas | `isPrimary` で、マウスなら左ボタンのとき：`activePointerId` を記録、`setPointerCapture`、`downX` と `pointerX` に位置、`source = pointer` |
+| `pointerdown` | Canvas と操作空間（§3.7） | `isPrimary` で、マウスなら左ボタンのとき：`activePointerId` を記録、押した要素で `setPointerCapture`、`downX` と `pointerX` に位置、`source = pointer` |
 | `pointermove` | `window` | マウス：いつでも `pointerX` を更新、`source = pointer`。タッチ・ペン：`activePointerId` の指のときだけ更新 |
 | `pointerup` | Canvas（キャプチャ中） | `activePointerId` の指なら：`|位置 − downX| ≤ 10`（論理座標）で `launchRequested = true`。`activePointerId = null`、`downX = null` |
-| `pointercancel` / `lostpointercapture` | Canvas | 追従をやめる（発射しない） |
+| `pointercancel` / `lostpointercapture` | Canvas と操作空間 | 追従をやめる（発射しない） |
 
 - 位置の変換：`x = (clientX − canvasの左端) × 480 / 表示幅` を 0〜480 に丸める（仕様書 §2.1）。
 - タップの判定は x の移動量だけで行う（パドルは横にしか動かないため）。
@@ -117,6 +117,14 @@ interface InputState {
 ### 3.6 入力の受付をやめる
 
 終了・画面を離れるときに、`window` に付けたリスナーを外し、`InputState` を初期に戻す。リスナーは `AbortController` の `signal` でまとめて外す。
+
+### 3.7 操作空間（仕様書 v1.2 §2、GUI-0003 §2.3）
+
+- `index.html` のプレイ画面に、Canvas と操作欄の間に `<div id="control-area" class="control-area" aria-hidden="true">` を置く（中に案内の文字）。
+- `createInput(canvas, options, controlArea)` で受け取り、`pointerdown`・`lostpointercapture`・`contextmenu` を Canvas と同じに付ける。
+- 位置の変換は Canvas の外形で行う（`toLogicalX` はそのまま）。操作空間は Canvas と左右の端がそろっている（幅は `--stage-width`）ので、指の真上のパドルの位置になる。
+- 出す・出さないは `play.ts` が決める：`matchMedia('(pointer: coarse)').matches` なら `hidden` を外す。`change` イベントでも合わせ直す（タブレットにマウスをつないだ場合など）。
+- CSS：Canvas と同じ `touch-action: none`・`user-select: none`・`-webkit-touch-callout: none`。高さ 96、ゲーム領域との間 8。
 
 ## 4. 描画（`render.ts`）
 
@@ -138,7 +146,7 @@ export function render(ctx: CanvasRenderingContext2D, state: GameState, palette:
 export function computeDisplaySize(v: { width: number; height: number; topInset: number; bottomInset: number; controlsHeight: number }): { width: number; height: number };
 ```
 
-- `play.ts` は、`window.innerWidth` / `innerHeight`、`main` の上下の余白（`getComputedStyle`）、操作欄の高さ 56 を渡す。
+- `play.ts` は、`window.innerWidth` / `innerHeight`、`main` の上下の余白（`getComputedStyle`）、ゲーム領域の下に置くものの高さ（操作欄 56、操作空間を出すときは 104 を足して 160）を `controlsHeight` に渡す。`computeDisplaySize` の式は変えない。
 - 結果を Canvas の CSS の大きさにし、実ピクセルは `× devicePixelRatio`（整数に丸める）にする。
 - `resize` と `orientationchange` で計算し直す。ただし結果パネルを出している間は、幅が変わったときだけ計算し直す（仕様書 §2.1。ソフトウェアキーボードで高さだけ縮む場合を除くため）。
 - 横向き（`innerWidth > innerHeight`）で、表示幅が 288 になったときは、縦向きの案内（`#orientation-notice`）を出す。

@@ -3,8 +3,8 @@ id: MBRK-TASK-0019
 type: Implementation Task
 title: インストールとオフラインの仕上げ
 status: stable
-version: 1.0
-updated: 2026-10-23
+version: 1.1
+updated: 2026-10-25
 sources:
   - MBRK-WS-0007
   - MBRK-TD-0001
@@ -18,7 +18,7 @@ verified: null
 
 - WS：[MBRK-WS-0007](MBRK-WS-0007-workstream-ja.md)　順番：19　大きさ：M
 - ブランチ：`feat/0019-install-offline`
-- 依存：TASK-0018
+- 依存：TASK-0025（仕様書 v1.2 の修正の WS-0009 を先に行う）
 - 対象のストーリー：US-0017、US-0018
 - 対象のテストケース：TC-0017-01〜04、TC-0018-01〜03、TC-0017-05・TC-0018-04（手動、段階の終わり）
 
