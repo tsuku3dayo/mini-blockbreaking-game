@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
-import { nextFrames, openGame, snapshot, touch, touchAt } from './helpers';
+import { expect, test, type Page } from '@playwright/test';
+import { controlPoint, nextFrames, openGame, snapshot, touch, touchAt, type TouchType } from './helpers';
 
 // 前提：/?debug=1 を開いて START（TC-0007）
 
@@ -92,6 +92,86 @@ test('TC-0007-06 2 本目の指は無視する', async ({ page }) => {
   expect(await paddleX(page)).toBeCloseTo(100, 3);
   await touch(page, 'pointerup', 420, Y, 2);
   expect(await paddleX(page)).toBeCloseTo(100, 3);
+});
+
+test.describe('操作空間（仕様書 v1.2）', () => {
+  /** 操作空間の中の、論理 x にあたる位置にタッチを送る */
+  async function touchArea(page: Page, type: TouchType, x: number): Promise<void> {
+    await touchAt(page, type, await controlPoint(page, x));
+  }
+
+  test('TC-0007-09 操作空間でなぞると追従し、離すと止まる', async ({ page }) => {
+    await touchArea(page, 'pointerdown', 240);
+    await touchArea(page, 'pointermove', 100);
+    expect(await paddleX(page)).toBeCloseTo(100, 0);
+    await touchArea(page, 'pointermove', 300);
+    expect(await paddleX(page)).toBeCloseTo(300, 0);
+    await touchArea(page, 'pointerup', 300);
+    await touchArea(page, 'pointermove', 150);
+    expect(await paddleX(page)).toBeCloseTo(300, 0);
+  });
+
+  test('TC-0007-10 操作空間のタップで発射し、動かしたら発射しない', async ({ page }) => {
+    await touchArea(page, 'pointerdown', 240);
+    await touchArea(page, 'pointermove', 260);
+    await touchArea(page, 'pointerup', 260);
+    await nextFrames(page);
+    expect((await snapshot(page)).status).toBe('ready');
+
+    await touchArea(page, 'pointerdown', 260);
+    await touchArea(page, 'pointermove', 265);
+    await touchArea(page, 'pointerup', 265);
+    await expect.poll(async () => (await snapshot(page)).status).toBe('playing');
+  });
+
+  test('TC-0007-10 ブラウザの本物のタッチ（touchscreen.tap）で、操作空間から発射する', async ({ page }) => {
+    const point = await controlPoint(page, 144);
+    await page.touchscreen.tap(point.x, point.y);
+    await expect.poll(async () => (await snapshot(page)).status).toBe('playing');
+    expect((await snapshot(page)).paddleX).toBeCloseTo(144, 0);
+  });
+
+  test('TC-0007-11 タッチ端末では操作空間が出て、ゲーム領域と左右がそろい、スクロールを止める', async ({ page }) => {
+    const area = page.locator('#control-area');
+    await expect(area).toBeVisible();
+    const box = await area.boundingBox();
+    const field = await page.locator('#field').boundingBox();
+    if (!box || !field) throw new Error('外形が取れません');
+    expect(box.height).toBeCloseTo(96, 0);
+    expect(box.x).toBeCloseTo(field.x, 0);
+    expect(box.width).toBeCloseTo(field.width, 0);
+    // ゲーム領域のすぐ下（間 8）
+    expect(box.y - (field.y + field.height)).toBeCloseTo(8, 0);
+    const style = await area.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { touchAction: s.touchAction, userSelect: s.userSelect || s.webkitUserSelect };
+    });
+    expect(style).toEqual({ touchAction: 'none', userSelect: 'none' });
+
+    const before = await page.evaluate(() => window.scrollY);
+    await touchArea(page, 'pointerdown', 240);
+    for (const x of [200, 160, 120]) await touchArea(page, 'pointermove', x);
+    await touchArea(page, 'pointerup', 120);
+    expect(await page.evaluate(() => window.scrollY)).toBe(before);
+    const prevented = await area.evaluate((el) => !el.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true })));
+    expect(prevented).toBe(true);
+  });
+
+  test('TC-0007-12 操作空間から外に出ても追従する', async ({ page }) => {
+    await touchArea(page, 'pointerdown', 240);
+    await touchArea(page, 'pointermove', 700);
+    expect(await paddleX(page)).toBe(440);
+    await touchArea(page, 'pointerup', 700);
+  });
+});
+
+test.describe('マウスの端末', () => {
+  test.use({ hasTouch: false, isMobile: false });
+
+  test('TC-0007-11 パソコン（マウス）では操作空間が出ない', async ({ page }) => {
+    await expect(page.locator('#field')).toBeVisible();
+    await expect(page.locator('#control-area')).toBeHidden();
+  });
 });
 
 test('TC-0007-07 中断されたら追従をやめ、発射もしない', async ({ page }) => {

@@ -1,3 +1,4 @@
+import { CONTROL_AREA_HEIGHT } from './config';
 import { createGame, pause, resume, step, type GameEvent, type GameState, type GameStatus } from './game';
 import { createInput } from './input';
 import { computeDisplaySize, isMinimumSize } from './layout';
@@ -20,6 +21,8 @@ export interface PlayDeps {
 
 /** ゲーム領域の下の操作欄の高さ（間隔 8 + ボタン 48。GUI-0003 §1.2） */
 const CONTROLS_HEIGHT = 56;
+/** 操作空間を出すときに足す高さ（間隔 8 + 操作空間。GUI-0003 §1.2） */
+const CONTROL_AREA_SPACE = 8 + CONTROL_AREA_HEIGHT;
 
 export interface PlayScreen {
   /** 新しいゲームを始める */
@@ -46,11 +49,18 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
   const main = document.getElementById('app') as HTMLElement;
   const orientationNotice = document.getElementById('orientation-notice') as HTMLElement;
   const pauseButton = document.getElementById('pause-button') as HTMLButtonElement;
+  const controlArea = document.getElementById('control-area') as HTMLElement;
+  /** 主な入力が指の端末か（操作空間を出すか。GUI-0003 §2.3） */
+  const coarsePointer = matchMedia('(pointer: coarse)');
   const palette = readPalette();
-  const input = createInput(canvas, {
-    onTogglePause: () => togglePause(),
-    isActive: () => isRunning(state) || state.status === 'paused',
-  });
+  const input = createInput(
+    canvas,
+    {
+      onTogglePause: () => togglePause(),
+      isActive: () => isRunning(state) || state.status === 'paused',
+    },
+    controlArea,
+  );
   const acc = createAccumulator();
   // フレームごとに使い回す
   const events: GameEvent[] = [];
@@ -73,13 +83,15 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     if (!force && isOver(state) && viewportWidth === layoutViewportWidth) return false;
     layoutViewportWidth = viewportWidth;
 
+    // タッチ端末では、ゲーム領域の下に操作空間を出し、その分ゲーム領域の高さを譲る
+    controlArea.hidden = !coarsePointer.matches;
     const style = getComputedStyle(main);
     const { width, height } = computeDisplaySize({
       width: viewportWidth,
       height: window.innerHeight,
       topInset: parseFloat(style.paddingTop) || 0,
       bottomInset: parseFloat(style.paddingBottom) || 0,
-      controlsHeight: CONTROLS_HEIGHT,
+      controlsHeight: CONTROLS_HEIGHT + (controlArea.hidden ? 0 : CONTROL_AREA_SPACE),
     });
     // 操作欄もゲーム領域と同じ幅にする
     section.style.setProperty('--stage-width', `${width}px`);
@@ -189,6 +201,12 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     if (layout(false)) draw();
   }
 
+  /** タブレットにマウスをつないだときなど、主な入力が変わったら操作空間を出し直す */
+  function onPointerKindChange(): void {
+    layout(true);
+    draw();
+  }
+
   /** プレイ画面にいる間だけ受けるイベント */
   function listen(on: boolean): void {
     for (const type of ['resize', 'orientationchange']) {
@@ -197,9 +215,11 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     }
     document.removeEventListener('visibilitychange', onVisibilityChange);
     pauseButton.removeEventListener('click', onPauseButton);
+    coarsePointer.removeEventListener('change', onPointerKindChange);
     if (on) {
       document.addEventListener('visibilitychange', onVisibilityChange);
       pauseButton.addEventListener('click', onPauseButton);
+      coarsePointer.addEventListener('change', onPointerKindChange);
     }
   }
 

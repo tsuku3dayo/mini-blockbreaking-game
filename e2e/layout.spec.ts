@@ -18,7 +18,9 @@ test('TC-0010-03 1 画面に収まる', async ({ page }) => {
   if (!viewport) throw new Error('viewport がありません');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(0);
-  for (const selector of ['#field', '#pause-button']) {
+  // タッチのプロジェクトなので、操作空間も出ている
+  await expect(page.locator('#control-area')).toBeVisible();
+  for (const selector of ['#field', '#control-area', '#pause-button']) {
     const box = await page.locator(selector).boundingBox();
     expect(box, selector).not.toBeNull();
     if (!box) continue;

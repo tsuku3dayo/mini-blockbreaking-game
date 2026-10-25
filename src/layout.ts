@@ -10,7 +10,7 @@ export interface Viewport {
   topInset: number;
   /** 下端の余白（安全領域を含む） */
   bottomInset: number;
-  /** ゲーム領域の下の操作欄の高さ（間隔 8 + ボタン 48） */
+  /** ゲーム領域の下に置くものの高さ（操作欄 56。操作空間を出すときは 104 を足す） */
   controlsHeight: number;
 }
 
