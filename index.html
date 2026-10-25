@@ -46,7 +46,11 @@
             <dd>一時停止ボタン<br />/ P ・ Esc</dd>
           </dl>
         </section>
-        <!-- 効果音ボタンは TASK-0018 でここに置く -->
+        <!-- 効果音ボタン（GUI-0002）。文字・アイコン・aria-pressed は main.ts が設定に合わせる -->
+        <button id="title-sound" type="button" class="toggle sound-toggle" aria-pressed="true">
+          <span data-icon="sound-on"></span>
+          <span class="toggle-label">効果音：オン</span>
+        </button>
         <button id="install-open" type="button" class="link install-open">
           <span data-icon="install"></span>
           アプリとしてインストールする方法
@@ -66,11 +70,15 @@
           <canvas id="field" role="img" aria-label="ブロック崩しのゲーム画面" tabindex="0"></canvas>
           <div id="result-panel" class="result-panel" role="region" aria-labelledby="result-heading" hidden></div>
         </div>
-        <!-- 操作欄（GUI-0003 §2.3）。一時停止の動きは TASK-0011、効果音ボタンは TASK-0018 で入れる -->
+        <!-- 操作欄（GUI-0003 §2.3）：左に一時停止、右に効果音 -->
         <div class="play-controls">
           <button id="pause-button" type="button" class="toggle" aria-pressed="false">
             <span data-icon="pause"></span>
             <span class="toggle-label">一時停止</span>
+          </button>
+          <button id="play-sound" type="button" class="toggle sound-toggle" aria-pressed="true">
+            <span data-icon="sound-on"></span>
+            <span class="toggle-label">効果音：オン</span>
           </button>
         </div>
       </section>

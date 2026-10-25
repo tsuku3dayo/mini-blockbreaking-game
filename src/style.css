@@ -675,6 +675,11 @@ button.toggle {
   gap: 8px;
 }
 
+/* タイトル画面では中央寄せ（GUI-0002） */
+.title .sound-toggle {
+  align-self: center;
+}
+
 /* 縦向きのおすすめ（GUI-0006 §5） */
 .notice {
   display: flex;
