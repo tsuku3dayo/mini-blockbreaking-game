@@ -2,14 +2,14 @@
 id: MBRK-AC-0024
 type: Attested Computation
 title: 操作空間の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0024
   - MBRK-TC-0007
   - MBRK-TC-0010
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T20:12:08+09:00" }
 ---
 
 # AC-0024 操作空間の実施記録

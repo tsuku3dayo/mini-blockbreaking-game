@@ -2,13 +2,13 @@
 id: MBRK-AC-0025
 type: Attested Computation
 title: 記録の全消去の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0025
   - MBRK-TC-0023
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T20:12:08+09:00" }
 ---
 
 # AC-0025 記録の全消去の実施記録
