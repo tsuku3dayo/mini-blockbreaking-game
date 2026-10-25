@@ -2,14 +2,14 @@
 id: MBRK-AC-0020
 type: Attested Computation
 title: 更新の帯と起動失敗の復旧の仕上げの実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-25
 sources:
   - MBRK-TASK-0020
   - MBRK-TC-0019
   - MBRK-TC-0020
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-25T20:35:24+09:00" }
 ---
 
 # AC-0020 更新の帯と起動失敗の復旧の仕上げの実施記録
