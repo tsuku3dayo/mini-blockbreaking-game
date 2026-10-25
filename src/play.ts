@@ -1,5 +1,7 @@
+import type { Announce } from './announce';
 import { CONTROL_AREA_HEIGHT } from './config';
-import { createGame, pause, resume, step, type GameEvent, type GameState, type GameStatus } from './game';
+import { formatNumber } from './format';
+import { blockScore, createGame, pause, resume, step, type GameEvent, type GameState, type GameStatus } from './game';
 import { createInput } from './input';
 import { computeDisplaySize, isMinimumSize } from './layout';
 import { advance, createAccumulator, resetAccumulator } from './loop';
@@ -9,14 +11,14 @@ import { summarize } from './score';
 import type { Sound } from './sound';
 import { icon } from './ui';
 
-// プレイ画面（TD-0003 §1・§2・§5・§7）。
-// 読み上げは後のタスクで足す
+// プレイ画面（TD-0003 §1・§2・§5・§6・§7）
 
-/** プレイ画面から頼む画面の切替えと、効果音（main.ts が渡す） */
+/** プレイ画面から頼む画面の切替えと、効果音・読み上げ（main.ts が渡す） */
 export interface PlayDeps {
   onTitle(): void;
   onRanking(): void;
   sound: Sound;
+  announce: Announce;
 }
 
 /** ゲーム領域の下の操作欄の高さ（間隔 8 + ボタン 48。GUI-0003 §1.2） */
@@ -148,6 +150,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     input.release();
     draw();
     updatePauseButton();
+    deps.announce.say('一時停止しました。再開ボタンで再開します');
   }
 
   /** 再開：一時停止中に出た発射要求を捨て、止まっていた時間を進めずにループを始める */
@@ -157,6 +160,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     draw();
     updatePauseButton();
     startLoop();
+    deps.announce.say('再開しました');
   }
 
   function togglePause(): void {
@@ -183,7 +187,9 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     // 結果パネルの間は操作空間を出さない（ゲーム用の入力を受け付けないため）
     controlArea.hidden = true;
     document.title = 'ブロック崩し - 結果';
-    showResultPanel(summarize(state), { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking }, { sound: deps.sound });
+    const summary = summarize(state);
+    showResultPanel(summary, { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking }, { sound: deps.sound });
+    deps.announce.say(`${summary.result === 'cleared' ? 'クリア' : 'ゲームオーバー'}。スコア ${formatNumber(summary.total)}`);
   }
 
   function frame(now: number): void {
@@ -196,6 +202,8 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     }
     // このフレームの出来事をまとめて鳴らす（同じ種類は 1 回。TD-0005 §1）
     deps.sound.playFrame(events);
+    // ブロックを壊したフレームだけ、スコアを読み上げる（1 フレームに 1 回。仕様書 §8.5）
+    if (events.some((e) => e.type === 'block')) deps.announce.say(`スコア ${formatNumber(blockScore(state))}`);
     draw();
     if (isOver(state)) finish();
     else if (isRunning(state)) frameId = requestAnimationFrame(frame);
