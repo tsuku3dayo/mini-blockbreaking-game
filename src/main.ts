@@ -3,6 +3,7 @@ import { installDebug, isDebugMode } from './debug';
 import { setupInstall } from './install';
 import { createPlayScreen } from './play';
 import { setUpdateBannerAllowed, setupUpdateBanner } from './pwa';
+import { createRankingView } from './ranking-view';
 import { migrateStorage, requestPersist } from './storage';
 import { renderIcons } from './ui';
 
@@ -18,6 +19,7 @@ const SCREENS: Record<ScreenName, { section: string; title: string; focus: strin
 };
 
 const play = createPlayScreen({ onTitle: () => navigate('title'), onRanking: () => navigate('ranking') });
+const rankingView = createRankingView({ onTitle: () => navigate('title') });
 let current: ScreenName | null = null;
 
 /** ハッシュから画面を決める。不明なものは null */
@@ -43,8 +45,9 @@ function showScreen(name: ScreenName): void {
   // 3. ページの先頭へ
   window.scrollTo(0, 0);
 
-  // 4. 画面の初期化
+  // 4. 画面の初期化（プレイ：新しいゲーム、ランキング：保存から読み直す）
   if (name === 'play') play.start();
+  else if (name === 'ranking') rankingView.show();
 
   // 5. 初期フォーカス
   if (screen.focus) document.getElementById(screen.focus)?.focus();
@@ -97,7 +100,6 @@ if (version) version.textContent = __APP_VERSION__;
 document.getElementById('title-start')?.addEventListener('click', () => navigate('play'));
 document.getElementById('title-ranking')?.addEventListener('click', () => navigate('ranking'));
 document.getElementById('ranking-back')?.addEventListener('click', () => navigate('title'));
-document.getElementById('ranking-empty-title')?.addEventListener('click', () => navigate('title'));
 document.addEventListener('keydown', onKeyDown);
 window.addEventListener('hashchange', onHashChange);
 setupUpdateBanner();

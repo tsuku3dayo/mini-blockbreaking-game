@@ -304,6 +304,95 @@ input[aria-invalid='true'] {
   padding: 32px 0;
 }
 
+/* ── ランキング（GUI-0005）：列は「順位（48）」「名前・結果・登録日時」「スコア（72）」。1 行を 2 段にする ── */
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* 列の幅を固定し、長い名前で表が横に広がらないようにする */
+  table-layout: fixed;
+}
+
+.ranking-table th,
+.ranking-table td {
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.ranking-table thead th {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.ranking-table .ranking-rank {
+  width: 48px;
+}
+
+.ranking-table .ranking-score {
+  width: 72px;
+  text-align: right;
+}
+
+.ranking-rank.is-top {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+tbody .ranking-rank:not(.is-top) {
+  font-weight: normal;
+}
+
+/* 自分の記録：--accent の 12% の背景と、左端の幅 4 の帯 */
+.ranking-table tr.is-mine {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.ranking-table tr.is-mine > th {
+  box-shadow: inset 4px 0 0 var(--accent);
+  padding-left: 8px;
+}
+
+/* 名前は 1 行で、はみ出す分は省略記号。「（あなた）」は省略しない */
+.ranking-name-line {
+  display: flex;
+  min-width: 0;
+}
+
+.ranking-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ranking-you {
+  flex: none;
+  white-space: nowrap;
+}
+
+.ranking-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ranking-meta .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.ranking-error-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--danger);
+}
+
 .install-open {
   display: inline-flex;
   align-items: center;
