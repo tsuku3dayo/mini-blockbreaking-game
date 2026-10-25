@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ResultSummary } from '../src/game';
 import type { ScoreRecord } from '../src/ranking';
-import { loadLastName, loadRanking, register } from '../src/records';
+import { clearRanking, loadLastName, loadRanking, register } from '../src/records';
 import { load } from '../src/storage';
 import { installFakeStorage, key, type FakeStorage } from './fake-storage';
 
@@ -84,6 +84,39 @@ describe('記録の読み書き（TD-0004 §3）', () => {
     storage.data.set(key('nextId'), '"x"');
     const r = register('A', summary('gameOver', 120), NOW);
     expect(r.ok && r.record.id).toBe(8);
+  });
+
+  it('TC-0023-01 全消去は記録と自分の記録 id だけを消し、次の id・前回の名前・効果音の設定は残す', () => {
+    storage.data.set(key('scores'), JSON.stringify([rec(1, 1250), rec(2, 980), rec(3, 120)]));
+    storage.data.set(key('nextId'), '4');
+    storage.data.set(key('lastName'), JSON.stringify('TSUKU'));
+    storage.data.set(key('lastRecordId'), '2');
+    storage.data.set(key('sound'), 'false');
+    expect(clearRanking()).toBe(true);
+    expect(loadRanking()).toEqual({ ok: true, scores: [], myId: null });
+    expect(load('nextId', 0)).toBe(4);
+    expect(loadLastName()).toBe('TSUKU');
+    expect(load('sound', true)).toBe(false);
+    // 次の登録は、消す前の続きの id
+    const r = register('NEW', summary('gameOver', 120), NOW);
+    expect(r.ok && r.record.id).toBe(4);
+    expect(r.ok && r.rank).toBe(1);
+  });
+
+  it('TC-0023-02 書けないときは false で、何も変えない', () => {
+    storage.data.set(key('scores'), JSON.stringify([rec(1, 1250)]));
+    storage.data.set(key('lastRecordId'), '1');
+    const before = new Map(storage.data);
+    storage.failSetAt = 2;
+    expect(clearRanking()).toBe(false);
+    expect(storage.data).toEqual(before);
+  });
+
+  it('TC-0023-03 壊れた記録も消せる', () => {
+    storage.data.set(key('scores'), '[{');
+    expect(loadRanking()).toEqual({ ok: false });
+    expect(clearRanking()).toBe(true);
+    expect(loadRanking()).toEqual({ ok: true, scores: [], myId: null });
   });
 
   it('前回の名前が規則に合わなければ空', () => {
