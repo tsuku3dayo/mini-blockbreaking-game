@@ -12,7 +12,7 @@ function render(): void {
   if (banner) banner.hidden = !(needRefresh && bannerAllowed);
 }
 
-/** 新しい版の準備ができたことにする（Service Worker から。TASK-0020 で ?debug からも呼ぶ） */
+/** 新しい版の準備ができたことにする（Service Worker から。?debug=1 のテスト用の入口からも呼ぶ） */
 export function onNeedRefresh(): void {
   needRefresh = true;
   render();

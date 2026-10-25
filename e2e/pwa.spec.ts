@@ -10,6 +10,30 @@ test('TC-0019-01 タイトル画面に package.json のバージョンが出る'
   await expect(page.locator('.version')).toHaveText(`v${version}`);
 });
 
+test('TC-0019-03 更新の帯はタイトル・ランキングだけに出し、プレイ画面では出さない', async ({ page }) => {
+  await openApp(page);
+  const banner = page.locator('#update-banner');
+  await expect(banner).toBeHidden();
+  await page.evaluate(() => window.__breakout?.showUpdateBanner());
+  await expect(banner).toBeVisible();
+  await expect(banner).toContainText('新しい版があります');
+  await expect(banner.getByRole('button', { name: '更新' })).toBeVisible();
+
+  // プレイ画面（結果パネルを含む）では出さない
+  await startGame(page);
+  await expect(banner).toBeHidden();
+  await finishGameOver(page);
+  await expect(banner).toBeHidden();
+
+  // ランキング・タイトルに移ると出る
+  await page.waitForTimeout(500);
+  await page.locator('#result-ranking').click();
+  await expect(banner).toBeVisible();
+  await page.locator('#ranking-back').click();
+  await expect(page.locator('#screen-title')).toBeVisible();
+  await expect(banner).toBeVisible();
+});
+
 // ── インストール（TC-0017） ──
 
 test('TC-0017-01 インストール方法の入口が出る', async ({ page }) => {
