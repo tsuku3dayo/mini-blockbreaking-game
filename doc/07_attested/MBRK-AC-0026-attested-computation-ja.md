@@ -2,13 +2,13 @@
 id: MBRK-AC-0026
 type: Attested Computation
 title: クレジット画面の実施記録
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-26
 sources:
   - MBRK-TASK-0026
   - MBRK-TC-0024
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T10:06:40+09:00" }
 ---
 
 # AC-0026 クレジット画面の実施記録
