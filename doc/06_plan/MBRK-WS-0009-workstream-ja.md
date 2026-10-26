@@ -3,15 +3,15 @@ id: MBRK-WS-0009
 type: Workstream
 title: 段階 5.5 修正（操作空間・記録の全消去）
 status: stable
-version: 1.0
-updated: 2026-10-25
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-EP-0001（v1.1 の段階 5.5）
   - MBRK-US-0007（v1.1）
   - MBRK-US-0010（v1.1）
   - MBRK-US-0022
-  - MBRK-TD-0003（v1.1）
-  - MBRK-TD-0004（v1.1）
+  - MBRK-TD-0003（v1.2）
+  - MBRK-TD-0004（v1.2）
   - doc/specification.md (v1.2)
 verified: null
 ---
@@ -20,6 +20,7 @@ verified: null
 
 - 進め方・完了の定義は [WS-0001 §1](MBRK-WS-0001-workstream-ja.md) を参照。
 - 番号は WS-0009 だが、WS-0006（効果音）のあと、WS-0007（アプリとして配る）の前に行う。
+- 根拠の版の見直し（v1.1、2026-10-26）：TD-0003 v1.2（結果パネルの間は操作空間を出さない）は、この WS の中で直した（PR #46）。TD-0004 v1.2（バックアップ）は WS-0008 の TASK-0021 で対応した
 
 ## 目的
 

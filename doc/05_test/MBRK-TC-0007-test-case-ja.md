@@ -3,18 +3,19 @@ id: MBRK-TC-0007
 type: Test Case
 title: 指でパドルを動かし、タップで発射する
 status: stable
-version: 1.2
-updated: 2026-10-25
+version: 1.3
+updated: 2026-10-26
 sources:
   - MBRK-US-0007（v1.1）
-  - MBRK-GUI-0003（v1.2）
-  - MBRK-TD-0003（v1.1）
+  - MBRK-GUI-0003（v1.4）
+  - MBRK-TD-0003（v1.2）
 verified: null
 ---
 
 # TC-0007 指でパドルを動かし、タップで発射する
 
 - 対象：[MBRK-US-0007](../02_requirements/MBRK-US-0007-user-story-ja.md)
+- 根拠の版の見直し（v1.3、2026-10-26）：GUI-0003 v1.3・TD-0003 v1.2（結果パネルの間は操作空間を出さない）は TC-0007-14 で確かめている。GUI-0003 v1.4（代替テキストの名前）は TC-0021 で確かめる。確認 ID は変えていない
 - テストファイル：`e2e/touch.spec.ts`
 - E2E の前提：`/?debug=1` で START。タッチは `pointerType: 'touch'` の `PointerEvent` を送る。位置は Canvas の論理座標から画面座標に直して送る
 

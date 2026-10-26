@@ -3,12 +3,12 @@ id: MBRK-TASK-0024
 type: Implementation Task
 title: 操作空間
 status: stable
-version: 1.0
-updated: 2026-10-25
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-WS-0009
-  - MBRK-TD-0003（v1.1）
-  - MBRK-GUI-0003（v1.2）
+  - MBRK-TD-0003（v1.2）
+  - MBRK-GUI-0003（v1.4）
   - MBRK-US-0007（v1.1）
   - MBRK-US-0010（v1.1）
 verified: null
@@ -20,6 +20,7 @@ verified: null
 - ブランチ：`feat/0024-control-area`
 - 依存：TASK-0018
 - 対象のストーリー：US-0007 v1.1、US-0010 v1.1
+- 根拠の版の見直し（v1.1、2026-10-26）：GUI-0003 v1.3・TD-0003 v1.2（結果パネルの間は操作空間を出さない）は、このタスクの直し（`fix/0024-hide-control-area-on-result`、PR #46、TC-0007-14）で対応した。GUI-0003 v1.4（代替テキストの名前）は TASK-0027 で対応した
 - 対象のテストケース：TC-0007-09〜12、TC-0010-01・03（v1.1）、TC-0007-13・TC-0010-09（手動、段階の終わり）
 
 ## やること

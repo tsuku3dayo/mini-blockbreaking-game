@@ -3,19 +3,20 @@ id: MBRK-TC-0024
 type: Test Case
 title: クレジットを見る
 status: stable
-version: 1.1
+version: 1.2
 updated: 2026-10-26
 sources:
   - MBRK-US-0023（v1.1）
-  - MBRK-GUI-0002（v1.2）
+  - MBRK-GUI-0002（v1.3）
   - MBRK-GUI-0007
-  - MBRK-TD-0001（v1.1）
+  - MBRK-TD-0001（v1.2）
 verified: null
 ---
 
 # TC-0024 クレジットを見る
 
 - 対象：[MBRK-US-0023](../02_requirements/MBRK-US-0023-user-story-ja.md)（TC-0023 は US-0022 で使っているため、この番号にした。TST-0001 §7）
+- 根拠の版の見直し（v1.2、2026-10-26）：GUI-0002 v1.3・TD-0001 v1.2 はアプリの名前の変更で、ページタイトル「ブロック崩しミニ - クレジット」は TC-0024-02 ですでに確かめている。確認 ID は変えていない
 - テストファイル：`e2e/credits.spec.ts`
 
 | 確認 ID | 確かめること | 種類 | 手順・入力 | 期待結果 |
