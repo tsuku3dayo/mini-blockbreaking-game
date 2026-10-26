@@ -53,6 +53,7 @@ npm run dev
 | `npm test` | 単体テスト（Vitest） |
 | `npm run test:e2e` | 画面のテスト（Playwright。Pixel 7 と 375 × 667 の 2 つ） |
 | `npm run check:dist` | `dist/` が PWA として成り立つか（manifest・アイコン・バージョン表示・起動の見張り）を確かめる |
+| `npm run check:docs` | `doc/` の成果物の整合性（ID・ファイル名・sources の版・確認 ID とテストの対応）を確かめる。`node scripts/check-docs.mjs --verbose` で、sources に版を書いていない参照も一覧にする |
 | `npm run icons` | アイコンを `public/icons/` に作り直す |
 | `npm run verify` | lint → 単体テスト → build → check:dist をまとめて行う |
 
