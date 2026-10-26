@@ -3,13 +3,13 @@ id: MBRK-TASK-0025
 type: Implementation Task
 title: 記録の全消去
 status: stable
-version: 1.0
-updated: 2026-10-25
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-WS-0009
-  - MBRK-TD-0004（v1.1）
-  - MBRK-GUI-0001（v1.1）
-  - MBRK-GUI-0002（v1.1）
+  - MBRK-TD-0004（v1.2）
+  - MBRK-GUI-0001（v1.3）
+  - MBRK-GUI-0002（v1.3）
   - MBRK-GUI-0006（v1.1）
   - MBRK-US-0022
 verified: null
@@ -22,6 +22,7 @@ verified: null
 - 依存：TASK-0024
 - 対象のストーリー：US-0022
 - 対象のテストケース：TC-0023-01〜08、TC-0023-09（手動、段階の終わり）
+- 根拠の版の見直し（v1.1、2026-10-26）：このタスクのあとの変更は、ほかのタスクで対応した。TD-0004 v1.2（バックアップ）は TASK-0021、GUI-0001 v1.2・GUI-0002 v1.2（クレジット）は TASK-0026、GUI-0001 v1.3・GUI-0002 v1.3（アプリの名前）は TASK-0027。記録の全消去の作りは変わらない
 
 ## やること
 

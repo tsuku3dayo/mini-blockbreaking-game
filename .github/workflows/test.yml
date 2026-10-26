@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # lint → 単体テスト → build → check:dist
+  # lint → check:docs → 単体テスト → build → check:dist
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10

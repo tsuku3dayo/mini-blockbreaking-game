@@ -3,19 +3,20 @@ id: MBRK-TC-0010
 type: Test Case
 title: スマートフォンの画面に合った大きさで遊ぶ
 status: stable
-version: 1.1
-updated: 2026-10-25
+version: 1.2
+updated: 2026-10-26
 sources:
   - MBRK-US-0010（v1.1）
   - MBRK-GUI-0001
-  - MBRK-GUI-0003（v1.2）
-  - MBRK-TD-0003（v1.1）
+  - MBRK-GUI-0003（v1.4）
+  - MBRK-TD-0003（v1.2）
 verified: null
 ---
 
 # TC-0010 スマートフォンの画面に合った大きさで遊ぶ
 
 - 対象：[MBRK-US-0010](../02_requirements/MBRK-US-0010-user-story-ja.md)
+- 根拠の版の見直し（v1.2、2026-10-26）：GUI-0003 v1.3・TD-0003 v1.2（結果パネルの間は操作空間を出さず、ゲーム領域の大きさは変えない）は TC-0007-14 で確かめている。GUI-0003 v1.4 は代替テキストの名前だけで、この TC には関わらない。確認 ID は変えていない
 - テストファイル：`tests/layout.test.ts`、`e2e/layout.spec.ts`（両プロジェクト）
 
 | 確認 ID | 確かめること | 種類 | 手順・入力 | 期待結果 |

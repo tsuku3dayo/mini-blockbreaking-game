@@ -1,6 +1,6 @@
 # ブロック崩しミニ 再現開発仕様書
 
-- 版：1.0（2026-10-26）
+- 版：1.1（2026-10-26）
 - 対象：「ブロック崩しミニ」（アプリのバージョン 1.0.0。ゲーム本体 + 端末内ハイスコアランキング）を、別の環境で同じものとして作り直すための仕様
 - 位置づけ：この 1 冊だけで再現できるようにまとめた仕様書。スマートフォンの縦画面で、ブラウザだけで動くアプリ（インストール可能・オフライン動作）として作る
 
@@ -20,6 +20,7 @@
 | 版 | 日付 | 内容 |
 | --- | --- | --- |
 | 1.0 | 2026-10-26 | 初版。第 1 部は `doc/specification.md` v1.4（改訂履歴は同ファイルを参照）。第 2 部は新規 |
+| 1.1 | 2026-10-26 | 成果物の整合性の検査（`npm run check:docs`）を追加し、`verify` に入れた（§15.1・§16.1・§26.5・§27.1）。第 1 部は変更なし |
 
 ---
 
@@ -924,8 +925,9 @@ stateDiagram-v2
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check:dist": "node scripts/check-dist.mjs",
+    "check:docs": "node scripts/check-docs.mjs",
     "icons": "node scripts/make-icons.mjs",
-    "verify": "npm run lint && npm test && npm run build && npm run check:dist"
+    "verify": "npm run lint && npm run check:docs && npm test && npm run build && npm run check:dist"
   }
 }
 ```
@@ -986,7 +988,7 @@ stateDiagram-v2
 │  └─ vite-env.d.ts
 ├─ tests/                  単体テスト（Vitest）と fake-storage.ts
 ├─ e2e/                    E2E（Playwright）、helpers.ts、fixtures/（バックアップのテスト用 JSON）
-├─ scripts/                make-icons.mjs・check-dist.mjs
+├─ scripts/                make-icons.mjs・check-dist.mjs・check-docs.mjs
 └─ .github/                workflows/test.yml・pages.yml、dependabot.yml
 ```
 
@@ -1404,6 +1406,14 @@ Canvas の中身は E2E から読めないため、状態を外から見る・�
 
 iPhone の Safari と Android の Chrome の実機で、タッチ操作・効果音・ホーム画面への追加・オフライン起動・更新を確かめる（E2E の Chromium では分からないもの）。
 
+### 26.5 成果物の整合性の検査（`scripts/check-docs.mjs`）
+
+開発の成果物（`doc/` の `MBRK-*.md`）の出力 → 入力の整合性を確かめる。決まりは `doc/InputOutput_Text.txt` の「整合性チェックの自動化」。
+
+- エラー：ID とファイル名・フォルダ、ID の重複、frontmatter の項目、参照している ID の実在、`sources` に書いた版と相手の今の版の一致、`stable` の成果物の根拠が `stable`、承認のある種類の `verified`、確認 ID がテストのコード（単体・E2E・ビルド検査）か実施記録（それ以外）にあること、テストのコードの確認 ID が test-case に実在すること
+- 注意（止めない）：仕様書の古い版を根拠にしているもの。`--verbose` で、`sources` に版を書いていない参照も一覧にする
+- 再現で成果物を持ち込まないときは、このスクリプトと `verify` の `check:docs` を外してよい
+
 ---
 
 ## 27. CI と公開
@@ -1412,7 +1422,7 @@ iPhone の Safari と Android の Chrome の実機で、タッチ操作・効果
 
 | ジョブ | 内容 |
 | --- | --- |
-| `check` | Node 24（npm のキャッシュ）→ `npm ci` → `npm run verify`（lint → 単体テスト → build → check:dist）。10 分で打ち切り |
+| `check` | Node 24（npm のキャッシュ）→ `npm ci` → `npm run verify`（lint → check:docs → 単体テスト → build → check:dist）。10 分で打ち切り |
 | `e2e` | `npm ci` → `npx playwright install chromium`（4 分で打ち切り、3 回まで試す。`--with-deps` は使わない）→ `npm run test:e2e`。失敗したら `playwright-report/` を 7 日保存。20 分で打ち切り |
 
 `permissions: contents: read`。同じブランチの古い実行は取り消す。

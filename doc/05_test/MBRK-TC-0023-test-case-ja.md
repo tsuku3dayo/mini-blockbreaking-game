@@ -3,19 +3,20 @@ id: MBRK-TC-0023
 type: Test Case
 title: ランキングの記録を全部消す
 status: stable
-version: 1.0
-updated: 2026-10-25
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-US-0022
-  - MBRK-GUI-0002（v1.1）
+  - MBRK-GUI-0002（v1.3）
   - MBRK-GUI-0006（v1.1）
-  - MBRK-TD-0004（v1.1）
+  - MBRK-TD-0004（v1.2）
 verified: null
 ---
 
 # TC-0023 ランキングの記録を全部消す
 
 - 対象：[MBRK-US-0022](../02_requirements/MBRK-US-0022-user-story-ja.md)（TC-0022 は非機能要件で使っているため、この番号にした。TST-0001 §7）
+- 根拠の版の見直し（v1.1、2026-10-26）：GUI-0002 v1.2・v1.3（クレジットのボタン、見出しの名前）は TC-0024・TC-0001 で、TD-0004 v1.2（バックアップ）は TC-0014 で確かめる。記録の全消去には関わらないので、確認 ID は変えていない
 - テストファイル：`tests/records.test.ts`、`e2e/clear.spec.ts`
 - E2E の前提：記録は保存データに直接入れる（`writeStorage`）
 

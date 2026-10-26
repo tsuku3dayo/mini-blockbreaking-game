@@ -3,13 +3,13 @@ id: MBRK-TASK-0026
 type: Implementation Task
 title: クレジット画面
 status: stable
-version: 1.0
-updated: 2026-10-25
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-WS-0008
-  - MBRK-TD-0001（v1.1）
-  - MBRK-GUI-0001（v1.2）
-  - MBRK-GUI-0002（v1.2）
+  - MBRK-TD-0001（v1.2）
+  - MBRK-GUI-0001（v1.3）
+  - MBRK-GUI-0002（v1.3）
   - MBRK-GUI-0007
   - MBRK-US-0023
 verified: null
@@ -22,6 +22,7 @@ verified: null
 - 依存：TASK-0023
 - 対象のストーリー：US-0023
 - 対象のテストケース：TC-0024-01〜06、TC-0024-07（手動、TASK-0023 の全体の手動確認に含める）
+- 根拠の版の見直し（v1.1、2026-10-26）：TD-0001 v1.2・GUI-0001 v1.3・GUI-0002 v1.3（アプリの名前の変更）は TASK-0027 で対応した。クレジット画面の作りは変わらない
 
 ## やること
 
