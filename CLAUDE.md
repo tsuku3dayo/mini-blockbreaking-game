@@ -13,7 +13,9 @@ This file provides guidance to Claude Code when working in this repository.
 
 `doc/InputOutput_Text.txt` の順に進める。**「承認」の地点では、オーナーが承認するまで次の段階に進まない。** 成果物を作ったら、承認を求めて止まる。
 
-00 project-brief → 01 システム構成（承認）→ 02 要件・ユーザーストーリー（承認）→ 03 画面設計（承認）→ 04 詳細設計 → 05 テスト / 06 作業計画（並行）→ 07 実装・自動テスト → 手動テスト（承認）→ attested-computation（承認）
+00 project-brief（承認）→ 01 システム構成（承認）→ 02 要件・ユーザーストーリー（承認）→ 03 画面設計（承認）→ 04 詳細設計 → 05 テスト / 06 作業計画（並行）→ 07 実装・自動テスト → 手動テスト → attested-computation（承認）。07〜attested-computation は WS ごとにくり返し、最後の WS がリリース。完了したら再現開発仕様書（`doc/reproduction-specification.md`）を最新にする。
+
+途中で仕様を変えるときは、依頼を `doc/requests/` に記録 → 仕様書の版を上げる → 影響する承認済みの成果物を版上げして再承認 → TD・TC・TASK を直す → 07、の順に進める（`doc/InputOutput_Text.txt` の「変更の依頼」）。
 
 ## Git の運用
 
@@ -74,7 +76,7 @@ verified: null              # 承認されたら { by: "tsuku3dayo", at: "<日�
 - 説明は `doc/Attested_Computation.md`。implementation-task（何をやるか）・test-case（どう確かめるか）に対する「実際にやって確かめた結果」。
 - 本文：実施概要（タスク・実施者・環境）／確認結果（テストケースの手順ごと）／**確認できなかったこと**（正直に書く）／後片付け／完了定義のチェックリスト。
 - `sources` に対応する TASK と TC の ID を書く。
-- AC の番号は TASK と同じにする（TASK-0004 の記録は AC-0004）。タスクの PR をマージしたら `draft` で作って自動テストの結果を書き、WS の終わりに手動テストの結果を足して `review` にし、オーナーの承認を受ける（`doc/06_plan/MBRK-WS-0001-workstream-ja.md` §1）。
+- AC の番号は TASK と同じにする（TASK-0004 の記録は AC-0004）。`draft` で作って自動テストの結果を書き、**タスクの PR に一緒に入れる**。WS の終わりに手動テストの結果を足して `review` にし、オーナーの承認を受ける（`doc/InputOutput_Text.txt` の「各工程の実行チェックリスト」）。
 
 ## 07 実装の進め方
 
