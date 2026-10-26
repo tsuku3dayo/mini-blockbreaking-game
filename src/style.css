@@ -179,11 +179,11 @@ input[aria-invalid='true'] {
   padding-top: 32px;
 }
 
+/* 日本語の名前なので本文の書体（等幅の書体は日本語の字形を持たない）。幅 375 で 1 行に収まる大きさ */
 .logo {
-  font-family: var(--font-mono);
-  font-size: 40px;
+  font-size: 32px;
   font-weight: bold;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-align: center;
 }
 

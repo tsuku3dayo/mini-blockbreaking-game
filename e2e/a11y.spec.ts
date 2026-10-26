@@ -28,7 +28,7 @@ const announced = (page: Page) => page.evaluate(() => window.__announced ?? []);
 
 test('TC-0021-01 ゲーム領域の代替テキスト', async ({ page }) => {
   await openGame(page);
-  await expect(page.getByRole('img', { name: 'ブロック崩しのゲーム画面' })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'ブロック崩しミニのゲーム画面' })).toBeVisible();
 });
 
 test('TC-0021-02 スコア・一時停止・再開・クリアを読み上げる', async ({ page }) => {

@@ -5,7 +5,7 @@ import { openApp } from './helpers';
 
 test('TC-0001-01 タイトル画面の要素', async ({ page }) => {
   await openApp(page, './');
-  await expect(page.getByRole('heading', { level: 1, name: 'BREAKOUT' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'ブロック崩しミニ' })).toBeVisible();
   await expect(page.getByRole('button', { name: /START/ })).toBeVisible();
   await expect(page.getByRole('button', { name: 'RANKING' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '操作方法' })).toBeVisible();
@@ -67,15 +67,15 @@ test('TC-0001-04 RANKING でランキング画面、BACK・Esc でタイトル�
 
 test('TC-0001-05 ページタイトルが画面ごとに変わる', async ({ page }) => {
   await openApp(page, './');
-  await expect(page).toHaveTitle('ブロック崩し - タイトル');
+  await expect(page).toHaveTitle('ブロック崩しミニ - タイトル');
   await page.getByRole('button', { name: /START/ }).click();
-  await expect(page).toHaveTitle('ブロック崩し - プレイ');
+  await expect(page).toHaveTitle('ブロック崩しミニ - プレイ');
   // ブラウザの「戻る」でタイトルへ
   await page.goBack();
-  await expect(page).toHaveTitle('ブロック崩し - タイトル');
+  await expect(page).toHaveTitle('ブロック崩しミニ - タイトル');
   await expect(page.locator('#screen-title')).toBeVisible();
   await page.getByRole('button', { name: 'RANKING' }).click();
-  await expect(page).toHaveTitle('ブロック崩し - ランキング');
+  await expect(page).toHaveTitle('ブロック崩しミニ - ランキング');
 });
 
 test('TC-0001-06 存在しない画面・開いたときの #/play はタイトルへ', async ({ page }) => {
@@ -92,6 +92,20 @@ test('TC-0001-06 存在しない画面・開いたときの #/play はタイト�
   await page.evaluate(() => (location.hash = '#/xyz'));
   await expect(page.locator('#screen-title')).toBeVisible();
   await expect.poll(() => new URL(page.url()).hash).toBe('#/title');
+});
+
+test('TC-0001-07 見出しが幅 375 で 1 行に収まる', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await openApp(page, './');
+  const m = await page.locator('#title-logo').evaluate((el) => {
+    // 見出しの箱ではなく文字の範囲で測る（箱は親の幅いっぱいに広がるため）
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const text = range.getBoundingClientRect();
+    return { height: text.height, right: text.right, fontSize: parseFloat(getComputedStyle(el).fontSize), width: document.documentElement.clientWidth };
+  });
+  expect(m.height).toBeLessThan(m.fontSize * 2);
+  expect(m.right).toBeLessThanOrEqual(m.width);
 });
 
 test('TC-0010-05 タイトル・ランキング画面のボタンは 44 px 以上', async ({ page }) => {

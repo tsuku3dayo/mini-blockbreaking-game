@@ -15,7 +15,7 @@ test('TC-0006-02 クリアの内訳', async ({ page }) => {
   await expect(breakdown.locator('dd')).toHaveText(['400', '850', '95.7 秒', '40 / 40']);
   await expect(panel.locator('.result-total dd')).toHaveText('1,250');
   expect((await snapshot(page)).elapsedMs).toBeCloseTo(95789, 6);
-  await expect(page).toHaveTitle('ブロック崩し - 結果');
+  await expect(page).toHaveTitle('ブロック崩しミニ - 結果');
 });
 
 test('TC-0006-05 ゲームオーバーの内訳', async ({ page }) => {
@@ -70,7 +70,7 @@ test('TC-0006-08 RETRY で新しいゲーム', async ({ page }) => {
   expect(state.broken).toBe(0);
   expect(state.elapsedMs).toBe(0);
   expect(state.alive.every(Boolean)).toBe(true);
-  await expect(page).toHaveTitle('ブロック崩し - プレイ');
+  await expect(page).toHaveTitle('ブロック崩しミニ - プレイ');
   await expect(page.locator('#pause-button')).toBeEnabled();
 });
 

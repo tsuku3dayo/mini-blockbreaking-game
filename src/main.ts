@@ -15,11 +15,11 @@ import { icon, renderIcons } from './ui';
 type ScreenName = 'title' | 'play' | 'ranking' | 'credits';
 
 const SCREENS: Record<ScreenName, { section: string; title: string; focus: string | null }> = {
-  title: { section: 'screen-title', title: 'ブロック崩し - タイトル', focus: 'title-start' },
+  title: { section: 'screen-title', title: 'ブロック崩しミニ - タイトル', focus: 'title-start' },
   // プレイ画面のフォーカスは、play.start() がゲーム領域に移す
-  play: { section: 'screen-play', title: 'ブロック崩し - プレイ', focus: null },
-  ranking: { section: 'screen-ranking', title: 'ブロック崩し - ランキング', focus: 'ranking-heading' },
-  credits: { section: 'screen-credits', title: 'ブロック崩し - クレジット', focus: 'credits-heading' },
+  play: { section: 'screen-play', title: 'ブロック崩しミニ - プレイ', focus: null },
+  ranking: { section: 'screen-ranking', title: 'ブロック崩しミニ - ランキング', focus: 'ranking-heading' },
+  credits: { section: 'screen-credits', title: 'ブロック崩しミニ - クレジット', focus: 'credits-heading' },
 };
 
 const sound = createSound();

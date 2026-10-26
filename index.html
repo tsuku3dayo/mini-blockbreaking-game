@@ -13,16 +13,16 @@
     <!-- iPhone のホーム画面アプリ: ステータスバーを不透明（black）にする。透明だと、画面の上端で、
          ステータスバーの下に入った内容を iOS がぼかして、文字が読みにくくなる -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="ブロック崩し" />
+    <meta name="apple-mobile-web-app-title" content="ブロック崩しミニ" />
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-    <title>ブロック崩し - タイトル</title>
+    <title>ブロック崩しミニ - タイトル</title>
   </head>
   <body data-screen="title">
     <main id="app">
       <!-- タイトル（GUI-0002） -->
       <section id="screen-title" class="screen title" aria-labelledby="title-logo">
-        <h1 id="title-logo" class="logo">BREAKOUT</h1>
+        <h1 id="title-logo" class="logo">ブロック崩しミニ</h1>
         <div class="logo-blocks" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
@@ -71,7 +71,7 @@
         </p>
         <!-- Canvas と結果パネルを重ねる箱 -->
         <div id="stage" class="stage">
-          <canvas id="field" role="img" aria-label="ブロック崩しのゲーム画面" tabindex="0"></canvas>
+          <canvas id="field" role="img" aria-label="ブロック崩しミニのゲーム画面" tabindex="0"></canvas>
           <div id="result-panel" class="result-panel" role="region" aria-labelledby="result-heading" hidden></div>
         </div>
         <!-- 操作空間（GUI-0003 §2.3）。タッチ端末だけ play.ts が出す。指でゲーム領域を隠さずに操作するための場所 -->

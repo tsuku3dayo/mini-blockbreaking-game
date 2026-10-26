@@ -186,7 +186,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     updatePauseButton();
     // 結果パネルの間は操作空間を出さない（ゲーム用の入力を受け付けないため）
     controlArea.hidden = true;
-    document.title = 'ブロック崩し - 結果';
+    document.title = 'ブロック崩しミニ - 結果';
     const summary = summarize(state);
     showResultPanel(summary, { retry: () => api.start(), title: deps.onTitle, ranking: deps.onRanking }, { sound: deps.sound });
     deps.announce.say(`${summary.result === 'cleared' ? 'クリア' : 'ゲームオーバー'}。スコア ${formatNumber(summary.total)}`);
@@ -239,7 +239,7 @@ export function createPlayScreen(deps: PlayDeps): PlayScreen {
     start() {
       stopLoop();
       hideResultPanel();
-      document.title = 'ブロック崩し - プレイ';
+      document.title = 'ブロック崩しミニ - プレイ';
       state = createGame();
       lastStatus = null;
       input.detach();

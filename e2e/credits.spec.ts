@@ -27,7 +27,7 @@ test('TC-0024-02 押すとクレジット画面になり、見出しに初期フ
   await page.locator('#title-credits').click();
   await expect(page.locator('#screen-credits')).toBeVisible();
   await expect(page.locator('#screen-title')).toBeHidden();
-  await expect(page).toHaveTitle('ブロック崩し - クレジット');
+  await expect(page).toHaveTitle('ブロック崩しミニ - クレジット');
   expect(new URL(page.url()).hash).toBe('#/credits');
   await expect(page.locator('#credits-heading')).toHaveText('クレジット');
   await expect(page.locator('#credits-heading')).toBeFocused();
