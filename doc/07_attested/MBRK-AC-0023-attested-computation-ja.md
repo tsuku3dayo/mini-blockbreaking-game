@@ -2,7 +2,7 @@
 id: MBRK-AC-0023
 type: Attested Computation
 title: リリース v1.0.0 の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-26
 sources:
@@ -10,7 +10,7 @@ sources:
   - MBRK-TST-0001
   - MBRK-TC-0001〜MBRK-TC-0024
   - doc/specification.md (v1.3) §12
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:54:13+09:00" }
 ---
 
 # AC-0023 リリース v1.0.0 の実施記録
@@ -177,7 +177,7 @@ v1.0.0（クレジット入り、PR #56 の公開）を、オーナーが公開 
 - [x] 全テストケースが合格、または「確認できなかったこと」に理由がある
 - [x] 仕様書 §12 の 55 項目の一覧がある（§2.2）
 - [x] 公開 URL のタイトルに `v1.0.0` が出る
-- [ ] オーナーが全 AC を承認した
+- [x] オーナーが全 AC を承認した
 - [x] `npm run verify` と `npm run test:e2e` が手元で通る
 - [x] PR の CI が緑（PR #53）
 - [x] PR がマージされた（PR #53）

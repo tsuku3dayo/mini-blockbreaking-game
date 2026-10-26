@@ -2,13 +2,13 @@
 id: MBRK-AC-0022
 type: Attested Computation
 title: 読み上げ・キーボード操作の仕上げの実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-26
 sources:
   - MBRK-TASK-0022
   - MBRK-TC-0021
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:54:13+09:00" }
 ---
 
 # AC-0022 読み上げ・キーボード操作の仕上げの実施記録

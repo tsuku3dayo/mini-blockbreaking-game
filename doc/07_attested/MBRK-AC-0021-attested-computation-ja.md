@@ -2,13 +2,13 @@
 id: MBRK-AC-0021
 type: Attested Computation
 title: 記録の書き出し・読み込みの実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-26
 sources:
   - MBRK-TASK-0021
   - MBRK-TC-0014
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:54:13+09:00" }
 ---
 
 # AC-0021 記録の書き出し・読み込みの実施記録

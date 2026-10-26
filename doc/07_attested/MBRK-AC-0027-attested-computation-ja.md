@@ -2,7 +2,7 @@
 id: MBRK-AC-0027
 type: Attested Computation
 title: アプリの名前を「ブロック崩しミニ」にする の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-10-26
 sources:
@@ -11,7 +11,7 @@ sources:
   - MBRK-TC-0017
   - MBRK-TC-0021
   - MBRK-TC-0024
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:54:13+09:00" }
 ---
 
 # AC-0027 アプリの名前を「ブロック崩しミニ」にする の実施記録
