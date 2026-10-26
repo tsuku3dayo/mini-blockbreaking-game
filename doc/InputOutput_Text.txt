@@ -1,4 +1,9 @@
-project-brief
+00.プロジェクト概要
+      │  入力：仕様書（doc/specification.md）
+      │
+      └─ project-brief
+      │
+    承認
       │
       ▼
 01.システム構成
@@ -12,7 +17,7 @@ project-brief
       ▼
 02.要件・ユーザーストーリー
       │
-      ├─ epic
+      ├─ epic（優先順位 = 07 の WS の順になる）
       └─ user-story
       │
     承認
@@ -40,13 +45,65 @@ strategy      │
  ▼         implementation-task
 test-case     │
  └────┬──────┘
+      │   ※ 04〜06 は承認なし。着手前に「進めてよいか」を確かめ、
+      │     書き終えたら stable にして段階ごとに PR
       ▼
-07.実装・自動テスト
+07.実装・自動テスト（WS ごとにくり返す）
+      │
+      │   WS の中で、TASK ごとに
+      │     feat/<TASK 番号>-<内容> ブランチ
+      │       → テスト（名前の先頭に確認 ID）→ 実装
+      │       → PR → CI が緑 → マージ（main へのマージ = 公開）
+      │       → attested-computation（draft：自動テストの結果）
       │
       ▼
-手動テスト
+手動テスト（WS の終わりごと。公開 URL・実機）
+      │
+      └─ attested-computation（review：手動テストの結果、確認できなかったこと）
+      │
+    承認 ──→ 次の WS へ（07 に戻る）
+      │
+      ▼  最後の WS が終わったら
+リリース
+      │
+      ├─ バージョンの確定、全体の手動テスト（仕様書の受け入れ基準をすべて）
+      └─ attested-computation
       │
     承認
       │
       ▼
-attested-computation
+完了
+      │
+      └─ 再現開発仕様書（doc/reproduction-specification.md：仕様書 + 実装仕様の 1 冊）
+
+
+─── 途中で仕様を変えるとき（変更の依頼） ───
+
+変更の依頼（オーナーのメモ）
+      │
+      └─ doc/requests/<日付>-<内容>.md（依頼日・元のメモ・反映先・内容）
+      │
+      ▼
+仕様書の版を上げる
+      │
+      ▼
+影響する承認済みの成果物（PB・ADR・US・GUI など）の版を上げ、review に戻す
+      │
+    承認
+      │
+      ▼
+technical-design・test-case・implementation-task を直す（修正用の WS を足す）
+      │
+      ▼
+07.実装・自動テストへ
+      │
+      ▼
+完了後に変えたときは、再現開発仕様書の第 1 部も同じように直す
+
+
+─── 運用の注意 ───
+
+- 承認はチャットの「承認します」「OK」で受ける。はっきりしない返事のときは確かめる。
+- PR のマージはオーナーが行う。main へのマージで公開されるので、リリースに関わる PR は「マージ = 公開」と伝えてから頼む。
+- 実機がない端末（例：Android）は、attested-computation の「確認できなかったこと」に書く。
+- 了承をとっていない人の名前は、公開リポジトリに書かない。
