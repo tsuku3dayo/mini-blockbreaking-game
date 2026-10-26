@@ -4,6 +4,7 @@
 
 - 公開 URL：https://tsuku3dayo.github.io/mini-blockbreaking-game/
 - 仕様：[doc/specification.md](doc/specification.md)（v1.4）
+- 別の環境で作り直すための仕様（製品仕様 + 実装仕様の 1 冊）：[doc/reproduction-specification.md](doc/reproduction-specification.md)
 
 ## 遊び方
 
