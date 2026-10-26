@@ -76,7 +76,7 @@ verified: null              # 承認されたら { by: "tsuku3dayo", at: "<日�
 - 説明は `doc/Attested_Computation.md`。implementation-task（何をやるか）・test-case（どう確かめるか）に対する「実際にやって確かめた結果」。
 - 本文：実施概要（タスク・実施者・環境）／確認結果（テストケースの手順ごと）／**確認できなかったこと**（正直に書く）／後片付け／完了定義のチェックリスト。
 - `sources` に対応する TASK と TC の ID を書く。
-- AC の番号は TASK と同じにする（TASK-0004 の記録は AC-0004）。タスクの PR をマージしたら `draft` で作って自動テストの結果を書き、WS の終わりに手動テストの結果を足して `review` にし、オーナーの承認を受ける（`doc/06_plan/MBRK-WS-0001-workstream-ja.md` §1）。
+- AC の番号は TASK と同じにする（TASK-0004 の記録は AC-0004）。`draft` で作って自動テストの結果を書き、**タスクの PR に一緒に入れる**。WS の終わりに手動テストの結果を足して `review` にし、オーナーの承認を受ける（`doc/InputOutput_Text.txt` の「各工程の実行チェックリスト」）。
 
 ## 07 実装の進め方
 
