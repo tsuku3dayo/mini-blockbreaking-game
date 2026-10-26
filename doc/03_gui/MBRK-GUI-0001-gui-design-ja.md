@@ -111,7 +111,7 @@ stateDiagram-v2
 | 本文・ボタン | `system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif` | 16px / 標準。行の高さ 1.6 |
 | 補助の文字 | 同上 | 14px |
 | 画面の見出し | 同上 | 20px / 太字 |
-| ロゴ「BREAKOUT」 | 等幅（`ui-monospace, 'SF Mono', Menlo, Consolas, monospace`） | 40px / 太字、字間 0.08em |
+| ロゴ「ブロック崩しミニ」 | 本文と同じ（等幅の書体は日本語の字形を持たないため） | 32px / 太字、字間 0.04em（8 文字で約 270px。幅 375 の画面の内側 343px に 1 行で収まる） |
 | 数字（スコア・タイム） | 等幅 | `font-variant-numeric: tabular-nums` |
 | HUD・Canvas の文字 | 等幅 | 仕様書 §2.2 の値（論理座標） |
 

@@ -2,9 +2,9 @@
 id: MBRK-GUI-0002
 type: GUI Design
 title: タイトル画面
-status: stable
-version: 1.2
-updated: 2026-10-25
+status: review
+version: 1.3
+updated: 2026-10-26
 sources:
   - MBRK-GUI-0001
   - MBRK-US-0001
@@ -13,8 +13,8 @@ sources:
   - MBRK-US-0019
   - MBRK-US-0022
   - MBRK-US-0023
-  - doc/specification.md (v1.3) §8.2、§8.6、§8.7、§8.8
-verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
+  - doc/specification.md (v1.4) §8.2、§8.6、§8.7、§8.8
+verified: null
 ---
 
 # GUI-0002 タイトル画面
@@ -25,7 +25,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
 ┌─────────────────────────────────────┐
 │                                     │ ← 上端の余白
 │                                     │
-│          B R E A K O U T            │ ← ロゴ（等幅・太字 40）
+│          ブロック崩しミニ           │ ← ロゴ（太字 32）
 │     ▬▬ ▬▬ ▬▬ ▬▬ ▬▬                   │ ← 飾りのブロック（5 色）
 │                                     │
 │  ┌───────────────────────────────┐  │
@@ -63,7 +63,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
 
 | 要素 | 内容・振る舞い | ストーリー |
 | --- | --- | --- |
-| ロゴ | 見出し `h1`「BREAKOUT」。下にブロックの 5 色を並べた飾り（`aria-hidden`） | US-0001 |
+| ロゴ | 見出し `h1`「ブロック崩しミニ」（1 行で表示する）。下にブロックの 5 色を並べた飾り（`aria-hidden`） | US-0001 |
 | START | 主ボタン。押すと新しいゲームでプレイ画面へ。初期フォーカス。PC では `Enter` のヒント | US-0001 |
 | RANKING | 普通のボタン。ランキング画面へ | US-0001 |
 | クレジット | 普通のボタン（RANKING の下）。クレジット画面へ（GUI-0007） | US-0023 |
