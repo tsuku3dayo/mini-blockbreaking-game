@@ -2,13 +2,13 @@
 id: MBRK-US-0023
 type: User Story
 title: クレジットを見る
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-26
 sources:
   - MBRK-EP-0001
   - doc/specification.md (v1.4) §8、§8.2、§8.8、§12.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:30:40+09:00" }
 ---
 
 # US-0023 クレジットを見る

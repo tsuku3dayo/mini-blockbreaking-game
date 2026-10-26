@@ -2,13 +2,13 @@
 id: MBRK-US-0001
 type: User Story
 title: タイトル画面からゲームを始める
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-26
 sources:
   - MBRK-EP-0001
   - doc/specification.md (v1.4) §8、§8.2
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:30:40+09:00" }
 ---
 
 # US-0001 タイトル画面からゲームを始める

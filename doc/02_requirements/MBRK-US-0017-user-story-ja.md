@@ -2,13 +2,13 @@
 id: MBRK-US-0017
 type: User Story
 title: ホーム画面に追加して開く
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-26
 sources:
   - MBRK-EP-0005
   - doc/specification.md (v1.4) §8.2、§8.6、§12.7
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-26T09:30:40+09:00" }
 ---
 
 # US-0017 ホーム画面に追加して開く
