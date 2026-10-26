@@ -1,9 +1,9 @@
-# ブロック崩し（mini-blockbreaking-game）
+# ブロック崩しミニ（mini-blockbreaking-game）
 
 スマートフォンで遊べる、1 ステージのブロック崩しです。ブラウザだけで動く PWA で、サーバーは使いません。ホーム画面に追加すると、オフラインでも遊べます。
 
 - 公開 URL：https://tsuku3dayo.github.io/mini-blockbreaking-game/
-- 仕様：[doc/specification.md](doc/specification.md)（v1.3）
+- 仕様：[doc/specification.md](doc/specification.md)（v1.4）
 
 ## 遊び方
 

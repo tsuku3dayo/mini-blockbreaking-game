@@ -25,7 +25,7 @@ check('TC-0017-04', 'manifest.webmanifest がある', manifestOk);
 check('TC-0017-04', 'index.html から manifest を読み込む', /<link[^>]+rel="manifest"/.test(html));
 if (manifestOk) {
   const manifest = JSON.parse(read('manifest.webmanifest'));
-  check('TC-0017-04', 'manifest の name・display・start_url', manifest.name === 'ブロック崩し' && manifest.display === 'standalone' && !!manifest.start_url);
+  check('TC-0017-04', 'manifest の name・display・start_url', manifest.name === 'ブロック崩しミニ' && manifest.display === 'standalone' && !!manifest.start_url);
   check('TC-0017-04', 'manifest の orientation が portrait', manifest.orientation === 'portrait');
   const icons = manifest.icons ?? [];
   const has = (size, purpose) => icons.some((icon) => icon.sizes === size && (icon.purpose ?? 'any').split(' ').includes(purpose) && exists(icon.src));

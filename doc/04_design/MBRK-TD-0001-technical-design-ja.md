@@ -3,17 +3,18 @@ id: MBRK-TD-0001
 type: Technical Design
 title: 詳細設計 全体（ファイル構成・画面の切替え・ビルド・PWA・CI・テスト用の入口）
 status: stable
-version: 1.1
-updated: 2026-10-25
+version: 1.2
+updated: 2026-10-26
 sources:
   - MBRK-SA-0001
   - MBRK-TS-0001
   - MBRK-ADR-0002
   - MBRK-ADR-0004
   - MBRK-ADR-0007
-  - MBRK-GUI-0001（v1.2）
+  - MBRK-ADR-0007（v1.1）
+  - MBRK-GUI-0001（v1.3）
   - MBRK-GUI-0007
-  - doc/specification.md (v1.3) §8、§8.8
+  - doc/specification.md (v1.4) §8、§8.5、§8.6、§8.8
   - simple_shogi（vite.config.ts、playwright.config.ts、public/boot.js、src/pwa.ts、src/install.ts、scripts/check-dist.mjs）
 verified: null
 ---
@@ -137,7 +138,7 @@ main.ts ─┬─▶ play.ts ─┬─▶ input.ts ──▶ layout.ts, config.t
     <section id="screen-play" class="screen" aria-label="プレイ" hidden>
       <p id="orientation-notice" class="notice" hidden>縦向きでのプレイをおすすめします</p>
       <div id="stage" class="stage">                 <!-- Canvas と結果パネルを重ねる箱 -->
-        <canvas id="field" role="img" aria-label="ブロック崩しのゲーム画面" tabindex="0"></canvas>
+        <canvas id="field" role="img" aria-label="ブロック崩しミニのゲーム画面" tabindex="0"></canvas>
         <div id="result-panel" class="result-panel" role="region" aria-labelledby="result-heading" hidden> … </div>
       </div>
       <div class="play-controls">
@@ -168,7 +169,7 @@ main.ts ─┬─▶ play.ts ─┬─▶ input.ts ──▶ layout.ts, config.t
 
 | 項目 | 値 |
 | --- | --- |
-| `APP_NAME` | `ブロック崩し` |
+| `APP_NAME` | `ブロック崩しミニ`（manifest の `name`・`short_name`。`index.html` の `apple-mobile-web-app-title` と `<title>`、`src/main.ts`・`src/play.ts` のページタイトルも同じ名前にする） |
 | `THEME_COLOR` / `BACKGROUND_COLOR` | `#0B1020` |
 | manifest の `description` | `スマートフォンで遊べる、1 ステージのブロック崩し` |
 | manifest の `orientation` | `portrait`（インストールしたアプリは縦向きで開く） |

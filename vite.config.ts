@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 const { version, name: appId } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string; name: string };
 
 // アプリ名・色はここと index.html の 2 か所だけ（TD-0001 §5）
-const APP_NAME = 'ブロック崩し';
+const APP_NAME = 'ブロック崩しミニ';
 const THEME_COLOR = '#0B1020';
 const BACKGROUND_COLOR = '#0B1020';
 
