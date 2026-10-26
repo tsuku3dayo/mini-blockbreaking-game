@@ -3,12 +3,12 @@ id: MBRK-AC-0026
 type: Attested Computation
 title: クレジット画面の実施記録
 status: stable
-version: 1.0
+version: 1.1
 updated: 2026-10-26
 sources:
   - MBRK-TASK-0026
   - MBRK-TC-0024
-verified: { by: "tsuku3dayo", at: "2026-10-26T09:54:13+09:00" }
+verified: { by: "tsuku3dayo", at: "2026-10-26T10:06:40+09:00" }
 ---
 
 # AC-0026 クレジット画面の実施記録
@@ -61,7 +61,7 @@ TASK-0023 の全体の手動確認で、オーナーが iPhone で確かめた�
 
 ## 3. 確認できなかったこと
 
-- SPECIAL THANKS（TANIGAWA・MISHINA）は、本人の了承がとれてから足す（オーナーの指示）ので、今は載せていない。
+- SPECIAL THANKS は、載せる人の了承がとれてから足す（オーナーの指示）ので、今は載せていない。
 - 版を 1.0.0 のまま公開し直すので、すでに v1.0.0 を開いた端末では、画面の版の表示は「v1.0.0」のまま変わらない。中身は「新しい版があります」の「更新」で切り替わる。
 
 ## 4. 後片付け
