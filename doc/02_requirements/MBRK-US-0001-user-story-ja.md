@@ -2,13 +2,13 @@
 id: MBRK-US-0001
 type: User Story
 title: タイトル画面からゲームを始める
-status: stable
-version: 1.0
-updated: 2026-10-23
+status: review
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-EP-0001
-  - doc/specification.md (v1.1) §8、§8.2
-verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
+  - doc/specification.md (v1.4) §8、§8.2
+verified: null
 ---
 
 # US-0001 タイトル画面からゲームを始める
@@ -26,7 +26,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 - [ ] START を押すと、新しいゲームの発射前の状態でプレイ画面になる（§7.1）
 - [ ] PC では START に初期フォーカスがあり、Enter でも始められる（§4、§8.2）
 - [ ] RANKING を押すとランキング画面になる（§8）
-- [ ] 画面ごとにページタイトルが変わる（「ブロック崩し - タイトル」等）（§8）
+- [ ] 画面ごとにページタイトルが変わる（「ブロック崩しミニ - タイトル」等）（§8）
 - [ ] 存在しない画面を指定して開くと、タイトル画面になる（§8）
 
 ## 補足

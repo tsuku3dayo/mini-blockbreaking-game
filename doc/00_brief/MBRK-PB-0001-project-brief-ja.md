@@ -1,13 +1,14 @@
 ---
 id: MBRK-PB-0001
 type: Project Brief
-title: ブロック崩し プロジェクト概要
-status: stable
-version: 1.0
-updated: 2026-10-23
+title: ブロック崩しミニ プロジェクト概要
+status: review
+version: 1.1
+updated: 2026-10-26
 sources:
   - doc/specification.md (v1.1)
-verified: { by: "tsuku3dayo", at: "2026-10-23T16:34:32+09:00" }
+  - doc/specification.md (v1.4)（名前の変更）
+verified: null
 ---
 
 # プロジェクト概要（project-brief）
@@ -22,7 +23,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-23T16:34:32+09:00" }
 
 | 項目 | 内容 |
 | --- | --- |
-| 名前 | ブロック崩し（見出しは「BREAKOUT」） |
+| 名前 | ブロック崩しミニ（見出しは「BREAKOUT」） |
 | 形 | ブラウザで動き、ホーム画面に追加できるアプリ（PWA）。サーバーなし・通信なし |
 | 遊び方 | パドルを指でなぞって動かし、ボールを打ち返して 40 個のブロックを壊す。ボールを 1 回落としたら終わり |
 | 主な機能 | ゲーム本体、スコア（ブロック得点 + 時間ボーナス）、端末内ハイスコアランキング（上位 10 件）、記録の書き出し・読み込み、効果音（オン / オフ設定あり）、一時停止 |

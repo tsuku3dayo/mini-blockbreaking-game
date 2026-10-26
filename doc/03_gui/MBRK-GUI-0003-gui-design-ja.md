@@ -2,9 +2,9 @@
 id: MBRK-GUI-0003
 type: GUI Design
 title: プレイ画面（ゲーム領域・操作欄・オーバーレイ）
-status: stable
-version: 1.3
-updated: 2026-10-25
+status: review
+version: 1.4
+updated: 2026-10-26
 sources:
   - MBRK-GUI-0001
   - MBRK-US-0002
@@ -16,8 +16,9 @@ sources:
   - MBRK-US-0016
   - MBRK-US-0021
   - MBRK-ADR-0003
-  - doc/specification.md (v1.2) §2、§3、§4、§7、§8.3、§8.5、§8.7
-verified: { by: "tsuku3dayo", at: "2026-10-25T20:12:08+09:00" }
+  - doc/specification.md (v1.2) §2、§3、§4、§7、§8.3、§8.7
+  - doc/specification.md (v1.4) §8.5
+verified: null
 ---
 
 # GUI-0003 プレイ画面
@@ -78,7 +79,7 @@ verified: { by: "tsuku3dayo", at: "2026-10-25T20:12:08+09:00" }
 | 項目 | 内容 |
 | --- | --- |
 | 中身 | 仕様書 §2.2 の描画順で、フィールド・外枠・ブロック・パドル・ボール・HUD・オーバーレイを描く（色は GUI-0001 §3） |
-| 代替テキスト | `role="img"`、`aria-label="ブロック崩しのゲーム画面"` |
+| 代替テキスト | `role="img"`、`aria-label="ブロック崩しミニのゲーム画面"` |
 | フォーカス | `tabindex="0"`。プレイ画面を開いたら、ここにフォーカスを移す。フォーカスの輪は Canvas の外枠の外側に出す |
 | タッチ | `touch-action: none`、`user-select: none`、`-webkit-touch-callout: none`（なぞってもスクロール・拡大・長押しメニューが出ない。仕様書 §4.1-7） |
 | マウス | プレイ中はカーソルを隠す（`cursor: none`）。発射前・一時停止中・終了後は通常のカーソル |

@@ -2,13 +2,13 @@
 id: MBRK-US-0017
 type: User Story
 title: ホーム画面に追加して開く
-status: stable
-version: 1.0
-updated: 2026-10-23
+status: review
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-EP-0005
-  - doc/specification.md (v1.1) §8.2、§8.6、§12.7
-verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
+  - doc/specification.md (v1.4) §8.2、§8.6、§12.7
+verified: null
 ---
 
 # US-0017 ホーム画面に追加して開く
@@ -25,5 +25,5 @@ verified: { by: "tsuku3dayo", at: "2026-10-23T16:53:39+09:00" }
 - [ ] タイトル画面にインストール方法の入口が出る。インストールしたアプリとして開いたときは入口が出ない（§12.7-4）
 - [ ] 説明には iPhone / iPad、Android、パソコンの 3 つの手順があり、今使っている端末の説明が最初から開いている（§8.6）
 - [ ] ブラウザがインストールの案内に対応しているときは「今すぐインストール」ボタンが出る（§8.6）
-- [ ] ホーム画面に追加すると、名前「ブロック崩し」とアプリのアイコンで表示され、開くとブラウザの枠なしで表示される（§8.6、ADR-0007）
+- [ ] ホーム画面に追加すると、名前「ブロック崩しミニ」とアプリのアイコンで表示され、開くとブラウザの枠なしで表示される（§8.6、ADR-0007）
 - [ ] `npm run check:dist` が通る（manifest・192 / 512 / maskable アイコン・apple-touch-icon）

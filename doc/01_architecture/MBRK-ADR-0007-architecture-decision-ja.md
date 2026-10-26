@@ -2,13 +2,14 @@
 id: MBRK-ADR-0007
 type: Architecture Decision
 title: アプリ識別子を mini-blockbreaking-game にする
-status: stable
-version: 1.0
-updated: 2026-10-23
+status: review
+version: 1.1
+updated: 2026-10-26
 sources:
   - MBRK-PB-0001 §10
   - simple_shogi CLAUDE.md（同じサイトに載るアプリ）
-verified: { by: "tsuku3dayo", at: "2026-10-23T16:38:45+09:00" }
+  - doc/specification.md (v1.4) §8.6
+verified: null
 ---
 
 # ADR-0007 アプリ識別子を mini-blockbreaking-game にする
@@ -25,7 +26,7 @@ GitHub Pages では、同じアカウントのアプリはすべて同じサイ�
 - 保存キー：`mini-blockbreaking-game-<名前>`
 - バックアップの `app`：`mini-blockbreaking-game`
 - バックアップのファイル名：`mini-blockbreaking-game-backup-YYYYMMDD.json`
-- 表示名（manifest の `name`）：「ブロック崩し」
+- 表示名（manifest の `name`・`short_name`）：「ブロック崩しミニ」（v1.1 で「ブロック崩し」から変更。表示名は保存キーに使わないので、変えても記録は引き継がれる）
 
 ## 検討した選択肢
 
