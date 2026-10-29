@@ -2,14 +2,14 @@
 id: MBRK-GUI-0007
 type: GUI Design
 title: クレジット画面
-status: review
+status: stable
 version: 1.1
 updated: 2026-10-29
 sources:
   - MBRK-GUI-0001
   - MBRK-US-0023
   - doc/specification.md (v1.5) §8、§8.8
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-10-29T17:48:46+09:00" }
 ---
 
 # GUI-0007 クレジット画面
