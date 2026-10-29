@@ -2,14 +2,14 @@
 id: MBRK-GUI-0007
 type: GUI Design
 title: クレジット画面
-status: stable
-version: 1.0
-updated: 2026-10-25
+status: review
+version: 1.1
+updated: 2026-10-29
 sources:
   - MBRK-GUI-0001
   - MBRK-US-0023
-  - doc/specification.md (v1.3) §8、§8.8
-verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
+  - doc/specification.md (v1.5) §8、§8.8
+verified: null
 ---
 
 # GUI-0007 クレジット画面
@@ -21,13 +21,13 @@ verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
 │ [← BACK]  クレジット                 │ ← 上部のバー（GUI-0001 §5.4）
 │                                     │
 │              PRODUCER               │ ← 役職（--muted、14、字間 0.08em）
-│          YOSHIHARU TSUKUDA          │ ← 名前（--text、18、太字）
+│           つくだ よしはる           │ ← 名前（--text、18、太字）
 │                                     │ ← 役職ごとの間 24
 │              DIRECTOR               │
-│          YOSHIHARU TSUKUDA          │
+│           つくだ よしはる           │
 │                                     │
 │            GAME DESIGNER            │
-│          YOSHIHARU TSUKUDA          │
+│           つくだ よしはる           │
 │                                     │
 │          GRAPHIC DESIGNER           │
 │             CLAUDE CODE             │
@@ -63,4 +63,4 @@ verified: { by: "tsuku3dayo", at: "2026-10-25T21:32:14+09:00" }
 ## 4. 読み上げ
 
 - `section` に `aria-labelledby` で見出しを結ぶ。
-- 役職と名前は `dt`・`dd` の組で、「PRODUCER、YOSHIHARU TSUKUDA」のように読める。
+- 役職と名前は `dt`・`dd` の組で、「PRODUCER、つくだ よしはる」のように読める。
