@@ -5,9 +5,9 @@ import { openApp } from './helpers';
 
 /** 仕様書 §8.8 の役職と名前 */
 const CREDITS = [
-  ['PRODUCER', 'YOSHIHARU TSUKUDA'],
-  ['DIRECTOR', 'YOSHIHARU TSUKUDA'],
-  ['GAME DESIGNER', 'YOSHIHARU TSUKUDA'],
+  ['PRODUCER', 'つくだ よしはる'],
+  ['DIRECTOR', 'つくだ よしはる'],
+  ['GAME DESIGNER', 'つくだ よしはる'],
   ['GRAPHIC DESIGNER', 'CLAUDE CODE'],
   ['SOUND CREATOR', 'CLAUDE CODE'],
   ['PROGRAMMER', 'CLAUDE CODE'],
