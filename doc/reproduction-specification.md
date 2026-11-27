@@ -1,18 +1,18 @@
 # ブロック崩しミニ 再現開発仕様書
 
-- 版：1.1（2026-10-26）
-- 対象：「ブロック崩しミニ」（アプリのバージョン 1.0.0。ゲーム本体 + 端末内ハイスコアランキング）を、別の環境で同じものとして作り直すための仕様
+- 版：1.2（2026-11-27）
+- 対象：「ブロック崩しミニ」（アプリのバージョン 1.0.1。ゲーム本体 + 端末内ハイスコアランキング）を、別の環境で同じものとして作り直すための仕様
 - 位置づけ：この 1 冊だけで再現できるようにまとめた仕様書。スマートフォンの縦画面で、ブラウザだけで動くアプリ（インストール可能・オフライン動作）として作る
 
 ### この仕様書の構成
 
 | 部 | 章 | 決めること |
 | --- | --- | --- |
-| 第 1 部 製品仕様 | 1〜12 | **何を作るか**：ゲームのルール・物理・操作・画面・スコア・ランキング・効果音・PWA の振る舞い・数値パラメータ・受け入れ基準。`doc/specification.md` v1.4 と同じ内容 |
+| 第 1 部 製品仕様 | 1〜12 | **何を作るか**：ゲームのルール・物理・操作・画面・スコア・ランキング・効果音・PWA の振る舞い・数値パラメータ・受け入れ基準。`doc/specification.md` v1.5 と同じ内容 |
 | 第 2 部 実装仕様 | 13〜30 | **どう作るか**：開発環境、技術構成、ファイル構成と層の決まり、主なデータ型、保存の形、効果音の音色、PWA の設定、テスト用の入口、テスト・CI・公開の手順 |
 
 - 第 1 部と第 2 部が食い違ったときは、第 1 部を正とする。第 2 部は、第 1 部が「実装者が選ぶ」としたもの（§1.1）を、現在のリポジトリと同じ選択に固定する。
-- 第 2 部の値は、このリポジトリの実装（`main`、2026-10-26 時点）から写したもの。
+- 第 2 部の値は、このリポジトリの実装（`main`、2026-11-27 時点）から写したもの。
 - 第 1 部を変えたときは、`doc/specification.md` も同じように変える（逆も同じ）。
 
 ### 改訂履歴
@@ -21,6 +21,7 @@
 | --- | --- | --- |
 | 1.0 | 2026-10-26 | 初版。第 1 部は `doc/specification.md` v1.4（改訂履歴は同ファイルを参照）。第 2 部は新規 |
 | 1.1 | 2026-10-26 | 成果物の整合性の検査（`npm run check:docs`）を追加し、`verify` に入れた（§15.1・§16.1・§26.5・§27.1）。第 1 部は変更なし |
+| 1.2 | 2026-11-27 | 第 1 部を `doc/specification.md` v1.5 にそろえた（§8.8 クレジットの名前を「つくだ よしはる」に）。アプリのバージョンを 1.0.1 に（§15.1・§15.2）。§14.1 の道具の版を `package.json` にそろえた（Dependabot の更新） |
 
 ---
 
@@ -576,9 +577,9 @@ stateDiagram-v2
 
 | 役職 | 名前 |
 | --- | --- |
-| PRODUCER | YOSHIHARU TSUKUDA |
-| DIRECTOR | YOSHIHARU TSUKUDA |
-| GAME DESIGNER | YOSHIHARU TSUKUDA |
+| PRODUCER | つくだ よしはる |
+| DIRECTOR | つくだ よしはる |
+| GAME DESIGNER | つくだ よしはる |
 | GRAPHIC DESIGNER | CLAUDE CODE |
 | SOUND CREATOR | CLAUDE CODE |
 | PROGRAMMER | CLAUDE CODE |
@@ -881,12 +882,12 @@ stateDiagram-v2
 | 区分 | 採用 | 版（`package.json` の指定） |
 | --- | --- | --- |
 | 言語 | TypeScript（strict） | `~6.0.3` |
-| ビルド・開発サーバー | Vite | `^8.3.4` |
+| ビルド・開発サーバー | Vite | `^8.3.8` |
 | PWA | vite-plugin-pwa（Workbox） / workbox-window | `^2.0.0` / `^7.4.1` |
-| 単体テスト | Vitest（node 環境） | `^5.0.3` |
-| E2E | Playwright | `^1.64.0` |
-| 静的検査 | ESLint + typescript-eslint（flat config） | `^10.12.0` / `^8.71.1` |
-| その他 | `@eslint/js` `^10.0.1`、`globals` `^17.13.0`、`@types/node` `^24.19.2` | |
+| 単体テスト | Vitest（node 環境） | `^5.1.0` |
+| E2E | Playwright | `^1.65.1` |
+| 静的検査 | ESLint + typescript-eslint（flat config） | `^10.15.0` / `^8.73.0` |
+| その他 | `@eslint/js` `^10.0.1`、`globals` `^17.14.0`、`@types/node` `^24.19.2` | |
 
 - **実行時の依存はない**（`dependencies` は空。すべて `devDependencies`）。UI フレームワーク・ゲームエンジン・音声ファイル・Web フォント・外部 CDN は使わない。
 - 描画は Canvas 2D、効果音は Web Audio の合成、保存は localStorage。
@@ -913,7 +914,7 @@ stateDiagram-v2
 ```json
 {
   "name": "mini-blockbreaking-game",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -939,7 +940,7 @@ stateDiagram-v2
 | 設定 | 値 | 理由 |
 | --- | --- | --- |
 | `base` | `'./'` | GitHub Pages のサブパスでも動く相対パス |
-| `define.__APP_VERSION__` | `package.json` の `version` | タイトル画面の `v1.0.0` |
+| `define.__APP_VERSION__` | `package.json` の `version` | タイトル画面の `v1.0.1` |
 | `define.__APP_ID__` | `package.json` の `name` | 保存のキー・バックアップの `app`・復旧の範囲 |
 | 独自プラグイン `app-id-meta` | `index.html` の `__APP_ID__` を識別子に置き換える | ビルドを通らない `public/boot.js` が `<meta name="app-id">` から読むため |
 | `VitePWA` | §23.1 | |
