@@ -2,14 +2,14 @@
 id: MBRK-AC-0028
 type: Attested Computation
 title: クレジットの名前をひらがなにし、v1.0.1 を公開する の実施記録
-status: review
+status: stable
 version: 1.0
 updated: 2026-11-27
 sources:
   - MBRK-TASK-0028
   - MBRK-TC-0019
   - MBRK-TC-0024
-verified: null
+verified: { by: "tsuku3dayo", at: "2026-11-27T14:52:44+09:00" }
 ---
 
 # AC-0028 クレジットの名前をひらがなにし、v1.0.1 を公開する の実施記録
